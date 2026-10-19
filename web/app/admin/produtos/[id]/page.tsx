@@ -12,17 +12,19 @@ type V = Row & { _key: string; _new?: boolean; _dirty?: boolean };
 async function load(id: string) {
   const c = sb();
   const isNew = id === "novo";
-  const [p, suppliers, categories, brands] = await Promise.all([
+  const [p, suppliers, categories, brands, modelRows] = await Promise.all([
     isNew ? Promise.resolve(null) : run<Row | null>(c.from("products").select("*, variants(*), product_images(*), product_categories(category_id)").eq("id", id).maybeSingle()),
     run(c.from("suppliers").select("id,name").order("name")),
     run(c.from("categories").select("id,name,path").order("path")),
     run(c.from("brands").select("id,name").order("name")),
+    run(c.from("products").select("model").not("model", "is", null).limit(2000)),
   ]);
   if (!isNew && !p) throw new Error("Produto não encontrado.");
-  return { p, suppliers, categories, brands, isNew };
+  const models = [...new Set((modelRows as Row[]).map((r) => String(r.model)))].sort();
+  return { p, suppliers, categories, brands, models, isNew };
 }
 
-const blank = { title: "", handle: "", status: "draft", vat_rate: 23, brand: "", supplier_id: null, supplier_ref: "", weight_g: null, featured: false, excerpt: "", description_html: "", seo_title: "", seo_description: "", tags: [] as string[], length_cm: null, width_cm: null, height_cm: null };
+const blank = { title: "", handle: "", model: "", color: "", status: "draft", vat_rate: 23, brand: "", supplier_id: null, supplier_ref: "", weight_g: null, featured: false, excerpt: "", description_html: "", seo_title: "", seo_description: "", tags: [] as string[], length_cm: null, width_cm: null, height_cm: null };
 
 export default function ProductPage() {
   const { id } = useParams<{ id: string }>();
@@ -59,7 +61,7 @@ function Editor({ d, reload }: { d: Awaited<ReturnType<typeof load>>; reload: ()
     if (sizes.some((x) => !x)) throw new Error("Há tamanhos sem nome.");
     if (new Set(sizes.map((x) => x.toLowerCase())).size !== sizes.length) throw new Error("Há tamanhos repetidos.");
     const row = {
-      title, handle, status: p.status, vat_rate: vat, brand: p.brand || null, supplier_id: p.supplier_id || null, supplier_ref: p.supplier_ref || null,
+      title, handle, model: String(p.model ?? "").trim() || null, color: String(p.color ?? "").trim() || null, status: p.status, vat_rate: vat, brand: p.brand || null, supplier_id: p.supplier_id || null, supplier_ref: p.supplier_ref || null,
       weight_g: p.weight_g ? Number(p.weight_g) : null, length_cm: p.length_cm || null, width_cm: p.width_cm || null, height_cm: p.height_cm || null,
       featured: !!p.featured, excerpt: p.excerpt || null, description_html: p.description_html || null,
       seo_title: p.seo_title || null, seo_description: p.seo_description || null,
@@ -259,6 +261,11 @@ function Editor({ d, reload }: { d: Awaited<ReturnType<typeof load>>; reload: ()
                 <input list="brands" value={p.brand ?? ""} onChange={(e) => set("brand", e.target.value)} />
                 <datalist id="brands">{d.brands.map((b) => <option key={b.id} value={b.name} />)}</datalist>
               </Field>
+              <Field label="Modelo" hint="Os produtos com o mesmo modelo (e marca) aparecem na loja como uma só ficha, com a escolha da cor. Vazio = produto sozinho.">
+                <input list="models" value={p.model ?? ""} onChange={(e) => set("model", e.target.value)} placeholder="ex.: CLOG c/ Tira" />
+                <datalist id="models">{d.models.map((m) => <option key={m} value={m} />)}</datalist>
+              </Field>
+              <Field label="Cor" hint="Como aparece na escolha da cor."><input value={p.color ?? ""} onChange={(e) => set("color", e.target.value)} placeholder="ex.: Azul marinho" /></Field>
               <Field label="IVA">
                 <select value={String(vat)} onChange={(e) => set("vat_rate", Number(e.target.value))}>
                   <option value="23">23% — calçado e geral</option>

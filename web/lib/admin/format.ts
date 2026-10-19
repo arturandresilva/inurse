@@ -52,7 +52,7 @@ export const RETURN_STATUS: Record<string, string> = {
   refunded: "Reembolsada", exchanged: "Trocada", rejected: "Recusada", cancelled: "Cancelada",
 };
 export const RETURN_REASON: Record<string, string> = {
-  tamanho: "Tamanho", defeito: "Defeito", engano_envio: "Engano no envio", nao_gostou: "Não gostou", outro: "Outro",
+  tamanho: "Tamanho", defeito: "Defeito", engano_envio: "Engano no envio", nao_gostou: "Não gostou", outro: "Outro", livre_resolucao: "Livre resolução (formulário)",
 };
 export type Tone = "ok" | "warn" | "err" | "info" | "muted";
 

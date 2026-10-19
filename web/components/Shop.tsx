@@ -1,6 +1,6 @@
 import Link from "next/link";
 import ProductCard from "./ProductCard";
-import { getCategories, getProducts, searchProducts, sellable, type Category } from "@/lib/catalog";
+import { getCategories, getProducts, groupByModel, searchProducts, sellable, type Category } from "@/lib/catalog";
 import { categoryHref, categoryLabel, SIZES, sizeMatches } from "@/lib/format";
 
 type Props = { category?: Category | null; size?: string; q?: string; basePath: string };
@@ -19,6 +19,7 @@ export default async function Shop({ category, size, q, basePath }: Props) {
   }
   if (size) products = products.filter((p) => p.variants.some((v) => sizeMatches(v.option_value, size) && sellable(v)) && p.status === "active");
 
+  const groups = groupByModel(products);
   const tops = cats.filter((c) => !c.parent_id && c.path !== "CALÇADO");
   const calcado = cats.filter((c) => c.path.startsWith("CALÇADO>") && c.path.split(">").length === 2 && !c.path.includes("COMPRAR POR"));
   const profs = cats.filter((c) => c.path.startsWith("CALÇADO>COMPRAR POR PROFISSÃO>"));
@@ -49,9 +50,9 @@ export default async function Shop({ category, size, q, basePath }: Props) {
       </aside>
       <section>
         <p className="crumbs"><Link href="/">Início</Link> / <Link href="/loja">Loja</Link>{category ? <> / {categoryLabel(category.name)}</> : null}</p>
-        <div className="section-head"><h1 style={{ fontSize: "clamp(1.8rem,3.5vw,2.6rem)" }}>{title}</h1><span className="muted">{products.length} produtos</span></div>
-        {products.length ? (
-          <div className="grid">{products.map((p) => <ProductCard key={p.id} p={p} size={size} />)}</div>
+        <div className="section-head"><h1 style={{ fontSize: "clamp(1.8rem,3.5vw,2.6rem)" }}>{title}</h1><span className="muted">{groups.length} {groups.length === 1 ? "modelo" : "modelos"}</span></div>
+        {groups.length ? (
+          <div className="grid">{groups.map((g) => <ProductCard key={g.key} g={g} size={size} />)}</div>
         ) : (
           <div className="empty">
             <h2>Nada encontrado</h2>

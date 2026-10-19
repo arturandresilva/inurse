@@ -243,3 +243,29 @@ p { margin: 0; }
 .cookie-actions .btn { padding: 8px 14px; font-size: 14px; border-radius: 10px; min-height: 0; }
 @media (max-width: 520px) { .cookie-notice { left: 10px; right: 10px; bottom: 10px; max-width: none; } }
 .linklike { background: none; border: 0; padding: 0; font: inherit; color: inherit; text-decoration: underline; cursor: pointer; }
+
+/* modelos e cores */
+.prod .swatches { display: flex; align-items: center; gap: 4px; margin-top: 6px; }
+.prod .sw { width: 26px; height: 26px; border-radius: 50%; overflow: hidden; background: var(--mint); border: 1px solid var(--line); flex: none; }
+.prod .sw img { width: 100%; height: 100%; object-fit: cover; }
+.prod .sw-more { font-size: 13px; color: var(--ink-soft); margin-left: 2px; }
+.color-choice { margin-top: 18px; }
+.color-name { font-size: .98rem; }
+.colors { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.colors .color { width: 58px; height: 58px; border-radius: 12px; overflow: hidden; border: 1.5px solid var(--line); background: var(--mint);
+  display: grid; place-items: center; font-size: 12px; text-decoration: none; position: relative; }
+.colors .color img { width: 100%; height: 100%; object-fit: cover; }
+.colors .color:hover { border-color: var(--navy); }
+.colors .color.on { border: 2.5px solid var(--scrub); }
+.colors .color.off { opacity: .45; }
+.colors .color.off::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top right, transparent 48%, var(--ink-soft) 49%, var(--ink-soft) 51%, transparent 52%); }
+
+/* livre resolução */
+.withdrawal-form, .withdrawal-receipt { display: grid; gap: 14px; margin: 14px 0 28px; }
+.withdrawal-form fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 8px; }
+.withdrawal-form legend { font-weight: 700; margin-bottom: 6px; }
+.withdrawal-form .check { display: flex; gap: 10px; align-items: center; }
+.withdrawal-form .row2 { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.withdrawal-receipt hr { border: 0; border-top: 1px solid var(--line); width: 100%; }
+.model-form p { margin-bottom: 8px; }
+@media print { header, footer, .cookie-notice, .prose > :not(.withdrawal-receipt):not(h1) { display: none !important; } }

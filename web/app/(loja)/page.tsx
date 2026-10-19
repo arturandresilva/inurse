@@ -1,6 +1,6 @@
 import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
-import { getCategories, getProducts } from "@/lib/catalog";
+import { getCategories, getProducts, groupByModel } from "@/lib/catalog";
 import { categoryHref, SIZES } from "@/lib/format";
 
 export const revalidate = 300;
@@ -8,7 +8,7 @@ export const revalidate = 300;
 export default async function Home() {
   const [products, cats] = await Promise.all([getProducts(), getCategories()]);
   const active = products.filter((p) => p.status === "active");
-  const featured = [...active.filter((p) => p.featured), ...active.filter((p) => !p.featured)].slice(0, 8);
+  const featured = groupByModel([...active.filter((p) => p.featured), ...active.filter((p) => !p.featured)]).slice(0, 8);
   const profs = cats.filter((c) => c.path.startsWith("CALÇADO>COMPRAR POR PROFISSÃO>"));
   return (
     <>
@@ -39,7 +39,7 @@ export default async function Home() {
       <section className="section" style={{ paddingTop: 8 }}>
         <div className="wrap">
           <div className="section-head"><h2>Os mais escolhidos</h2><Link href="/loja">Ver todos</Link></div>
-          <div className="grid">{featured.map((p) => <ProductCard key={p.id} p={p} />)}</div>
+          <div className="grid">{featured.map((g) => <ProductCard key={g.key} g={g} />)}</div>
         </div>
       </section>
 

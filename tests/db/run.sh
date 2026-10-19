@@ -24,4 +24,6 @@ fresh; run "importação: ligar a produtos existentes" -f import_link_test.sql
 fresh; run "área de cliente" -f customer_test.sql
 fresh; run "várias transportadoras" -f shipping_options_test.sql
 fresh; run "faturação InvoiceXpress" -f invoicing_test.sql
+fresh; run "catálogo por modelos" -f models_test.sql
+fresh; run "livre resolução" -f withdrawal_test.sql
 exit $fail

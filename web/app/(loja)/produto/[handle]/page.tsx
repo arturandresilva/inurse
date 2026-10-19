@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import BuyBox from "@/components/BuyBox";
 import FavoriteButton from "@/components/FavoriteButton";
 import Gallery from "@/components/Gallery";
-import { getCategories, getProduct, sellable } from "@/lib/catalog";
+import { colorLabel, getCategories, getModelColors, getProduct, image, sellable } from "@/lib/catalog";
 import { categoryHref, categoryLabel, SITE_URL, stripHtml } from "@/lib/format";
 
 export const revalidate = 300;
@@ -24,7 +24,7 @@ export default async function ProductPage({ params, searchParams }: { params: Pr
   const [{ handle }, sp] = await Promise.all([params, searchParams]);
   const p = await getProduct(handle);
   if (!p) notFound();
-  const cats = await getCategories();
+  const [cats, colors] = await Promise.all([getCategories(), getModelColors(p)]);
   const main = cats.find((c) => p.product_categories.some((pc) => pc.category_id === c.id) && c.path.split(">").length === 2 && !c.path.includes("COMPRAR POR"));
   const images = p.product_images.map((i) => i.url);
   const out = p.status === "out_of_stock" || !p.variants.some(sellable);
@@ -43,8 +43,28 @@ export default async function ProductPage({ params, searchParams }: { params: Pr
         <div className="buy">
           <p className="crumbs"><Link href="/loja">Loja</Link>{main ? <> / <Link href={categoryHref(main.path)}>{categoryLabel(main.name)}</Link></> : null}</p>
           {p.brand && <p className="brand">{p.brand}</p>}
-          <h1>{p.title}</h1>
+          <h1>{p.model ?? p.title}</h1>
           {p.excerpt && <p className="muted" style={{ marginTop: 10 }}>{p.excerpt}</p>}
+          {p.model && (
+            <div className="color-choice">
+              <p className="color-name"><span className="muted">Cor:</span> <strong>{colorLabel(p)}</strong></p>
+              {colors.length > 1 && (
+                <nav className="colors" aria-label="Escolher a cor">
+                  {colors.map((c) => {
+                    const u = image(c);
+                    const off = c.status === "out_of_stock" || !c.variants.some(sellable);
+                    return (
+                      <Link key={c.id} href={`/produto/${c.handle}${sp.tamanho ? `?tamanho=${sp.tamanho}` : ""}`} scroll={false}
+                        className={`color${c.id === p.id ? " on" : ""}${off ? " off" : ""}`} aria-current={c.id === p.id ? "page" : undefined}
+                        title={`${colorLabel(c)}${off ? " (esgotado)" : ""}`} aria-label={`${colorLabel(c)}${off ? ", esgotado" : ""}`}>
+                        {u ? <img src={u} alt="" loading="lazy" /> : <span>{colorLabel(c).slice(0, 2)}</span>}
+                      </Link>
+                    );
+                  })}
+                </nav>
+              )}
+            </div>
+          )}
           <BuyBox title={p.title} handle={p.handle} image={images[0] ?? null} initialSize={sp.tamanho} vatRate={Number(p.vat_rate)} outOfStock={out}
             variants={p.variants.map((v) => ({ id: v.id, option_value: v.option_value, price_cents: v.price_cents, compare_at_cents: v.compare_at_cents, available: sellable(v) && p.status === "active" }))} />
           <FavoriteButton productId={p.id} handle={p.handle} />

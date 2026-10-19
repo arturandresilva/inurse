@@ -25,6 +25,7 @@ export default function Footer() {
             <ul>
               <li><Link href="/p/termos-e-condicoes">Termos e condições</Link></li>
               <li><Link href="/p/privacidade">Política de privacidade e cookies</Link></li>
+              <li><Link href="/livre-resolucao">Direito de livre resolução</Link></li>
               <li><CookiePrefsLink /></li>
               <li><a href="https://www.livroreclamacoes.pt" target="_blank" rel="noopener noreferrer">Livro de Reclamações</a></li>
               <li><a href="https://www.consumidor.gov.pt/resolucao-de-litigios.aspx" target="_blank" rel="noopener noreferrer">Resolução alternativa de litígios</a></li>
