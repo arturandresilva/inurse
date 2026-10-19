@@ -126,7 +126,7 @@ function Brand() {
 }
 
 function Login() {
-  const [mode, setMode] = useState<"in" | "reset">("in");
+  const [mode, setMode] = useState<"in" | "reset" | "up">("in");
   const [msg, setMsg] = useState<{ t: string; err?: boolean } | null>(null);
   const [busy, setBusy] = useState(false);
   async function submit(e: React.FormEvent<HTMLFormElement>) {
@@ -139,6 +139,10 @@ function Login() {
         const { error } = await sb().auth.resetPasswordForEmail(email, { redirectTo: `${location.origin}/admin` });
         if (error) throw error;
         setMsg({ t: "Se o email existir, recebes um link para definir nova palavra-passe." });
+      } else if (mode === "up") {
+        const { data, error } = await sb().auth.signUp({ email, password: String(f.get("password") ?? ""), options: { emailRedirectTo: `${location.origin}/admin` } });
+        if (error) throw error;
+        if (!data.session) setMsg({ t: "Conta criada. Abre o link que recebeste por email para confirmar e depois entra." });
       } else {
         const { error } = await sb().auth.signInWithPassword({ email, password: String(f.get("password") ?? "") });
         if (error) throw error;
@@ -149,13 +153,16 @@ function Login() {
   return (
     <form className="a-auth" onSubmit={submit}>
       <Brand />
-      <h1>{mode === "in" ? "Entrar" : "Recuperar palavra-passe"}</h1>
+      <h1>{mode === "in" ? "Entrar" : mode === "up" ? "Criar conta (administrador convidado)" : "Recuperar palavra-passe"}</h1>
       <label className="a-field"><span className="a-label">Email</span><input name="email" type="email" required autoComplete="username" /></label>
-      {mode === "in" && <label className="a-field"><span className="a-label">Palavra-passe</span><input name="password" type="password" required autoComplete="current-password" /></label>}
-      <button className="a-btn primary" disabled={busy}>{busy ? "A entrar…" : mode === "in" ? "Entrar" : "Enviar link"}</button>
-      <button type="button" className="a-link" onClick={() => { setMode(mode === "in" ? "reset" : "in"); setMsg(null); }}>
-        {mode === "in" ? "Esqueci-me da palavra-passe" : "Voltar a entrar"}
-      </button>
+      {mode !== "reset" && <label className="a-field"><span className="a-label">Palavra-passe{mode === "up" ? " (mínimo 8 caracteres)" : ""}</span><input name="password" type="password" required minLength={mode === "up" ? 8 : undefined} autoComplete={mode === "up" ? "new-password" : "current-password"} /></label>}
+      <button className="a-btn primary" disabled={busy}>{busy ? "Um momento…" : mode === "in" ? "Entrar" : mode === "up" ? "Criar conta" : "Enviar link"}</button>
+      {mode === "in" ? (
+        <p className="a-small" style={{ display: "flex", gap: 14, flexWrap: "wrap", justifyContent: "center" }}>
+          <button type="button" className="a-link" onClick={() => { setMode("reset"); setMsg(null); }}>Esqueci-me da palavra-passe</button>
+          <button type="button" className="a-link" onClick={() => { setMode("up"); setMsg(null); }}>Fui convidado: criar conta</button>
+        </p>
+      ) : <button type="button" className="a-link" onClick={() => { setMode("in"); setMsg(null); }}>Voltar a entrar</button>}
       {msg && <p className={`a-auth-msg${msg.err ? " err" : ""}`} role="alert">{msg.t}</p>}
     </form>
   );

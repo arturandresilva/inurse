@@ -33,7 +33,7 @@ export default function ProductPage() {
 function Editor({ d, reload }: { d: Awaited<ReturnType<typeof load>>; reload: () => Promise<void> }) {
   const router = useRouter();
   const { busy, act } = useAction();
-  const [p, setP] = useState<Row>(() => ({ ...blank, ...(d.p ?? {}) }));
+  const [p, setP] = useState<Row>(() => ({ ...blank, ...(d.p ?? {}), description_html: decodeEntities(d.p?.description_html ?? "") }));
   const [cats, setCats] = useState<Set<string>>(() => new Set<string>((d.p?.product_categories ?? []).map((x: Row) => String(x.category_id))));
   const [vars, setVars] = useState<V[]>(() => [...(d.p?.variants ?? [])].sort((a, b) => a.position - b.position).map((v) => ({ ...v, _key: v.id })));
   const [imgs, setImgs] = useState<Row[]>(() => [...(d.p?.product_images ?? [])].sort((a, b) => a.position - b.position));
@@ -306,4 +306,10 @@ function MoneyInput({ value, onChange, label }: { value: number | null | undefin
   const [txt, setTxt] = useState(fromCents(value));
   useEffect(() => { setTxt((t) => (toCents(t) === (value ?? null) ? t : fromCents(value))); }, [value]);
   return <input className="money" inputMode="decimal" value={txt} aria-label={label} onChange={(e) => setTxt(e.target.value)} onBlur={() => { const c = toCents(txt); if (c !== (value ?? null)) onChange(c); setTxt(fromCents(c)); }} />;
+}
+
+/** "p&eacute;" → "pé" (textos vindos da loja antiga), mantendo o HTML igual. */
+function decodeEntities(html: string) {
+  if (!html || !/&[a-z]+;/i.test(html) || typeof DOMParser === "undefined") return html;
+  return new DOMParser().parseFromString(html, "text/html").body.innerHTML;
 }

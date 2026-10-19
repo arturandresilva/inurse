@@ -79,8 +79,8 @@
 .a-table a { color: inherit; font-weight: 700; text-decoration: none; }
 .a-table a:hover { text-decoration: underline; }
 .a-table input, .a-table select { padding: 5px 8px; font-size: .9rem; }
-.a-table input.money { width: 92px; text-align: right; }
-.a-table input.small { width: 70px; }
+.a-table input.money { width: 92px; min-width: 92px; text-align: right; }
+.a-table input.small { width: 70px; min-width: 70px; }
 .a-thumb { width: 40px; height: 40px; border-radius: 8px; background: var(--mint); object-fit: contain; mix-blend-mode: multiply; display: block; }
 .a-thumb.none { display: block; }
 .a-muted { color: var(--a-soft); }
@@ -109,10 +109,10 @@
 .a-link { background: none; border: 0; padding: 0; font: inherit; color: var(--a-act); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 
 /* ---------- Formulários ---------- */
-.a-root input:not([type=checkbox]):not([type=radio]):not([type=file]), .a-root select, .a-root textarea {
+.a-root :where(input:not([type=checkbox]):not([type=radio]):not([type=file]), select, textarea) {
   width: 100%; font: inherit; color: var(--a-ink); background: #fff; border: 1px solid #c9d3de; border-radius: 8px; padding: 8px 10px; min-width: 0; }
-.a-root textarea { min-height: 90px; resize: vertical; }
-.a-root input:focus, .a-root select:focus, .a-root textarea:focus { outline: 2px solid var(--ceil); outline-offset: 0; border-color: var(--a-ink); }
+.a-root :where(textarea) { min-height: 90px; resize: vertical; }
+.a-root :where(input, select, textarea):focus { outline: 2px solid var(--ceil); outline-offset: 0; border-color: var(--a-ink); }
 .a-form { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px 16px; }
 .a-field { display: grid; gap: 5px; align-content: start; min-width: 0; }
 .a-field.wide { grid-column: 1 / -1; }
