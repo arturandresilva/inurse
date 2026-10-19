@@ -99,7 +99,7 @@ export default function OrderPage() {
                   <div style={{ padding: "8px 20px 16px", maxWidth: 380, marginLeft: "auto" }} className="a-lines">
                     <div className="a-line"><span>Subtotal</span><span>{euro(o.subtotal_cents)}</span></div>
                     {o.discount_cents > 0 && <div className="a-line"><span>Desconto</span><span>−{euro(o.discount_cents)}</span></div>}
-                    <div className="a-line"><span>Portes{o.weight_g ? ` (${(o.weight_g / 1000).toFixed(2).replace(".", ",")} kg)` : ""}</span><span>{o.shipping_cents ? euro(o.shipping_cents) : "Grátis"}</span></div>
+                    <div className="a-line"><span>Portes{o.shipping_method?.label ? ` · ${o.shipping_method.label}` : ""}{o.weight_g ? ` (${(o.weight_g / 1000).toFixed(2).replace(".", ",")} kg)` : ""}</span><span>{o.shipping_cents ? euro(o.shipping_cents) : "Grátis"}</span></div>
                     <div className="a-line total"><span>Total (c/IVA)</span><span>{euro(o.total_cents)}</span></div>
                   </div>
                 </Card>
@@ -220,6 +220,7 @@ function ShipForm({ order, pickups, cttEnabled, busy, onSubmit }: { order: Row; 
       const f = Object.fromEntries(new FormData(e.currentTarget)) as Row;
       onSubmit({ ...f, weight_g: f.weight_kg ? Math.round(Number(String(f.weight_kg).replace(",", ".")) * 1000) : null });
     }}>
+      {order.shipping_method?.label && <Alert tone="info">O cliente escolheu: <strong>{order.shipping_method.label}</strong>{order.shipping_method.delivery === "ponto" ? " (levantamento num ponto de recolha)" : ""}.</Alert>}
       {!cttEnabled && <Alert tone="info">A API CTT ainda não está ligada: cria a guia no portal CTT e cola aqui o código de seguimento. Depois de ligada, a etiqueta e o pedido de recolha são criados neste ecrã.</Alert>}
       {pickups.length === 0 && <Alert tone="warn">Ainda não tens moradas de recolha. <Link href="/admin/envios?tab=moradas">Adicionar</Link></Alert>}
       <div className="a-grid-2">
@@ -230,8 +231,8 @@ function ShipForm({ order, pickups, cttEnabled, busy, onSubmit }: { order: Row; 
           </select>
         </Field>
         <Field label="Código de seguimento"><input name="tracking_code" placeholder="ex.: EA123456789PT" autoFocus /></Field>
-        <Field label="Transportadora"><input name="carrier" defaultValue="CTT Expresso" /></Field>
-        <Field label="Serviço"><input name="service" defaultValue="48h" /></Field>
+        <Field label="Transportadora"><input name="carrier" defaultValue={order.shipping_method?.carrier ?? "CTT Expresso"} /></Field>
+        <Field label="Serviço"><input name="service" defaultValue={order.shipping_method?.service ?? "48h"} /></Field>
         <Field label="Peso (kg)"><input name="weight_kg" inputMode="decimal" defaultValue={order.weight_g ? (order.weight_g / 1000).toString().replace(".", ",") : ""} /></Field>
         <Field label="Volumes"><input name="parcels" type="number" min={1} defaultValue={1} /></Field>
         <Field label="Data da recolha"><input name="pickup_date" type="date" /></Field>

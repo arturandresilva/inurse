@@ -22,4 +22,5 @@ fresh; run "recolhas e devoluções" -f returns_test.sql
 fresh; run "operações do backoffice" -f admin_ops_test.sql
 fresh; run "importação: ligar a produtos existentes" -f import_link_test.sql
 fresh; run "área de cliente" -f customer_test.sql
+fresh; run "várias transportadoras" -f shipping_options_test.sql
 exit $fail

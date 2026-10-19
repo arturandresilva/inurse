@@ -15,11 +15,11 @@ export default function CheckoutPage() {
   const [lines, setLines] = useState<CartLine[]>([]);
   const [methods, setMethods] = useState<string[]>([]);
   const [f, setF] = useState({ email: "", name: "", phone: "", nif: "", line1: "", line2: "", zip: "", city: "", region: "Continente",
-    payment: "", promo: "", notes: "", terms: false, newsletter: false });
+    payment: "", promo: "", notes: "", terms: false, newsletter: false, ship: "" });
   const [promoApplied, setPromoApplied] = useState("");
   const [error, setError] = useState("");
   const [sending, setSending] = useState(false);
-  const { quote, loading } = useQuote(lines, f.region, promoApplied);
+  const { quote, loading } = useQuote(lines, f.region, promoApplied, f.ship);
 
   const [signedIn, setSignedIn] = useState(false);
   useEffect(() => {
@@ -52,7 +52,7 @@ export default function CheckoutPage() {
     setSending(true);
     const { data, error: err } = await supabase.rpc("place_order", { p: {
       email: f.email, phone: f.phone, nif: f.nif || null, accept_terms: f.terms, newsletter: f.newsletter, payment_method: f.payment,
-      promo_code: promoApplied || null, notes: f.notes || null, cart_token: cartToken(),
+      promo_code: promoApplied || null, notes: f.notes || null, cart_token: cartToken(), shipping_option: quote?.shipping_option ?? null,
       shipping_address: { name: f.name, phone: f.phone, line1: f.line1, line2: f.line2, zip: f.zip.trim(), city: f.city, region: f.region },
       items: lines.map((l) => ({ variant_id: l.variant_id, qty: l.qty })),
     } });
@@ -91,6 +91,20 @@ export default function CheckoutPage() {
             <div className="field"><label htmlFor="region">Zona</label>
               <select id="region" value={f.region} onChange={up("region")}><option>Continente</option><option>Açores</option><option>Madeira</option></select></div>
           </fieldset>
+          {(quote?.shipping_options?.length ?? 0) > 0 && (
+            <fieldset>
+              <legend>Como queres receber</legend>
+              <div className="ship-opts" role="radiogroup" aria-label="Transportadora">
+                {quote!.shipping_options!.map((o) => (
+                  <label key={o.key} className={quote!.shipping_option === o.key ? "on" : ""}>
+                    <input type="radio" name="ship" value={o.key} checked={quote!.shipping_option === o.key} onChange={() => setF((s) => ({ ...s, ship: o.key }))} />
+                    <span className="ship-name">{o.label}<small>{o.delivery === "ponto" ? "Levantas num ponto de recolha" : "Entrega na morada"}{o.eta ? ` · ${o.eta}` : ""}</small></span>
+                    <span className="ship-price">{o.price_cents === 0 ? "Grátis" : `${o.was_cents ? "+" : ""}${(o.price_cents / 100).toFixed(2).replace(".", ",")} €`}</span>
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+          )}
           <fieldset>
             <legend>Pagamento</legend>
             <div className="pay" role="radiogroup" aria-label="Método de pagamento">

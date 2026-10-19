@@ -225,3 +225,12 @@ p { margin: 0; }
   .account-auth, .account-cols { grid-template-columns: 1fr; gap: 28px; }
   .account-label { display: none; }
 }
+
+/* opções de envio */
+.ship-opts { display: grid; gap: 10px; }
+.ship-opts label { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; border: 1.5px solid var(--line); border-radius: 14px; padding: 12px 16px; background: #fff; cursor: pointer; }
+.ship-opts label.on { border-color: var(--navy); box-shadow: 0 0 0 1px var(--navy); }
+.ship-opts input { accent-color: var(--scrub); width: 18px; height: 18px; }
+.ship-name { font-weight: 700; }
+.ship-name small { display: block; font-weight: 400; color: var(--ink-soft); font-size: .9rem; }
+.ship-price { font-weight: 700; white-space: nowrap; }

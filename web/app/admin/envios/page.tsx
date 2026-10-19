@@ -43,21 +43,26 @@ type D = Awaited<ReturnType<typeof load>>;
 
 function Rates({ d, reload }: { d: D; reload: () => Promise<void> }) {
   const { busy, act } = useAction();
-  const [rows, setRows] = useState<Row[]>(() => d.rates.map((r) => ({ ...r, _w: String(r.max_weight_g / 1000).replace(".", ","), _p: fromCents(r.price_cents), _c: fromCents(r.cost_cents) })));
+  const toRow = (r: Row) => ({ ...r, _g: `${r.carrier}|${r.service}`, _w: String(r.max_weight_g / 1000).replace(".", ","), _p: fromCents(r.price_cents), _c: fromCents(r.cost_cents) });
+  const [rows, setRows] = useState<Row[]>(() => d.rates.map(toRow));
   const [cfg, setCfg] = useState<Row>(d.cfg);
   const zone = (z: string) => (cfg.zones ?? []).find((x: Row) => x.region === z) ?? { region: z, price_cents: 0, free_from_cents: 0 };
   const setZone = (z: string, k: string, v: unknown) => setCfg((c) => ({ ...c, zones: ZONES.map((name) => (name === z ? { ...zone(name), [k]: v } : zone(name))) }));
   const upd = (i: number, k: string, v: unknown) => setRows((xs) => xs.map((x, j) => (j === i ? { ...x, [k]: v, _dirty: true } : x)));
+  // campos da opção (transportadora, serviço, nome, tipo, prazo) valem para todos os escalões dessa opção
+  const updGroup = (g: string, k: string, v: unknown) => setRows((xs) => xs.map((x) => (x._g === g ? { ...x, [k]: v, _dirty: true } : x)));
+  const groups = [...new Set(rows.filter((r) => !r._del).map((r) => r._g as string))];
 
   async function save(confirm: boolean) {
     for (const r of rows) {
+      if (r._del) { if (r.id) await run(sb().from("shipping_rates").delete().eq("id", r.id)); continue; }
       const w = Math.round(Number(String(r._w).replace(",", ".")) * 1000);
       const price = toCents(r._p);
-      if (!w || price == null) throw new Error(`Escalão incompleto em ${r.zone}.`);
-      const row = { zone: r.zone, max_weight_g: w, price_cents: price, cost_cents: toCents(r._c), active: r.active !== false, carrier: r.carrier ?? "CTT Expresso", service: r.service ?? "48h" };
-      if (r._del && r.id) await run(sb().from("shipping_rates").delete().eq("id", r.id));
-      else if (r._del) continue;
-      else if (!r.id) await run(sb().from("shipping_rates").insert(row));
+      if (!String(r.carrier ?? "").trim() || !String(r.service ?? "").trim()) throw new Error("Cada opção precisa de transportadora e serviço.");
+      if (!w || price == null) throw new Error(`Escalão incompleto em ${r.label || r.carrier} (${r.zone}).`);
+      const row = { zone: r.zone, max_weight_g: w, price_cents: price, cost_cents: toCents(r._c), active: r.active !== false,
+        carrier: String(r.carrier).trim(), service: String(r.service).trim(), label: r.label || null, delivery: r.delivery ?? "domicilio", eta: r.eta || null };
+      if (!r.id) await run(sb().from("shipping_rates").insert(row));
       else if (r._dirty) await run(sb().from("shipping_rates").update(row).eq("id", r.id));
     }
     const value = { ...cfg, rates_confirmed: confirm || !!cfg.rates_confirmed,
@@ -66,32 +71,65 @@ function Rates({ d, reload }: { d: D; reload: () => Promise<void> }) {
     await reload();
   }
 
+  function addOption() {
+    const name = window.prompt("Transportadora (ex.: DPD, GLS, CTT Expresso, Nacex)");
+    if (!name) return;
+    const service = window.prompt("Serviço (ex.: 48h, Pickup, Locker)", "48h") || "48h";
+    const g = `${name}|${service}`;
+    setRows((xs) => [...xs, { _g: g, carrier: name, service, label: `${name} — entrega em casa`, delivery: "domicilio", eta: "", zone: "Continente", _w: "2", _p: "", _c: "", active: true, _dirty: true }]);
+  }
+
   return (
     <>
-      {!d.cfg.rates_confirmed && <Alert tone="warn">Estes escalões são um ponto de partida. Copia os valores do teu contrato CTT (custo) e decide quanto cobras ao cliente; depois carrega em “Guardar e confirmar”.</Alert>}
-      <div className="a-cols even">
-        {ZONES.map((z) => (
-          <Card key={z} title={z} actions={<button className="a-btn sm" onClick={() => setRows((xs) => [...xs, { zone: z, _w: "", _p: "", _c: "", active: true }])}>+ Escalão</button>}>
+      {!d.cfg.rates_confirmed && <Alert tone="warn">Estes escalões são um ponto de partida. Copia os valores do teu contrato com cada transportadora (custo) e decide quanto cobras ao cliente; depois carrega em “Guardar e confirmar”.</Alert>}
+      <Alert tone="info">No checkout, o cliente vê todas as opções ativas para a zona e o peso da encomenda e escolhe a que prefere (e paga esse envio). Com portes grátis, a mais barata fica a 0 € e as outras custam só a diferença.</Alert>
+      {groups.map((g) => {
+        const first = rows.find((r) => r._g === g && !r._del)!;
+        return (
+          <Card key={g} title={first.label || `${first.carrier} ${first.service}`} actions={<>
+            <label className="a-check"><input type="checkbox" checked={first.active !== false} onChange={(e) => updGroup(g, "active", e.target.checked)} /> Ativa</label>
+            <button className="a-btn sm danger" onClick={() => { if (window.confirm("Remover esta opção de envio e todos os escalões?")) setRows((xs) => xs.map((x) => (x._g === g ? { ...x, _del: true } : x))); }}>Remover opção</button>
+          </>}>
+            <div className="a-form" style={{ marginBottom: 12 }}>
+              <Field label="Transportadora"><input value={first.carrier ?? ""} onChange={(e) => updGroup(g, "carrier", e.target.value)} /></Field>
+              <Field label="Serviço"><input value={first.service ?? ""} onChange={(e) => updGroup(g, "service", e.target.value)} /></Field>
+              <Field label="Nome para o cliente"><input value={first.label ?? ""} onChange={(e) => updGroup(g, "label", e.target.value)} placeholder="ex.: CTT — entrega em casa" /></Field>
+              <Field label="Tipo">
+                <select value={first.delivery ?? "domicilio"} onChange={(e) => updGroup(g, "delivery", e.target.value)}>
+                  <option value="domicilio">Entrega na morada</option><option value="ponto">Ponto de recolha / cacifo</option>
+                </select>
+              </Field>
+              <Field label="Prazo mostrado"><input value={first.eta ?? ""} onChange={(e) => updGroup(g, "eta", e.target.value)} placeholder="2–3 dias úteis" /></Field>
+            </div>
             <table className="a-table">
-              <thead><tr><th>Até (kg)</th><th className="num">Cliente paga (c/IVA)</th><th className="num">CTT cobra-te (s/IVA)</th><th></th></tr></thead>
+              <thead><tr><th>Zona</th><th>Até (kg)</th><th className="num">Cliente paga (c/IVA)</th><th className="num">Custa-te (s/IVA)</th><th></th></tr></thead>
               <tbody>
-                {rows.map((r, i) => r.zone !== z || r._del ? null : (
+                {rows.map((r, i) => r._g !== g || r._del ? null : (
                   <tr key={r.id ?? `n${i}`}>
+                    <td><select value={r.zone} onChange={(e) => upd(i, "zone", e.target.value)} aria-label="Zona">{ZONES.map((z) => <option key={z}>{z}</option>)}</select></td>
                     <td><input className="small" inputMode="decimal" value={r._w} onChange={(e) => upd(i, "_w", e.target.value)} aria-label="Peso máximo" /></td>
                     <td className="num"><input className="money" inputMode="decimal" value={r._p} onChange={(e) => upd(i, "_p", e.target.value)} aria-label="Preço ao cliente" /></td>
-                    <td className="num"><input className="money" inputMode="decimal" value={r._c} placeholder="= preço" onChange={(e) => upd(i, "_c", e.target.value)} aria-label="Custo CTT" /></td>
+                    <td className="num"><input className="money" inputMode="decimal" value={r._c} placeholder="= preço" onChange={(e) => upd(i, "_c", e.target.value)} aria-label="Custo" /></td>
                     <td><button className="a-btn sm ghost" onClick={() => upd(i, "_del", true)} aria-label="Remover escalão">✕</button></td>
                   </tr>
                 ))}
               </tbody>
             </table>
-            <div style={{ marginTop: 10 }}>
-              <Field label="Portes grátis a partir de (€, 0 = nunca)">
+            <button className="a-btn sm" style={{ marginTop: 10 }} onClick={() => setRows((xs) => [...xs, { ...first, id: undefined, _w: "", _p: "", _c: "", _dirty: true }])}>+ Escalão</button>
+          </Card>
+        );
+      })}
+      <p style={{ marginBottom: 18 }}><button className="a-btn" onClick={addOption}>+ Nova opção de envio (outra transportadora)</button></p>
+      <div className="a-cols even">
+        <Card title="Portes grátis">
+          <div className="a-form" style={{ gridTemplateColumns: "1fr" }}>
+            {ZONES.map((z) => (
+              <Field key={z} label={`${z}: a partir de (€, 0 = nunca)`}>
                 <input inputMode="decimal" value={fromCents(zone(z).free_from_cents)} onChange={(e) => setZone(z, "free_from_cents", toCents(e.target.value) ?? 0)} style={{ maxWidth: 140 }} />
               </Field>
-            </div>
-          </Card>
-        ))}
+            ))}
+          </div>
+        </Card>
         <Card title="Peso e volume">
           <div className="a-form" style={{ gridTemplateColumns: "1fr" }}>
             <Field label="Peso por defeito de um artigo sem peso (g)"><input type="number" value={cfg.default_item_weight_g ?? 900} onChange={(e) => setCfg({ ...cfg, default_item_weight_g: e.target.value })} /></Field>
