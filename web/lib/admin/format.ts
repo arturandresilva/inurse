@@ -55,3 +55,10 @@ export const RETURN_REASON: Record<string, string> = {
   tamanho: "Tamanho", defeito: "Defeito", engano_envio: "Engano no envio", nao_gostou: "Não gostou", outro: "Outro",
 };
 export type Tone = "ok" | "warn" | "err" | "info" | "muted";
+
+/** Margem sobre o preço de venda sem IVA (%). */
+export function marginPct(priceCents: number | null | undefined, costCents: number | null | undefined, vat: number) {
+  if (!priceCents || costCents == null) return null;
+  const net = priceCents / (1 + vat / 100);
+  return ((net - costCents) / net) * 100;
+}
