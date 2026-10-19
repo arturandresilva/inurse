@@ -22,7 +22,7 @@ async function load() {
     m.run_id = runId;
     if (p.run_id === runId) m.offers.push(p);
   }
-  return [...byModel.values()].map((m) => {
+  return [...byModel.values()].map((m): Row => {
     const offers = (m.offers as Row[]).filter((o) => o.in_stock !== false).sort((a, b) => a.price_cents - b.price_cents);
     const our = (m.offers as Row[])[0]?.our_price_cents ?? null;
     return { ...m, offers, our, best: offers[0] ?? null };

@@ -39,7 +39,7 @@ export default function ReviewForm({ number, token, initial }: { number: number;
 
   const todo = info.products.filter((p) => !p.done);
   if (info.store_done && !todo.length) return <div className="notice"><p>{t("Já avaliou esta encomenda. Obrigado!")}</p></div>;
-  const setP = (id: string, k: string, v: string | number) => setProds({ ...prods, [id]: { rating: 0, title: "", body: "", ...prods[id], [k]: v } });
+  const setP = (id: string, k: string, v: string | number) => setProds({ ...prods, [id]: { ...(prods[id] ?? { rating: 0, title: "", body: "" }), [k]: v } });
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
