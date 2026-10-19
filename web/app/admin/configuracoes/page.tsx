@@ -59,6 +59,14 @@ function Settings() {
                   <div className="a-formfoot"><button className="a-btn primary" disabled={busy}>Guardar</button></div>
                 </form>
               </Card>
+              <Card title="Traduções (inglês, espanhol e francês)">
+                <p className="a-hint" style={{ marginBottom: 12 }}>Os textos fixos da loja já estão traduzidos. As descrições dos produtos, as categorias e as páginas (termos, privacidade…) são traduzidas pelo agente Tradutor todas as noites, só o que é novo ou mudou. Conta para o orçamento mensal da IA.</p>
+                <button type="button" className="a-btn" disabled={busy} onClick={() => act(async () => {
+                  const r = await callFunction<Row>("agentes", { agent: "tradutor" });
+                  if (r?.skipped) throw new Error(r.reason);
+                  return r;
+                }, "Tradução feita. Se faltar alguma coisa, continua na próxima execução.")}>Traduzir agora</button>
+              </Card>
               <Card title="Dados legais">
                 <p className="a-hint" style={{ marginBottom: 12 }}>Usados nos Termos e Condições, Privacidade, Contactos, livre resolução e emails aos clientes. Ao corrigir aqui, muda em todo o site (pode demorar até 10 minutos a aparecer).</p>
                 <form onSubmit={(e) => { const f = form(e); const g = (k: string) => String(f.get(k) ?? "").trim();

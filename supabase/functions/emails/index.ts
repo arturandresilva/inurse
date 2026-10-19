@@ -25,7 +25,6 @@ async function rest(path: string, init: RequestInit = {}): Promise<Row[] | Row |
 const one = async (path: string) => (((await rest(path)) ?? []) as Row[])[0] ?? null;
 
 const esc = (s: unknown) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]!));
-const euro = (c: number) => (c / 100).toLocaleString("pt-PT", { style: "currency", currency: "EUR" });
 const first = (n: unknown) => String(n ?? "").trim().split(/\s+/)[0] ?? "";
 
 // ---------- modelo base ----------
@@ -33,84 +32,157 @@ let LEGAL: Row = {};
 const phone = (p: unknown) => String(p ?? "").replace(/\D/g, "").replace(/^(\d{3})(\d{3})(\d{3})$/, "$1 $2 $3");
 function layout(title: string, inner: string, site: string) {
   const L = { legal_name: "Artur Silva", nif: "226720462", address: "Praça 20 de Maio", zip: "4590-182", city: "Paços de Ferreira", email: "info@inurse.pt", phone: "918889008", ...Object.fromEntries(Object.entries(LEGAL).filter(([, v]) => v)) };
-  return `<!doctype html><html lang="pt"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${esc(title)}</title></head>
+  return `<!doctype html><html lang="${LANG}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${esc(title)}</title></head>
 <body style="margin:0;background:#f2f5f7;font-family:Arial,Helvetica,sans-serif;color:#1c2a4a">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f2f5f7;padding:24px 12px"><tr><td align="center">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border-radius:16px;overflow:hidden">
 <tr><td style="padding:22px 28px;border-bottom:1px solid #e3e9ee"><a href="${site}" style="text-decoration:none;font:700 24px Arial,sans-serif;letter-spacing:2px;color:#2EB3EA"><span style="color:#E8323C">&#10084;</span>iNURSE</a></td></tr>
 <tr><td style="padding:28px;font-size:15px;line-height:1.55">${inner}</td></tr>
 <tr><td style="padding:18px 28px;background:#1c2a4a;color:#cfd8e3;font-size:12px;line-height:1.5">
-iNurse · calçado profissional e meias de descanso · <a href="mailto:${esc(L.email)}" style="color:#fff">${esc(L.email)}</a> · ${esc(phone(L.phone))}<br>
+iNurse · ${tx("foot")} · <a href="mailto:${esc(L.email)}" style="color:#fff">${esc(L.email)}</a> · ${esc(phone(L.phone))}<br>
 ${esc(L.legal_name)}, NIF ${esc(L.nif)}, ${esc(L.address)}, ${esc(L.zip)} ${esc(L.city)}</td></tr>
 </table></td></tr></table></body></html>`;
 }
 const button = (href: string, label: string) =>
   `<p style="margin:22px 0"><a href="${href}" style="display:inline-block;background:#0f6e63;color:#fff;text-decoration:none;font-weight:700;padding:13px 22px;border-radius:12px">${esc(label)}</a></p>`;
 
-function itemsTable(items: Row[]) {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid #e3e9ee;margin:14px 0">${items.map((i) =>
-    `<tr><td style="padding:10px 0;border-bottom:1px solid #e3e9ee">${esc(i.title)}<br><span style="color:#5b6780;font-size:13px">Tamanho ${esc(i.option_value)} · ${i.quantity} un.</span></td>
-     <td align="right" style="padding:10px 0;border-bottom:1px solid #e3e9ee;white-space:nowrap">${euro(i.unit_price_cents * i.quantity)}</td></tr>`).join("")}</table>`;
-}
 
-// ---------- os três emails ----------
+// ---------- textos dos emails, por língua (a encomenda guarda a língua do cliente) ----------
+type Lang = "pt" | "en" | "es" | "fr";
+const TX: Record<Lang, Record<string, string>> = {
+  pt: {
+    hi: "Olá{n},", view: "Ver a encomenda", size: "Tamanho", units: "un.", shipping: "Portes", discount: "Desconto", total: "Total",
+    rec_s: "Encomenda #{o} recebida", rec_t: "Obrigado pela sua encomenda na iNurse. Recebemos a encomenda <strong>#{o}</strong>:",
+    tr_h: "Pagamento por transferência bancária", tr_b: "Indique a referência <strong>#{o}</strong> no descritivo. A encomenda segue assim que o pagamento for confirmado.",
+    pay_other: "Siga as instruções de pagamento na página da encomenda. A encomenda segue assim que o pagamento for confirmado.",
+    rec_f: "Tem {d} dias depois de receber para trocar ou devolver. A fatura é enviada por email assim que o pagamento for confirmado.",
+    sh_s: "A encomenda #{o} está a caminho", sh_t: "Boas notícias: a sua encomenda <strong>#{o}</strong> já saiu do armazém{c}.", with: " com {c}",
+    track_code: "Código de seguimento", track: "Seguir a encomenda", sh_f: "Se o tamanho não servir, pode pedir a troca na página da encomenda.",
+    paid_s: "Pagamento da encomenda #{o} confirmado", paid_t: "Confirmámos o pagamento da sua encomenda <strong>#{o}</strong> ({v}). Vamos prepará-la e avisamos assim que sair do armazém. A fatura segue num email à parte.",
+    prep_s: "Encomenda #{o} em preparação", prep_t: "A sua encomenda <strong>#{o}</strong> está a ser preparada no armazém. Avisamos com o código de seguimento assim que for enviada.",
+    del_s: "Encomenda #{o} entregue", del_t: "A sua encomenda <strong>#{o}</strong> foi entregue. Se o tamanho não servir, tem {d} dias para pedir a troca ou a devolução na página da encomenda.",
+    can_s: "Encomenda #{o} cancelada", can_t: "A sua encomenda <strong>#{o}</strong> foi cancelada. Se já tinha pago, o reembolso é feito pelo mesmo meio de pagamento. Se não pediu este cancelamento, responda a este email.",
+    ref_s: "Reembolso da encomenda #{o}", ref_t: "Processámos o reembolso da sua encomenda <strong>#{o}</strong>. Pode demorar alguns dias úteis a aparecer na sua conta, conforme o banco.",
+    rv_s: "Como correu a sua encomenda #{o}?", rv_t: "A sua encomenda <strong>#{o}</strong> foi entregue. Esperamos que esteja tudo a seu gosto!",
+    rv_q: "Como foi a experiência de compra? Toque nas estrelas:", rv_sug: "Tem alguma sugestão para melhorarmos? Pode deixá-la na mesma página, juntamente com a sua opinião sobre os produtos. Leva menos de um minuto e ajuda outros profissionais de saúde a escolher.",
+    rv_btn: "Dar a minha opinião", rv_f: "Se algo não correu bem, responda a este email: lemos todas as mensagens.",
+    foot: "calçado profissional e meias de descanso",
+  },
+  en: {
+    hi: "Hello{n},", view: "View your order", size: "Size", units: "pcs", shipping: "Shipping", discount: "Discount", total: "Total",
+    rec_s: "Order #{o} received", rec_t: "Thank you for shopping at iNurse. We have received order <strong>#{o}</strong>:",
+    tr_h: "Payment by bank transfer", tr_b: "Please quote reference <strong>#{o}</strong> in the transfer description. We ship as soon as the payment is confirmed.",
+    pay_other: "Please follow the payment instructions on your order page. We ship as soon as the payment is confirmed.",
+    rec_f: "You have {d} days after delivery to exchange or return. The invoice is emailed once the payment is confirmed.",
+    sh_s: "Order #{o} is on its way", sh_t: "Good news: your order <strong>#{o}</strong> has left the warehouse{c}.", with: " with {c}",
+    track_code: "Tracking code", track: "Track your order", sh_f: "If the size isn't right, you can request an exchange on your order page.",
+    paid_s: "Payment for order #{o} confirmed", paid_t: "We have confirmed the payment for your order <strong>#{o}</strong> ({v}). We will prepare it and let you know as soon as it ships. The invoice follows in a separate email.",
+    prep_s: "Order #{o} is being prepared", prep_t: "Your order <strong>#{o}</strong> is being prepared at the warehouse. We will send you the tracking code as soon as it ships.",
+    del_s: "Order #{o} delivered", del_t: "Your order <strong>#{o}</strong> has been delivered. If the size isn't right, you have {d} days to request an exchange or return on your order page.",
+    can_s: "Order #{o} cancelled", can_t: "Your order <strong>#{o}</strong> has been cancelled. If you had already paid, the refund is made to the same payment method. If you did not request this, please reply to this email.",
+    ref_s: "Refund for order #{o}", ref_t: "We have processed the refund for your order <strong>#{o}</strong>. It may take a few working days to appear in your account, depending on your bank.",
+    rv_s: "How did your order #{o} go?", rv_t: "Your order <strong>#{o}</strong> has been delivered. We hope you are happy with it!",
+    rv_q: "How was your shopping experience? Tap the stars:", rv_sug: "Any suggestions for us? You can leave them on the same page, together with your opinion of the products. It takes less than a minute and helps other healthcare professionals choose.",
+    rv_btn: "Give my feedback", rv_f: "If something went wrong, just reply to this email: we read every message.",
+    foot: "professional footwear and rest socks",
+  },
+  es: {
+    hi: "Hola{n}:", view: "Ver el pedido", size: "Talla", units: "ud.", shipping: "Envío", discount: "Descuento", total: "Total",
+    rec_s: "Pedido #{o} recibido", rec_t: "Gracias por tu compra en iNurse. Hemos recibido el pedido <strong>#{o}</strong>:",
+    tr_h: "Pago por transferencia bancaria", tr_b: "Indica la referencia <strong>#{o}</strong> en el concepto. Enviamos el pedido en cuanto se confirme el pago.",
+    pay_other: "Sigue las instrucciones de pago en la página del pedido. Enviamos el pedido en cuanto se confirme el pago.",
+    rec_f: "Tienes {d} días desde la recepción para cambiar o devolver. La factura se envía por email cuando se confirma el pago.",
+    sh_s: "Tu pedido #{o} está en camino", sh_t: "Buenas noticias: tu pedido <strong>#{o}</strong> ya ha salido del almacén{c}.", with: " con {c}",
+    track_code: "Código de seguimiento", track: "Seguir el pedido", sh_f: "Si la talla no te sirve, puedes pedir el cambio en la página del pedido.",
+    paid_s: "Pago del pedido #{o} confirmado", paid_t: "Hemos confirmado el pago de tu pedido <strong>#{o}</strong> ({v}). Lo preparamos y te avisamos en cuanto salga del almacén. La factura llega en un email aparte.",
+    prep_s: "Pedido #{o} en preparación", prep_t: "Tu pedido <strong>#{o}</strong> se está preparando en el almacén. Te enviaremos el código de seguimiento en cuanto salga.",
+    del_s: "Pedido #{o} entregado", del_t: "Tu pedido <strong>#{o}</strong> ha sido entregado. Si la talla no te sirve, tienes {d} días para pedir el cambio o la devolución en la página del pedido.",
+    can_s: "Pedido #{o} cancelado", can_t: "Tu pedido <strong>#{o}</strong> ha sido cancelado. Si ya habías pagado, el reembolso se hace por el mismo medio de pago. Si no lo has pedido tú, responde a este email.",
+    ref_s: "Reembolso del pedido #{o}", ref_t: "Hemos procesado el reembolso de tu pedido <strong>#{o}</strong>. Puede tardar unos días hábiles en aparecer en tu cuenta, según el banco.",
+    rv_s: "¿Qué tal tu pedido #{o}?", rv_t: "Tu pedido <strong>#{o}</strong> ha sido entregado. ¡Esperamos que te guste!",
+    rv_q: "¿Cómo fue tu experiencia de compra? Toca las estrellas:", rv_sug: "¿Tienes alguna sugerencia? Puedes dejarla en la misma página, junto con tu opinión sobre los productos. Lleva menos de un minuto y ayuda a otros profesionales sanitarios a elegir.",
+    rv_btn: "Dar mi opinión", rv_f: "Si algo no ha ido bien, responde a este email: leemos todos los mensajes.",
+    foot: "calzado profesional y medias de descanso",
+  },
+  fr: {
+    hi: "Bonjour{n},", view: "Voir la commande", size: "Pointure", units: "pce", shipping: "Livraison", discount: "Remise", total: "Total",
+    rec_s: "Commande #{o} reçue", rec_t: "Merci pour votre commande chez iNurse. Nous avons bien reçu la commande <strong>#{o}</strong> :",
+    tr_h: "Paiement par virement bancaire", tr_b: "Indiquez la référence <strong>#{o}</strong> dans le libellé. Nous expédions dès que le paiement est confirmé.",
+    pay_other: "Suivez les instructions de paiement sur la page de la commande. Nous expédions dès que le paiement est confirmé.",
+    rec_f: "Vous disposez de {d} jours après réception pour échanger ou retourner. La facture est envoyée par email dès confirmation du paiement.",
+    sh_s: "La commande #{o} est en route", sh_t: "Bonne nouvelle : votre commande <strong>#{o}</strong> a quitté l’entrepôt{c}.", with: " avec {c}",
+    track_code: "Numéro de suivi", track: "Suivre la commande", sh_f: "Si la pointure ne convient pas, vous pouvez demander un échange sur la page de la commande.",
+    paid_s: "Paiement de la commande #{o} confirmé", paid_t: "Nous avons confirmé le paiement de votre commande <strong>#{o}</strong> ({v}). Nous la préparons et vous prévenons dès son expédition. La facture suit dans un email séparé.",
+    prep_s: "Commande #{o} en préparation", prep_t: "Votre commande <strong>#{o}</strong> est en préparation à l’entrepôt. Nous vous enverrons le numéro de suivi dès l’expédition.",
+    del_s: "Commande #{o} livrée", del_t: "Votre commande <strong>#{o}</strong> a été livrée. Si la pointure ne convient pas, vous avez {d} jours pour demander un échange ou un retour sur la page de la commande.",
+    can_s: "Commande #{o} annulée", can_t: "Votre commande <strong>#{o}</strong> a été annulée. Si vous aviez déjà payé, le remboursement est effectué par le même moyen de paiement. Si vous n’avez pas demandé cette annulation, répondez à cet email.",
+    ref_s: "Remboursement de la commande #{o}", ref_t: "Nous avons effectué le remboursement de votre commande <strong>#{o}</strong>. Il peut apparaître sur votre compte sous quelques jours ouvrés, selon votre banque.",
+    rv_s: "Comment s’est passée votre commande #{o} ?", rv_t: "Votre commande <strong>#{o}</strong> a été livrée. Nous espérons qu’elle vous plaît !",
+    rv_q: "Comment s’est passée votre expérience d’achat ? Touchez les étoiles :", rv_sug: "Une suggestion pour nous améliorer ? Vous pouvez la laisser sur la même page, avec votre avis sur les produits. Cela prend moins d’une minute et aide d’autres professionnels de santé à choisir.",
+    rv_btn: "Donner mon avis", rv_f: "Si quelque chose ne s’est pas bien passé, répondez à cet email : nous lisons tous les messages.",
+    foot: "chaussures professionnelles et chaussettes de repos",
+  },
+};
+let LANG: Lang = "pt";
+const tx = (k: string, v: Record<string, string | number> = {}) =>
+  Object.entries(v).reduce((s, [a, b]) => s.split(`{${a}}`).join(String(b)), TX[LANG][k] ?? TX.pt[k] ?? k);
+const money = (c: number) => (c / 100).toLocaleString({ pt: "pt-PT", en: "en-GB", es: "es-ES", fr: "fr-FR" }[LANG], { style: "currency", currency: "EUR" });
+
 async function render(kind: string, o: Row, cfg: Row): Promise<{ subject: string; html: string }> {
+  LANG = (["pt", "en", "es", "fr"].includes(o.locale) ? o.locale : "pt") as Lang;
   const site = String(cfg.site_url || "https://www.inurse.pt").replace(/\/$/, "");
-  const orderUrl = `${site}/encomenda/${o.number}?t=${o.public_token}`;
+  const q = LANG === "pt" ? "" : `&lang=${LANG}`;
+  const orderUrl = `${site}/encomenda/${o.number}?t=${o.public_token}${q}`;
   const name = first(o.shipping_address?.name);
-  const hi = `<p style="margin:0 0 14px">Olá${name ? " " + esc(name) : ""},</p>`;
+  const days = LEGAL.return_days ?? 15;
+  const hi = `<p style="margin:0 0 14px">${tx("hi", { n: name ? " " + esc(name) : "" })}</p>`;
+  const N = { o: o.number };
   if (kind === "encomenda_recebida") {
     const items = ((await rest(`order_items?order_id=eq.${o.id}&select=title,option_value,quantity,unit_price_cents&order=title`)) ?? []) as Row[];
     const pay = await one("settings?key=eq.public.payments&select=value");
     const transfer = o.payment_method === "transfer"
-      ? `<div style="background:#e4f2ec;border-radius:12px;padding:14px 16px;margin:16px 0"><strong>Pagamento por transferência bancária</strong><br>
-         IBAN: <strong>${esc(pay?.value?.iban ?? "")}</strong><br>Valor: <strong>${euro(o.total_cents)}</strong><br>
-         Indique a referência <strong>#${o.number}</strong> no descritivo. A encomenda segue assim que o pagamento for confirmado.</div>`
-      : `<p>Siga as instruções de pagamento na página da encomenda. A encomenda segue assim que o pagamento for confirmado.</p>`;
-    return { subject: `Encomenda #${o.number} recebida`, html: layout(`Encomenda #${o.number}`, `${hi}
-      <p>Obrigado pela sua encomenda na iNurse. Recebemos a encomenda <strong>#${o.number}</strong>:</p>
-      ${itemsTable(items)}
-      <p style="text-align:right;margin:0">Portes: ${euro(o.shipping_cents)}${o.discount_cents ? ` · Desconto: −${euro(o.discount_cents)}` : ""}<br><strong style="font-size:17px">Total: ${euro(o.total_cents)}</strong></p>
-      ${transfer}${button(orderUrl, "Ver a encomenda")}
-      <p style="color:#5b6780;font-size:13px">Tem ${LEGAL.return_days ?? 15} dias depois de receber para trocar ou devolver. A fatura é enviada por email assim que o pagamento for confirmado.</p>`, site) };
+      ? `<div style="background:#e4f2ec;border-radius:12px;padding:14px 16px;margin:16px 0"><strong>${tx("tr_h")}</strong><br>
+         IBAN: <strong>${esc(pay?.value?.iban ?? "")}</strong><br>${tx("total")}: <strong>${money(o.total_cents)}</strong><br>${tx("tr_b", N)}</div>`
+      : `<p>${tx("pay_other")}</p>`;
+    const rows = items.map((i) =>
+      `<tr><td style="padding:10px 0;border-bottom:1px solid #e3e9ee">${esc(i.title)}<br><span style="color:#5b6780;font-size:13px">${tx("size")} ${esc(i.option_value)} · ${i.quantity} ${tx("units")}</span></td>
+       <td align="right" style="padding:10px 0;border-bottom:1px solid #e3e9ee;white-space:nowrap">${money(i.unit_price_cents * i.quantity)}</td></tr>`).join("");
+    return { subject: tx("rec_s", N), html: layout(tx("rec_s", N), `${hi}
+      <p>${tx("rec_t", N)}</p>
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid #e3e9ee;margin:14px 0">${rows}</table>
+      <p style="text-align:right;margin:0">${tx("shipping")}: ${money(o.shipping_cents)}${o.discount_cents ? ` · ${tx("discount")}: −${money(o.discount_cents)}` : ""}<br><strong style="font-size:17px">${tx("total")}: ${money(o.total_cents)}</strong></p>
+      ${transfer}${button(orderUrl, tx("view"))}
+      <p style="color:#5b6780;font-size:13px">${tx("rec_f", { d: days })}</p>`, site) };
   }
   if (kind === "encomenda_enviada") {
     const s = await one(`shipments?order_id=eq.${o.id}&select=carrier,tracking_code&order=shipped_at.desc&limit=1`);
     const code = s?.tracking_code;
     const track = code ? `https://www.ctt.pt/feapl_2/app/open/objectSearch/objectSearch.jspx?objects=${encodeURIComponent(code)}` : orderUrl;
-    return { subject: `A encomenda #${o.number} está a caminho`, html: layout("Encomenda enviada", `${hi}
-      <p>Boas notícias: a sua encomenda <strong>#${o.number}</strong> já saiu do armazém${s?.carrier ? ` com ${esc(s.carrier)}` : ""}.</p>
-      ${code ? `<p>Código de seguimento: <strong>${esc(code)}</strong></p>` : ""}
-      ${button(track, code ? "Seguir a encomenda" : "Ver a encomenda")}
-      <p style="color:#5b6780;font-size:13px">Se o tamanho não servir, pode pedir a troca na <a href="${orderUrl}" style="color:#0f6e63">página da encomenda</a>.</p>`, site) };
+    return { subject: tx("sh_s", N), html: layout(tx("sh_s", N), `${hi}
+      <p>${tx("sh_t", { ...N, c: s?.carrier ? tx("with", { c: esc(s.carrier) }) : "" })}</p>
+      ${code ? `<p>${tx("track_code")}: <strong>${esc(code)}</strong></p>` : ""}
+      ${button(track, code ? tx("track") : tx("view"))}
+      <p style="color:#5b6780;font-size:13px"><a href="${orderUrl}" style="color:#0f6e63">${tx("sh_f")}</a></p>`, site) };
   }
-  const simple: Record<string, [string, string, string]> = {
-    encomenda_paga: [`Pagamento da encomenda #${o.number} confirmado`, "Pagamento confirmado",
-      `Confirmámos o pagamento da sua encomenda <strong>#${o.number}</strong> (${euro(o.total_cents)}). Vamos prepará-la e avisamos assim que sair do armazém. A fatura segue num email à parte.`],
-    encomenda_preparacao: [`Encomenda #${o.number} em preparação`, "Em preparação",
-      `A sua encomenda <strong>#${o.number}</strong> está a ser preparada no armazém. Avisamos com o código de seguimento assim que for enviada.`],
-    encomenda_entregue: [`Encomenda #${o.number} entregue`, "Entregue",
-      `A sua encomenda <strong>#${o.number}</strong> foi entregue. Se o tamanho não servir, tem ${LEGAL.return_days ?? 15} dias para pedir a troca ou a devolução na página da encomenda.`],
-    encomenda_cancelada: [`Encomenda #${o.number} cancelada`, "Cancelada",
-      `A sua encomenda <strong>#${o.number}</strong> foi cancelada. Se já tinha pago, o reembolso é feito pelo mesmo meio de pagamento. Se não pediu este cancelamento, responda a este email.`],
-    encomenda_reembolsada: [`Reembolso da encomenda #${o.number}`, "Reembolsada",
-      `Processámos o reembolso da sua encomenda <strong>#${o.number}</strong>. Pode demorar alguns dias úteis a aparecer na sua conta, conforme o banco.`],
+  const simple: Record<string, [string, string]> = {
+    encomenda_paga: ["paid_s", "paid_t"], encomenda_preparacao: ["prep_s", "prep_t"], encomenda_entregue: ["del_s", "del_t"],
+    encomenda_cancelada: ["can_s", "can_t"], encomenda_reembolsada: ["ref_s", "ref_t"],
   };
   if (simple[kind]) {
-    const [subject, title, text] = simple[kind];
-    return { subject, html: layout(title, `${hi}<p>${text}</p>${button(orderUrl, "Ver a encomenda")}`, site) };
+    const [sk, bk] = simple[kind];
+    return { subject: tx(sk, N), html: layout(tx(sk, N), `${hi}<p>${tx(bk, { ...N, v: money(o.total_cents), d: days })}</p>${button(orderUrl, tx("view"))}`, site) };
   }
   // avaliacao
-  const rate = (n: number) => `${site}/avaliar/${o.number}?t=${o.public_token}&nota=${n}`;
+  const rate = (n: number) => `${site}/avaliar/${o.number}?t=${o.public_token}${n ? `&nota=${n}` : ""}${q}`;
   const stars = [1, 2, 3, 4, 5].map((n) =>
-    `<a href="${rate(n)}" style="display:inline-block;text-decoration:none;font-size:30px;color:#f5a623;padding:0 3px" title="${n} estrela${n > 1 ? "s" : ""}">&#9733;</a>`).join("");
-  return { subject: `Como correu a sua encomenda #${o.number}?`, html: layout("Como correu?", `${hi}
-    <p>A sua encomenda <strong>#${o.number}</strong> foi entregue. Esperamos que esteja tudo a seu gosto!</p>
-    <p><strong>Como foi a experiência de compra?</strong> Toque nas estrelas:</p>
+    `<a href="${rate(n)}" style="display:inline-block;text-decoration:none;font-size:30px;color:#f5a623;padding:0 3px" title="${n}/5">&#9733;</a>`).join("");
+  return { subject: tx("rv_s", N), html: layout(tx("rv_s", N), `${hi}
+    <p>${tx("rv_t", N)}</p>
+    <p><strong>${tx("rv_q")}</strong></p>
     <p style="margin:10px 0 18px">${stars}</p>
-    <p>Tem alguma sugestão para melhorarmos? Pode deixá-la na mesma página, juntamente com a sua opinião sobre os produtos. Leva menos de um minuto e ajuda outros profissionais de saúde a escolher.</p>
-    ${button(rate(0).replace("&nota=0", ""), "Dar a minha opinião")}
-    <p style="color:#5b6780;font-size:13px">Se algo não correu bem, responda a este email: lemos todas as mensagens.</p>`, site) };
+    <p>${tx("rv_sug")}</p>
+    ${button(rate(0), tx("rv_btn"))}
+    <p style="color:#5b6780;font-size:13px">${tx("rv_f")}</p>`, site) };
 }
 
 async function send(to: string, subject: string, html: string, cfg: Row) {

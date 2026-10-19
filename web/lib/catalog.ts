@@ -3,14 +3,14 @@ import { supabase } from "./supabase";
 export type Variant = { id: string; option_value: string; price_cents: number; compare_at_cents: number | null; stock: number | null; active: boolean; position: number; allow_backorder: boolean };
 export type Product = {
   id: string; handle: string; title: string; excerpt: string | null; description_html: string | null; brand: string | null;
-  status: string; featured: boolean; model: string | null; color: string | null; vat_rate: number; seo_title: string | null; seo_description: string | null; position: number;
+  status: string; featured: boolean; model: string | null; color: string | null; translations: Record<string, Record<string, string>> | null; vat_rate: number; seo_title: string | null; seo_description: string | null; position: number;
   updated_at: string;
   variants: Variant[]; product_images: { url: string; position: number }[]; product_categories: { category_id: string }[];
 };
-export type Category = { id: string; name: string; slug: string; path: string; parent_id: string | null; position: number };
+export type Category = { id: string; name: string; slug: string; path: string; parent_id: string | null; position: number; translations: Record<string, Record<string, string>> | null };
 
 const PRODUCT_FIELDS =
-  "id,handle,title,excerpt,description_html,brand,model,color,status,featured,vat_rate,seo_title,seo_description,position,updated_at," +
+  "id,handle,title,excerpt,description_html,brand,model,color,translations,status,featured,vat_rate,seo_title,seo_description,position,updated_at," +
   "variants(id,option_value,price_cents,compare_at_cents,stock,active,position,allow_backorder),product_images(url,position),product_categories(category_id)";
 
 function tidy(p: Product): Product {
@@ -32,7 +32,7 @@ export async function getProduct(handle: string): Promise<Product | null> {
 }
 
 export async function getCategories(): Promise<Category[]> {
-  const { data } = await supabase.from("categories").select("id,name,slug,path,parent_id,position").order("path");
+  const { data } = await supabase.from("categories").select("id,name,slug,path,parent_id,position,translations").order("path");
   return (data ?? []) as Category[];
 }
 
@@ -75,4 +75,7 @@ export async function getModelColors(p: Product): Promise<Product[]> {
   return list.some((x) => x.id === p.id) ? list : [p, ...list];
 }
 
-export const colorLabel = (p: Product) => (p.color ? (/^\d+$/.test(p.color) ? `Cor ${p.color}` : p.color) : p.title);
+export function colorLabel(p: Product, locale: string = "pt", t: (s: string, v?: Record<string, string>) => string = (s) => s) {
+  const c = (locale !== "pt" && p.translations?.[locale]?.color) || p.color;
+  return c ? (/^\d+$/.test(c) ? t("Cor {n}", { n: c }) : c) : p.title;
+}

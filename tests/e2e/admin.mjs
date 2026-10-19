@@ -181,6 +181,12 @@ await stepShop('formulário de livre resolução', async () => {
   await shop.click('button:has-text("Enviar declaração")'); await shop.waitForSelector('.withdrawal-receipt');
   await shop.screenshot({ path: `${SHOTS}/68-livre-resolucao-comprovativo.png`, fullPage: true });
 });
+await stepShop('loja em inglês', async () => {
+  await shop.goto(`${BASE}/?lang=en`); await shop.waitForSelector('html[lang="en"]');
+  await shop.waitForSelector('text=Made for twelve-hour shifts');
+  await shop.screenshot({ path: `${SHOTS}/69-loja-ingles.png` });
+  await shop.goto(`${BASE}/?lang=pt`); await shop.waitForSelector('html[lang="pt-PT"]');
+});
 await stepShop('loja com logótipo novo', async () => {
   await shop.goto(`${BASE}/`); await shop.waitForSelector('header .logo svg');
   await shop.screenshot({ path: `${SHOTS}/63-loja-inicio.png` });

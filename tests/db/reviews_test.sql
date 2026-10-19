@@ -41,3 +41,8 @@ do $$ declare o orders; begin
     raise notice 'ERRO emails por estado: %', (select string_agg(kind, ',') from email_outbox);
   end if;
 end $$;
+\echo '-- encomenda com língua'
+do $$ declare r jsonb; begin
+  r := place_order_l('{"locale":"fr","email":"jean@x.fr","accept_terms":true,"payment_method":"transfer","shipping_address":{"name":"Jean","line1":"R","zip":"4590-000","city":"P","region":"Continente"},"items":[{"variant_id":"70000000-0000-0000-0000-000000000002","qty":1}]}');
+  if (select locale from orders where number = (r->>'number')::int) <> 'fr' then raise notice 'ERRO língua da encomenda'; end if;
+end $$;

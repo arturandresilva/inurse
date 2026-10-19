@@ -21,6 +21,7 @@ const NAV: { group: string; items: Item[] }[] = [
     { href: "/admin/produtos", label: "Produtos" },
     { href: "/admin/importar", label: "Importar folhas" },
     { href: "/admin/precos", label: "Preços e margens" },
+    { href: "/admin/concorrencia", label: "Concorrência" },
     { href: "/admin/fornecedores", label: "Fornecedores" },
   ] },
   { group: "Envios", items: [

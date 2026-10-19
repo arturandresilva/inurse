@@ -55,6 +55,14 @@ function lisbonNow() {
 }
 
 async function runAgent(key: string, trigger: "manual" | "agendado") {
+  // preços da concorrência (pesquisa na web) e tradutor têm funções próprias
+  if (key === "concorrencia" || key === "tradutor") {
+    const [c] = ((await rest("settings?key=eq.cron&select=value")) ?? []) as Row[];
+    const r = await fetch(`${URL}/functions/v1/${key === "tradutor" ? "traduzir" : "concorrencia"}`, { method: "POST", headers: { "Content-Type": "application/json", "x-cron-secret": c?.value?.secret ?? "" }, body: "{}" });
+    const out = await r.json().catch(() => ({ error: `HTTP ${r.status}` }));
+    if (out.error) throw new Error(out.error);
+    return out;
+  }
   const [agent] = (await rest(`agents?key=eq.${encodeURIComponent(key)}&select=*`)) as Row[];
   if (!agent) throw new Error("agente desconhecido");
   if (!KEY) return { skipped: true, reason: "Falta a chave da API Anthropic: guarda-a nos segredos das Edge Functions do Supabase com o nome ANTHROPIC_API_KEY." };

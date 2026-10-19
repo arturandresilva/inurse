@@ -66,3 +66,12 @@ test('erro do Resend fica registado e volta a tentar', async () => {
 test('sem sessão de administrador não envia testes', async () => {
   assert.equal((await call({ mode: 'test', to: 'a@b.pt' }, {})).status, 401);
 });
+
+test('email na língua do cliente', async () => {
+  sent.length = 0; resendFail = false;
+  db.order.locale = 'fr';
+  await call({ mode: 'test', to: 'jean@x.fr', kind: 'encomenda_enviada' });
+  assert.match(sent[0].subject, /La commande #1001 est en route/);
+  assert.match(sent[0].html, /lang="fr"/);
+  db.order.locale = 'pt';
+});
