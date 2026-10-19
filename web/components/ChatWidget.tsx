@@ -21,7 +21,7 @@ export default function ChatWidget() {
   const locale = useLocale();
   const path = usePathname();
   const [open, setOpen] = useState(false);
-  const [cfg, setCfg] = useState<{ enabled?: boolean; whatsapp?: string; greeting?: string } | null>(null);
+  const [cfg, setCfg] = useState<{ enabled?: boolean; greeting?: string } | null>(null);
   const [conv, setConv] = useState<{ id: string; token: string } | null>(null);
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [text, setText] = useState("");
@@ -47,7 +47,6 @@ export default function ChatWidget() {
   }, [open, conv, msgs]);
 
   if (!cfg || cfg.enabled === false || path?.startsWith("/checkout")) return null;
-  const wa = cfg.whatsapp ? `https://wa.me/${cfg.whatsapp.replace(/\D/g, "")}` : null;
 
   async function send(e: React.FormEvent) {
     e.preventDefault();
@@ -55,7 +54,7 @@ export default function ChatWidget() {
     setText(""); setMsgs((x) => [...x, { role: "user", content: m }]); setBusy(true);
     const { data, error } = await supabase.functions.invoke("assistente", { body: { message: m, conversation_id: conv?.id, token: conv?.token, page: path, locale } });
     setBusy(false);
-    if (error || !data?.reply) { setMsgs((x) => [...x, { role: "assistant", content: t("Não consegui responder agora. Tente de novo ou fale connosco pelo WhatsApp.") }]); return; }
+    if (error || !data?.reply) { setMsgs((x) => [...x, { role: "assistant", content: t("Não consegui responder agora. Deixe o seu email e respondemos o quanto antes.") }]); return; }
     setConv({ id: data.conversation_id, token: data.token });
     setMsgs((x) => [...x, { role: "assistant", content: data.reply, created_at: data.at }]);
   }
@@ -86,7 +85,6 @@ export default function ChatWidget() {
             <button className="btn" disabled={busy || !text.trim()}>{t("Enviar")}</button>
           </form>
           <footer>
-            {wa && <a href={wa} target="_blank" rel="noopener noreferrer">{t("Preferir WhatsApp")}</a>}
             <span>{t("As conversas ficam guardadas para o podermos ajudar.")} <Link href="/p/privacidade">{t("Privacidade")}</Link></span>
           </footer>
         </section>

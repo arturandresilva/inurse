@@ -66,6 +66,7 @@ const TX: Record<Lang, Record<string, string>> = {
     rv_s: "Como correu a sua encomenda #{o}?", rv_t: "A sua encomenda <strong>#{o}</strong> foi entregue. Esperamos que esteja tudo a seu gosto!",
     rv_q: "Como foi a experiência de compra? Toque nas estrelas:", rv_sug: "Tem alguma sugestão para melhorarmos? Pode deixá-la na mesma página, juntamente com a sua opinião sobre os produtos. Leva menos de um minuto e ajuda outros profissionais de saúde a escolher.",
     rv_btn: "Dar a minha opinião", rv_f: "Se algo não correu bem, responda a este email: lemos todas as mensagens.",
+    chat_s: "Resposta à sua mensagem", chat_t: "Obrigado por nos ter contactado através do site. Aqui está a nossa resposta:", chat_f: "Pode responder diretamente a este email.",
     foot: "calçado profissional e meias de descanso",
   },
   en: {
@@ -84,6 +85,7 @@ const TX: Record<Lang, Record<string, string>> = {
     rv_s: "How did your order #{o} go?", rv_t: "Your order <strong>#{o}</strong> has been delivered. We hope you are happy with it!",
     rv_q: "How was your shopping experience? Tap the stars:", rv_sug: "Any suggestions for us? You can leave them on the same page, together with your opinion of the products. It takes less than a minute and helps other healthcare professionals choose.",
     rv_btn: "Give my feedback", rv_f: "If something went wrong, just reply to this email: we read every message.",
+    chat_s: "Reply to your message", chat_t: "Thank you for contacting us through our website. Here is our reply:", chat_f: "You can reply directly to this email.",
     foot: "professional footwear and rest socks",
   },
   es: {
@@ -102,6 +104,7 @@ const TX: Record<Lang, Record<string, string>> = {
     rv_s: "¿Qué tal tu pedido #{o}?", rv_t: "Tu pedido <strong>#{o}</strong> ha sido entregado. ¡Esperamos que te guste!",
     rv_q: "¿Cómo fue tu experiencia de compra? Toca las estrellas:", rv_sug: "¿Tienes alguna sugerencia? Puedes dejarla en la misma página, junto con tu opinión sobre los productos. Lleva menos de un minuto y ayuda a otros profesionales sanitarios a elegir.",
     rv_btn: "Dar mi opinión", rv_f: "Si algo no ha ido bien, responde a este email: leemos todos los mensajes.",
+    chat_s: "Respuesta a tu mensaje", chat_t: "Gracias por contactarnos a través de la web. Esta es nuestra respuesta:", chat_f: "Puedes responder directamente a este email.",
     foot: "calzado profesional y medias de descanso",
   },
   fr: {
@@ -120,6 +123,7 @@ const TX: Record<Lang, Record<string, string>> = {
     rv_s: "Comment s’est passée votre commande #{o} ?", rv_t: "Votre commande <strong>#{o}</strong> a été livrée. Nous espérons qu’elle vous plaît !",
     rv_q: "Comment s’est passée votre expérience d’achat ? Touchez les étoiles :", rv_sug: "Une suggestion pour nous améliorer ? Vous pouvez la laisser sur la même page, avec votre avis sur les produits. Cela prend moins d’une minute et aide d’autres professionnels de santé à choisir.",
     rv_btn: "Donner mon avis", rv_f: "Si quelque chose ne s’est pas bien passé, répondez à cet email : nous lisons tous les messages.",
+    chat_s: "Réponse à votre message", chat_t: "Merci de nous avoir contactés via notre site. Voici notre réponse :", chat_f: "Vous pouvez répondre directement à cet email.",
     foot: "chaussures professionnelles et chaussettes de repos",
   },
 };
@@ -185,6 +189,33 @@ async function render(kind: string, o: Row, cfg: Row): Promise<{ subject: string
     <p style="color:#5b6780;font-size:13px">${tx("rv_f")}</p>`, site) };
 }
 
+// conversas do site: resposta ao cliente (na língua da conversa) e aviso à loja
+async function renderChat(e: Row, cfg: Row): Promise<{ subject: string; html: string } | null> {
+  const site = String(cfg.site_url || "https://www.inurse.pt").replace(/\/$/, "");
+  if (e.kind === "conversa") {
+    const p = e.payload ?? {};
+    LANG = (["pt", "en", "es", "fr"].includes(p.locale) ? p.locale : "pt") as Lang;
+    const name = first(p.name);
+    const text = esc(p.text ?? "").replace(/\n/g, "<br>");
+    return { subject: tx("chat_s"), html: layout(tx("chat_s"), `<p style="margin:0 0 14px">${tx("hi", { n: name ? " " + esc(name) : "" })}</p>
+      <p>${tx("chat_t")}</p>
+      <div style="border-left:3px solid #0f6e63;padding:6px 14px;margin:14px 0;color:#1c2a4a">${text}</div>
+      <p style="color:#5b6780;font-size:13px">${tx("chat_f")}</p>`, site) };
+  }
+  LANG = "pt";
+  const c = await one(`chat_conversations?id=eq.${e.conversation_id}&select=*`);
+  if (!c) return null;
+  if (c.status !== "needs_human") return null;   // já respondida ou fechada
+  const ms = (((await rest(`chat_messages?conversation_id=eq.${c.id}&select=role,content&order=created_at.desc&limit=6`)) ?? []) as Row[]).reverse();
+  const who: Record<string, string> = { user: "Cliente", assistant: "Assistente", staff: "Tu" };
+  const lines = ms.map((m) => `<p style="margin:0 0 8px"><strong>${who[m.role] ?? m.role}:</strong> ${esc(m.content).replace(/\n/g, "<br>")}</p>`).join("");
+  return { subject: `Conversa no site precisa de resposta${c.name ? ` — ${c.name}` : ""}`, html: layout("Conversa no site", `
+    <p>Um cliente precisa de resposta no assistente do site.</p>
+    <p><strong>Motivo:</strong> ${esc(c.summary || "—")}<br><strong>Contacto:</strong> ${esc(c.contact || "não deixou")}<br><strong>Língua:</strong> ${esc(String(c.locale).toUpperCase())}</p>
+    <div style="background:#f4f6f9;border-radius:8px;padding:12px 14px;margin:12px 0">${lines}</div>
+    ${button(`${site}/admin/conversas`, "Abrir no backoffice")}`, site) };
+}
+
 async function send(to: string, subject: string, html: string, cfg: Row) {
   const r = await fetch("https://api.resend.com/emails", {
     method: "POST", headers: { Authorization: `Bearer ${RESEND}`, "Content-Type": "application/json" },
@@ -203,6 +234,14 @@ async function due(cfg: Row) {
     // emails anteriores à ativação, ou de tipos desligados, não são enviados
     if (new Date(e.created_at).getTime() < since || cfg.kinds?.[e.kind] === false) { await patch({ status: "skipped" }); continue; }
     try {
+      if (e.kind === "conversa" || e.kind === "conversa_alerta") {
+        const m = await renderChat(e, cfg);
+        if (!m) { await patch({ status: "skipped", error: "conversa já respondida ou apagada" }); continue; }
+        await send(e.to_email, m.subject, m.html, cfg);
+        await patch({ status: "sent", sent_at: new Date().toISOString(), attempts: (e.attempts ?? 0) + 1, error: null });
+        out.push({ id: e.id, sent: true });
+        continue;
+      }
       const o = await one(`orders?id=eq.${e.order_id}&select=*`);
       if (!o) { await patch({ status: "skipped", error: "encomenda apagada" }); continue; }
       if (e.kind === "avaliacao" && o.status !== "delivered") { await patch({ status: "skipped", error: "encomenda já não está entregue" }); continue; }

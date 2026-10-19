@@ -26,6 +26,8 @@ globalThis.fetch = async (url, init = {}) => {
   if (p === '/rest/v1/order_items') return res([{ title: 'CLOG 01 - AZUL', option_value: '38', quantity: 2, unit_price_cents: 2990 }]);
   if (p === '/rest/v1/shipments') return res([{ carrier: 'CTT Expresso', tracking_code: 'EA123PT' }]);
   if (p === '/rest/v1/order_events') return res([]);
+  if (p === '/rest/v1/chat_conversations') return res([db.chat]);
+  if (p === '/rest/v1/chat_messages') return res([{ role: 'assistant', content: 'Vamos responder por email.' }, { role: 'user', content: 'As socas <b>esticam</b>?' }]);
   if (p === '/rest/v1/email_outbox') {
     if (m === 'PATCH') { const id = u.searchParams.get('id').slice(3); Object.assign(db.outbox.find((e) => e.id === id), body); return res([]); }
     return res(db.outbox.filter((e) => (e.status ?? 'pending') === 'pending'));
@@ -74,4 +76,22 @@ test('email na língua do cliente', async () => {
   assert.match(sent[0].subject, /La commande #1001 est en route/);
   assert.match(sent[0].html, /lang="fr"/);
   db.order.locale = 'pt';
+});
+
+test('conversas do site: resposta ao cliente por email e aviso à loja', async () => {
+  sent.length = 0; resendFail = false;
+  db.chat = { id: 'c1', status: 'needs_human', name: 'Rita', contact: 'rita@x.pt', summary: 'Dúvida de tamanho', locale: 'es' };
+  db.outbox.length = 0;
+  db.outbox.push(
+    { id: 'm1', kind: 'conversa', conversation_id: 'c1', to_email: 'rita@x.pt', payload: { text: 'Sí, ceden un poco.\nSaludos', locale: 'es', name: 'Rita Sousa' }, created_at: new Date().toISOString(), attempts: 0 },
+    { id: 'm2', kind: 'conversa_alerta', conversation_id: 'c1', to_email: 'info@inurse.pt', created_at: new Date().toISOString(), attempts: 0 });
+  await call({ mode: 'due' }, { 'x-cron-secret': 'S' });
+  assert.equal(sent.length, 2);
+  assert.equal(sent[0].subject, 'Respuesta a tu mensaje'); assert.match(sent[0].html, /Hola Rita/); assert.match(sent[0].html, /un poco\.<br>Saludos/);
+  assert.match(sent[1].subject, /precisa de resposta — Rita/); assert.match(sent[1].html, /&lt;b&gt;esticam/); assert.match(sent[1].html, /\/admin\/conversas/);
+  // já respondida: o aviso não é enviado
+  db.chat.status = 'open'; sent.length = 0;
+  db.outbox.push({ id: 'm3', kind: 'conversa_alerta', conversation_id: 'c1', to_email: 'info@inurse.pt', created_at: new Date().toISOString(), attempts: 0 });
+  await call({ mode: 'due' }, { 'x-cron-secret': 'S' });
+  assert.equal(sent.length, 0); assert.equal(db.outbox.find((e) => e.id === 'm3').status, 'skipped');
 });

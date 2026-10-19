@@ -24,17 +24,23 @@ const euro = (c: number) => (c / 100).toFixed(2).replace(".", ",") + " €";
 const UUID = /^[0-9a-f-]{36}$/i;
 
 const FALLBACK: Record<string, string> = {
-  pt: "Neste momento não consigo responder automaticamente. Deixe o seu email ou telefone e respondemos em breve, ou fale connosco pelo WhatsApp.",
-  en: "I can't answer automatically right now. Leave your email or phone number and we'll get back to you soon, or contact us on WhatsApp.",
-  es: "Ahora mismo no puedo responder automáticamente. Deja tu email o teléfono y te respondemos pronto, o escríbenos por WhatsApp.",
-  fr: "Je ne peux pas répondre automatiquement pour le moment. Laissez votre email ou téléphone et nous vous répondrons vite, ou écrivez-nous sur WhatsApp.",
+  pt: "Neste momento não consigo responder automaticamente. Deixe aqui o seu email e respondemos por email o quanto antes.",
+  en: "I can't answer automatically right now. Leave your email here and we'll reply by email as soon as possible.",
+  es: "Ahora mismo no puedo responder automáticamente. Deja aquí tu email y te responderemos por email lo antes posible.",
+  fr: "Je ne peux pas répondre automatiquement pour le moment. Laissez ici votre email et nous vous répondrons par email au plus vite.",
+};
+const THANKS: Record<string, string> = {
+  pt: "Obrigado! Já registámos a sua mensagem e respondemos para {e} o quanto antes.",
+  en: "Thank you! We've received your message and will reply to {e} as soon as possible.",
+  es: "¡Gracias! Hemos recibido tu mensaje y te responderemos a {e} lo antes posible.",
+  fr: "Merci ! Nous avons bien reçu votre message et vous répondrons à {e} au plus vite.",
 };
 
 async function storeContext() {
-  const [products, ship, store, pay, chat] = await Promise.all([
+  const [products, ship, store, pay] = await Promise.all([
     rest("products?status=in.(active,out_of_stock)&select=handle,title,brand,model,color,status,excerpt,vat_rate,variants(option_value,price_cents,active)&limit=2000"),
     one("settings?key=eq.public.shipping&select=value"), one("settings?key=eq.public.store&select=value"),
-    one("settings?key=eq.public.payments&select=value"), one("settings?key=eq.public.chat&select=value"),
+    one("settings?key=eq.public.payments&select=value"),
   ]);
   const groups = new Map<string, Row>();
   for (const p of (products ?? []) as Row[]) {
@@ -60,14 +66,13 @@ async function storeContext() {
       pagamentos: ["mbway", "multibanco", "transfer"].filter((k) => pv[k]).map((k) => ({ mbway: "MB WAY", multibanco: "Multibanco", transfer: "transferência bancária" }[k])).join(", "),
       contactos: `${st.email ?? "info@inurse.pt"} · ${st.phone ?? ""}`, guia_tamanhos: "/p/guia-de-tamanhos",
     },
-    whatsapp: chat?.value?.whatsapp ?? "",
   };
 }
 
 const TOOLS = [
   { name: "ver_encomenda", description: "Consulta o estado de uma encomenda. Pede sempre ao cliente o número da encomenda E o email usado na compra.",
     input_schema: { type: "object", properties: { numero: { type: "integer" }, email: { type: "string" } }, required: ["numero", "email"] } },
-  { name: "pedir_pessoa", description: "Passa a conversa para uma pessoa da loja (quando o cliente pede, há uma reclamação, um problema com uma encomenda que não consegues resolver, ou não sabes a resposta). Pede antes um email ou telefone para contacto.",
+  { name: "pedir_pessoa", description: "Passa a conversa para uma pessoa da loja (quando o cliente pede, há uma reclamação, um problema com uma encomenda que não consegues resolver, ou não sabes a resposta). Pede antes o email do cliente (a resposta segue por email).",
     input_schema: { type: "object", properties: { motivo: { type: "string" }, nome: { type: "string" }, contacto: { type: "string" } }, required: ["motivo"] } },
 ];
 const STATUS: Record<string, string> = { pending_payment: "a aguardar pagamento", paid: "paga, em preparação", processing: "em preparação", shipped: "enviada", delivered: "entregue", cancelled: "cancelada", refunded: "reembolsada" };
@@ -82,7 +87,7 @@ async function runTool(name: string, input: Row, conv: Row) {
   if (name === "pedir_pessoa") {
     await rest(`chat_conversations?id=eq.${conv.id}`, { method: "PATCH", body: JSON.stringify({ status: "needs_human", unread: true,
       summary: String(input.motivo ?? "").slice(0, 300), name: input.nome ? String(input.nome).slice(0, 80) : conv.name, contact: input.contacto ? String(input.contacto).slice(0, 120) : conv.contact }) });
-    return { ok: true, nota: "A conversa foi passada para a equipa; diz ao cliente que respondemos em breve (normalmente no próprio dia útil) e que também pode usar o WhatsApp." };
+    return { ok: true, nota: "A conversa foi passada para a equipa; diz ao cliente que lhe respondemos por email o quanto antes." };
   }
   return { erro: "ferramenta desconhecida" };
 }
@@ -111,7 +116,7 @@ async function reply(conv: Row, locale: string, page: string) {
   const system = `És o assistente de atendimento da iNurse, loja online portuguesa de calçado profissional (socas hospitalares, sapatos e sapatilhas de trabalho) e meias de descanso e compressão para profissionais de saúde.
 Responde em ${lang} (ou na língua em que o cliente escrever), de forma curta, simpática e concreta (2–5 frases). Usa só a informação abaixo; não inventes preços, prazos, stock nem características. Quando recomendares um modelo, inclui o link relativo (ex.: /produto/...).
 Para o estado de uma encomenda usa ver_encomenda (precisa do número e do email da compra). Nunca reveles dados de encomendas sem o email certo.
-Se o cliente pedir para falar com uma pessoa, tiver uma reclamação, um problema que não consegues resolver ou uma pergunta que não sabes responder, pede um email ou telefone e usa pedir_pessoa.
+Se o cliente pedir para falar com uma pessoa, tiver uma reclamação, um problema que não consegues resolver ou uma pergunta a que não sabes responder com certeza, não adivinhes: diz que vamos responder por email o quanto antes, pede o email (e o nome, se quiser) e usa pedir_pessoa com o email em "contacto". Não há atendimento por WhatsApp nem por telefone no chat.
 Não dês aconselhamento médico: para dúvidas clínicas sobre compressão, recomenda falar com o médico ou farmacêutico.
 O cliente está na página: ${page || "/"}.
 Informação da loja (JSON): ${JSON.stringify(ctx.loja)}
@@ -131,7 +136,7 @@ Catálogo (JSON): ${JSON.stringify(ctx.catalogo)}`;
     msgs.push({ role: "assistant", content: data.content });
     msgs.push({ role: "user", content: await Promise.all(uses.map(async (u: Row) => ({ type: "tool_result", tool_use_id: u.id, content: JSON.stringify(await runTool(u.name, u.input ?? {}, conv)) }))) });
   }
-  return { text: text || FALLBACK[locale] || FALLBACK.pt, cost: (tin * PRICE_IN + tout * PRICE_OUT) / 1e6, whatsapp: ctx.whatsapp };
+  return { text: text || FALLBACK[locale] || FALLBACK.pt, cost: (tin * PRICE_IN + tout * PRICE_OUT) / 1e6 };
 }
 
 Deno.serve(async (req) => {
@@ -156,10 +161,12 @@ Deno.serve(async (req) => {
     }
     if (conv!.messages >= 60) return json({ conversation_id: conv!.id, token: conv!.token, reply: FALLBACK[locale], limit: true });
     await rest("chat_messages", { method: "POST", body: JSON.stringify({ conversation_id: conv!.id, role: "user", content: message }) });
-    let out: { text: string; cost: number; whatsapp: string };
+    // email escrito pelo cliente: fica como contacto da conversa (é por lá que respondemos)
+    const mail = message.match(/[\w.+-]+@[\w-]+(\.[\w-]+)+/)?.[0];
+    if (mail && !conv!.contact) { await rest(`chat_conversations?id=eq.${conv!.id}`, { method: "PATCH", body: JSON.stringify({ contact: mail.slice(0, 120) }) }); conv!.contact = mail; }
+    let out: { text: string; cost: number };
     if (!KEY || await overBudget()) {
-      const chat = (await one("settings?key=eq.public.chat&select=value"))?.value ?? {};
-      out = { text: FALLBACK[locale], cost: 0, whatsapp: chat.whatsapp ?? "" };
+      out = { text: conv!.contact ? (THANKS[locale] ?? THANKS.pt).replace("{e}", conv!.contact) : FALLBACK[locale], cost: 0 };
       await rest(`chat_conversations?id=eq.${conv!.id}`, { method: "PATCH", body: JSON.stringify({ status: "needs_human" }) });
     } else {
       out = await reply(conv!, locale, String(b.page ?? ""));
@@ -169,7 +176,7 @@ Deno.serve(async (req) => {
     await rest(`chat_conversations?id=eq.${conv!.id}`, { method: "PATCH", body: JSON.stringify({
       last_at: new Date().toISOString(), messages: (fresh?.messages ?? 0) + 2, cost_usd: Number(fresh?.cost_usd ?? 0) + out.cost,
       unread: true, locale }) });
-    return json({ conversation_id: conv!.id, token: conv!.token, reply: out.text, at: m.created_at, status: fresh?.status, whatsapp: out.whatsapp });
+    return json({ conversation_id: conv!.id, token: conv!.token, reply: out.text, at: m.created_at, status: fresh?.status });
   } catch (e) {
     return json({ error: String((e as Error).message ?? e) }, 500);
   }

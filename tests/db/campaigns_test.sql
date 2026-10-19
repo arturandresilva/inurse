@@ -19,3 +19,25 @@ do $$ begin
   exception when check_violation then null; end;
   if not exists (select 1 from settings where key = 'public.home') then raise notice 'ERRO: falta public.home'; end if;
 end $$;
+
+-- Conversas: aviso à loja quando precisa de resposta; resposta por email ao cliente
+insert into auth.users(id,email) values ('00000000-0000-0000-0000-000000000001','artur.impact@gmail.com');
+set test.uid = '00000000-0000-0000-0000-000000000001';
+insert into chat_conversations (id, name, contact, locale) values
+  ('00000000-0000-0000-0000-0000000000d1', 'Rita', 'rita@x.pt', 'es'),
+  ('00000000-0000-0000-0000-0000000000d2', null, '912345678', 'pt');
+update chat_conversations set status = 'needs_human' where id = '00000000-0000-0000-0000-0000000000d1';
+update chat_conversations set summary = 'x' where id = '00000000-0000-0000-0000-0000000000d1';   -- não repete o aviso
+select chat_reply('00000000-0000-0000-0000-0000000000d1', 'Sí, ceden un poco.', true);
+select chat_reply('00000000-0000-0000-0000-0000000000d2', 'Ligamos já.');                  -- só no balão
+do $$ declare a int; b int; st text; begin
+  select count(*) into a from email_outbox where kind = 'conversa_alerta';
+  select count(*) into b from email_outbox where kind = 'conversa' and to_email = 'rita@x.pt' and payload->>'locale' = 'es';
+  select status into st from chat_conversations where id = '00000000-0000-0000-0000-0000000000d1';
+  if a <> 1 then raise notice 'ERRO: % avisos (esperado 1)', a; end if;
+  if b <> 1 then raise notice 'ERRO: resposta por email não ficou na fila'; end if;
+  if st <> 'open' then raise notice 'ERRO: conversa respondida ficou %', st; end if;
+  begin perform chat_reply('00000000-0000-0000-0000-0000000000d2', 'Olá', true); raise notice 'ERRO: email inválido aceite';
+  exception when others then if sqlerrm not like '%email válido%' then raise notice 'ERRO: %', sqlerrm; end if; end;
+  if exists (select 1 from settings where key = 'public.chat' and value ? 'whatsapp') then raise notice 'ERRO: WhatsApp ainda nas definições'; end if;
+end $$;

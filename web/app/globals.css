@@ -497,3 +497,39 @@ p { margin: 0; }
 }
 @media (prefers-reduced-motion: reduce) { .slide, .slide.on { transition: none; } }
 @media (min-width: 701px) { .slider-faixa .slide-copy { padding-left: 76px; padding-right: 76px; } .slider-topo .slide-copy { padding-left: 64px; padding-right: 64px; } }
+
+/* ---------- Telemóvel (revisão geral) ---------- */
+html, body { overflow-x: clip; }
+main .wrap { padding-left: 20px; padding-right: 20px; }       /* .shop/.prose/.cart punham a margem lateral a 0 */
+@media (max-width: 980px) { .top .mainnav { display: none; } } /* o menu está no botão ☰ */
+@media (max-width: 640px) {
+  main .wrap, .top .wrap { padding-left: 16px; padding-right: 16px; }
+  .top .wrap { flex-wrap: nowrap; height: 60px; padding-top: 0; padding-bottom: 0; }
+  .announce .wrap { padding: 6px 16px; font-size: .82rem; }
+  .section { padding: 40px 0; }
+  .section-head { flex-wrap: wrap; gap: 4px 12px; margin-bottom: 18px; }
+  .section-head h2 { font-size: 1.55rem; }
+  .section-head .muted { flex-basis: 100%; font-size: .92rem; }
+  .hero2 { padding: 28px 0 30px; }
+  .hero2-art { display: none; }
+  .hero2 h1 { font-size: 2.25rem; max-width: none; }
+  .hero2 .lead { font-size: 1.02rem; margin-top: 12px; }
+  .hero2-cta { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 22px; }
+  .hero2-cta .btn { padding-left: 10px; padding-right: 10px; }
+  .trust-grid { grid-template-columns: 1fr 1fr; gap: 14px 12px; padding: 16px; }
+  .trust-grid > div { gap: 8px; }
+  .trust-grid svg { width: 22px; height: 22px; }
+  .trust-grid strong { font-size: .9rem; line-height: 1.25; }
+  .trust-grid span { font-size: .8rem; }
+  .slider-faixa-wrap { padding: 28px 16px 0; }
+  .slider-faixa .slider-track { height: 360px; }
+  .slider-faixa .slide-copy { padding-bottom: 44px; }
+  .slider-topo .slider-track { height: min(560px, 78svh); }
+  .cat-tiles { gap: 12px; }
+  .size-grid { gap: 8px; }
+  .shop { padding-top: 20px; }
+  .prose { padding-top: 24px; }
+  .chat-fab { width: 50px; height: 50px; right: 14px; }
+  .foot .cols { gap: 24px 16px; }
+  .foot button { text-align: left; padding-left: 0; }
+}
