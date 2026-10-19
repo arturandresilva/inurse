@@ -21,7 +21,8 @@ begin
   select value->'simple' into s from settings where key = 'public.shipping';
   if s is null or coalesce((s->>'enabled')::boolean, false) is false then return null; end if;
   z := s->'zones'->p_region;
-  if z is null or coalesce((z->>'available')::boolean, true) is false then return null; end if;
+  -- tabela simples ligada mas sem envio para esta zona
+  if z is null or coalesce((z->>'available')::boolean, true) is false or z->>'weight_up_cents' is null then return '{"unavailable": true}'; end if;
   w := chargeable_weight_g(p_items);
   vol := order_volume_l(p_items);
   pw := case when w <= coalesce((z->>'weight_limit_g')::int, 2147483647) then (z->>'weight_up_cents')::int else (z->>'weight_over_cents')::int end;
@@ -76,7 +77,9 @@ begin
   select x into z from jsonb_array_elements(coalesce(zones, '[]')) x where x->>'region' = region;
   -- tabela simples (até X kg / acima; até X litros / acima): uma só opção, CTT
   sp := simple_shipping(region, (select coalesce(jsonb_agg(jsonb_build_object('variant_id', l->>'variant_id', 'qty', l->'qty')), '[]') from jsonb_array_elements(lines) l));
-  if sp is not null then
+  if sp ? 'unavailable' then
+    problems := problems || jsonb_build_object('erro', 'de momento não enviamos para esta zona');
+  elsif sp is not null then
     opts := jsonb_build_array(jsonb_build_object('key', 'CTT Expresso|simples', 'carrier', 'CTT Expresso', 'service', coalesce(sp->>'service', '48h'),
               'label', 'CTT Expresso', 'delivery', 'domicilio', 'eta', sp->>'eta', 'price_cents', (sp->>'price_cents')::int,
               'cost_cents', (sp->>'cost_cents')::int, 'volume_l', sp->'volume_l', 'by', sp->>'by'));

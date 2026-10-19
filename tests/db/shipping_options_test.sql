@@ -45,7 +45,7 @@ do $$ declare q jsonb; begin
   -- 3 pares: 2,5 kg (acima) e 18 L (acima) → o mais caro: 8,90 €
   q := quote_cart('{"items":[{"variant_id":"40000000-0000-0000-0000-000000000002","qty":3}],"region":"Continente"}');
   if (q->>'shipping_cents')::int <> 890 then raise notice 'ERRO 3 pares: %', q->>'shipping_cents'; end if;
-  -- Açores sem configuração simples → usa os escalões (não há) → erro de zona
+  -- Açores sem configuração na tabela simples → indisponível
   q := quote_cart('{"items":[{"variant_id":"40000000-0000-0000-0000-000000000002","qty":1}],"region":"Açores"}');
   if jsonb_array_length(q->'problems') = 0 then raise notice 'ERRO Açores devia estar indisponível'; end if;
 end $$;
