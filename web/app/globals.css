@@ -577,3 +577,4 @@ main .wrap { padding-left: 20px; padding-right: 20px; }       /* .shop/.prose/.c
 .hero-search input { width: auto; }
 .hero-search .btn { flex: none; }
 @media (max-width: 640px) { .hero-search .btn { padding: 10px 14px; } .hero-search input { padding: 10px 8px; font-size: 1rem; } }
+.hero3-grid > * { min-width: 0; }

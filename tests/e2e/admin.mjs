@@ -210,7 +210,7 @@ for (const [name, url, wait] of [['inicio', '/', 'header'], ['loja', '/loja', '.
     else { await phone.goto(`${BASE}/loja`); await phone.locator('.prod').first().click(); await phone.waitForURL(/\/produto\//); }
     await phone.waitForSelector(wait); await phone.waitForTimeout(400);
     const over = await phone.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
-    if (over > 1) problems.push(`[telemóvel ${name}] a página é ${over}px mais larga que o ecrã (desliza para o lado)`);
+    if (over > 1 || await phone.evaluate(() => [...document.querySelectorAll("main *")].some((el) => el.getBoundingClientRect().right > window.innerWidth + 1 && getComputedStyle(el).position !== "fixed" && !el.closest(".quick, .slider, .size-grid")))) problems.push(`[telemóvel ${name}] a página é ${over}px mais larga que o ecrã (desliza para o lado)`);
     await phone.screenshot({ path: `${SHOTS}/t-${name}.png`, fullPage: true });
   });
 }
