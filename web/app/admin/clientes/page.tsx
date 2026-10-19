@@ -62,7 +62,7 @@ export default function Customers() {
                 <tbody>
                   {s.data.rows.map((c) => (
                     <tr key={c.id} className="click" onClick={() => router.push(`/admin/clientes/${c.id}`)}>
-                      <td><Link href={`/admin/clientes/${c.id}`} onClick={(e) => e.stopPropagation()}>{c.name || c.email}</Link>{c.name && <div className="a-small a-muted">{c.email}</div>}</td>
+                      <td><Link href={`/admin/clientes/${c.id}`} onClick={(e) => e.stopPropagation()}>{c.name || c.email}</Link>{c.has_account && <> <span className="a-badge info">tem conta</span></>}{c.name && <div className="a-small a-muted">{c.email}</div>}</td>
                       <td>{c.phone ?? "—"}</td>
                       <td>{c.nif ?? "—"}</td>
                       <td className="num">{c.total_orders}</td>

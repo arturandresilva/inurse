@@ -22,8 +22,8 @@
 .a-app { display: grid; grid-template-columns: 232px minmax(0, 1fr); }
 .a-side { position: sticky; top: 0; height: 100vh; overflow-y: auto; background: #16223c; color: #cdd6e4;
   display: flex; flex-direction: column; padding: 18px 12px; }
-.a-brand { font: 800 1.35rem var(--display); color: #fff; display: flex; align-items: baseline; gap: 2px; padding: 0 8px 14px; letter-spacing: -0.03em; }
-.a-brand small { font: 600 .68rem var(--text); text-transform: uppercase; letter-spacing: .1em; color: #8fa1bd; margin-left: 8px; }
+.a-brand { font: 800 1.35rem var(--display); color: #fff; display: flex; align-items: center; gap: 8px; padding: 2px 8px 16px; }
+.a-brand small { font: 600 .68rem var(--text); text-transform: uppercase; letter-spacing: .1em; color: #8fa1bd; }
 .a-logo { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; background: var(--ceil); color: #16223c; margin-right: 4px; font-size: 1rem; }
 .a-nav-group { display: grid; gap: 1px; margin-bottom: 14px; }
 .a-nav-title { font-size: .7rem; text-transform: uppercase; letter-spacing: .1em; color: #7d8eaa; padding: 6px 10px; }
@@ -224,3 +224,5 @@
   .a-head h1 { font-size: 1.4rem; }
   .a-table th, .a-table td { padding: 8px; }
 }
+.a-img.cover { outline: 3px solid var(--a-act); outline-offset: -3px; }
+.a-cover-tag { position: absolute; top: 6px; left: 6px; z-index: 1; background: var(--a-act); color: #fff; font-size: .72rem; font-weight: 700; border-radius: 6px; padding: 2px 7px; }

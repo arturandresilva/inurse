@@ -122,6 +122,12 @@ function Editor({ d, reload }: { d: Awaited<ReturnType<typeof load>>; reload: ()
       }
     }, "Imagens adicionadas.");
   }
+  async function makeCover(i: number) {
+    if (i === 0) return;
+    const n = [imgs[i], ...imgs.filter((_, k) => k !== i)];
+    setImgs(n);
+    await act(async () => { for (const [k, im] of n.entries()) await run(sb().from("product_images").update({ position: k }).eq("id", im.id)); }, "Foto de capa atualizada.");
+  }
   async function moveImg(i: number, dir: -1 | 1) {
     const j = i + dir; if (j < 0 || j >= imgs.length) return;
     const n = [...imgs]; [n[i], n[j]] = [n[j], n[i]];
@@ -201,12 +207,14 @@ function Editor({ d, reload }: { d: Awaited<ReturnType<typeof load>>; reload: ()
           {d.p && (
             <Card title="Imagens" actions={<button className="a-btn sm" onClick={() => fileRef.current?.click()} disabled={busy}>Adicionar imagens</button>}>
               <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" multiple hidden onChange={(e) => { upload(e.target.files); e.target.value = ""; }} />
-              {imgs.length === 0 ? <p className="a-muted">Sem imagens. A primeira imagem é a que aparece na loja.</p> : (
+              {imgs.length === 0 ? <p className="a-muted">Sem imagens. A foto de capa é a que aparece na loja e nas listas.</p> : (
                 <div className="a-imgs">
                   {imgs.map((im, i) => (
-                    <div className="a-img" key={im.id}>
+                    <div className={`a-img${i === 0 ? " cover" : ""}`} key={im.id}>
+                      {i === 0 && <span className="a-cover-tag">Capa</span>}
                       <img src={im.url} alt="" loading="lazy" />
                       <div className="tools">
+                        {i > 0 && <button onClick={() => makeCover(i)} title="Usar como foto de capa na loja">Capa</button>}
                         <button onClick={() => moveImg(i, -1)} disabled={i === 0} aria-label="Mover para a esquerda">←</button>
                         <button onClick={() => moveImg(i, 1)} disabled={i === imgs.length - 1} aria-label="Mover para a direita">→</button>
                         <button onClick={() => delImg(im)} aria-label="Remover">✕</button>

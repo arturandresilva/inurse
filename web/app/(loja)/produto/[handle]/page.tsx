@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import BuyBox from "@/components/BuyBox";
+import FavoriteButton from "@/components/FavoriteButton";
 import Gallery from "@/components/Gallery";
 import { getCategories, getProduct, sellable } from "@/lib/catalog";
 import { categoryHref, categoryLabel, SITE_URL, stripHtml } from "@/lib/format";
@@ -46,6 +47,7 @@ export default async function ProductPage({ params, searchParams }: { params: Pr
           {p.excerpt && <p className="muted" style={{ marginTop: 10 }}>{p.excerpt}</p>}
           <BuyBox title={p.title} handle={p.handle} image={images[0] ?? null} initialSize={sp.tamanho} vatRate={Number(p.vat_rate)} outOfStock={out}
             variants={p.variants.map((v) => ({ id: v.id, option_value: v.option_value, price_cents: v.price_cents, compare_at_cents: v.compare_at_cents, available: sellable(v) && p.status === "active" }))} />
+          <FavoriteButton productId={p.id} handle={p.handle} />
           <ul className="promise">
             <li>Envio CTT com número de seguimento</li>
             <li>Troca de tamanho com recolha em casa</li>

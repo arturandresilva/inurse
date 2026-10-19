@@ -98,18 +98,24 @@ function Settings() {
             {tab === "ctt" && (
               <Card title="CTT Expresso (etiquetas, recolhas e devolução fácil)">
                 <Alert tone={s.ctt?.enabled ? "ok" : "info"}>
-                  {s.ctt?.enabled ? "Ligação ativa." : "Para criar etiquetas e pedir recolhas a partir do backoffice, a CTT tem de te dar o ID de autenticação da API. Guarda-o nos segredos das Edge Functions do Supabase com o nome CTT_AUTH_ID (nunca aqui) e depois ativa."}
+                  {s.ctt?.enabled ? "Ligação ativa." : "As credenciais da API (Identificação de utilizador e Chave única do cliente, no backoffice CTT) ficam nos segredos das Edge Functions do Supabase, com os nomes CTT_USER_ID e CTT_AUTH_ID — nunca aqui. Depois ativa a integração."}
                 </Alert>
-                <form onSubmit={(e) => { const f = form(e); save("ctt", { enabled: f.get("enabled") === "on", client_id: f.get("client_id"), contract_id: f.get("contract_id"), service: f.get("service"), sender_name: f.get("sender_name"), sender_email: f.get("sender_email"), sender_phone: f.get("sender_phone") }); }}>
+                <form onSubmit={(e) => { const f = form(e); save("ctt", { enabled: f.get("enabled") === "on", client_id: f.get("client_id"), contract_id: f.get("contract_id"), contract_account: f.get("contract_account"), service: f.get("service"), return_service: f.get("return_service"), sender_name: f.get("sender_name"), sender_email: f.get("sender_email"), sender_phone: f.get("sender_phone") }); }}>
                   <div className="a-form">
                     <Field label="Nº de cliente CTT"><input name="client_id" defaultValue={s.ctt?.client_id ?? ""} /></Field>
                     <Field label="Nº de contrato"><input name="contract_id" defaultValue={s.ctt?.contract_id ?? ""} /></Field>
-                    <Field label="Serviço por defeito"><select name="service" defaultValue={s.ctt?.service ?? "48h"}><option value="48h">Expresso 48h</option><option value="24h">Expresso 24h</option><option value="13h">Expresso 13h</option></select></Field>
+                    <Field label="Nº da conta contrato"><input name="contract_account" defaultValue={s.ctt?.contract_account ?? ""} /></Field>
+                    <Field label="Serviço para envios"><select name="service" defaultValue={s.ctt?.service ?? "EMSF057.01"}>
+                      {((s.ctt?.services as Row[] | undefined) ?? [{ code: "EMSF057.01", name: "Em 2 dias" }]).filter((x) => !x.returns).map((x) => <option key={x.code} value={x.code}>{x.code} — {x.name}</option>)}
+                    </select></Field>
+                    <Field label="Serviço para devoluções"><select name="return_service" defaultValue={s.ctt?.return_service ?? "EMSF053.01"}>
+                      {((s.ctt?.services as Row[] | undefined) ?? [{ code: "EMSF053.01", name: "Devolução Fácil" }]).map((x) => <option key={x.code} value={x.code}>{x.code} — {x.name}</option>)}
+                    </select></Field>
                     <Field label="Remetente (nome)"><input name="sender_name" defaultValue={s.ctt?.sender_name ?? "iNurse"} /></Field>
                     <Field label="Remetente (email)"><input name="sender_email" type="email" defaultValue={s.ctt?.sender_email ?? ""} /></Field>
                     <Field label="Remetente (telefone)"><input name="sender_phone" defaultValue={s.ctt?.sender_phone ?? ""} /></Field>
                   </div>
-                  <label className="a-check" style={{ marginTop: 12 }}><input type="checkbox" name="enabled" defaultChecked={!!s.ctt?.enabled} /> Ativar a integração (só depois de guardares o CTT_AUTH_ID)</label>
+                  <label className="a-check" style={{ marginTop: 12 }}><input type="checkbox" name="enabled" defaultChecked={!!s.ctt?.enabled} /> Ativar a integração (só depois de guardares CTT_USER_ID e CTT_AUTH_ID)</label>
                   <div className="a-formfoot"><button className="a-btn primary" disabled={busy}>Guardar</button></div>
                 </form>
               </Card>

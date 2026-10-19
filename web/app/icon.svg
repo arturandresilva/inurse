@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="iNurse">
+<rect width="100" height="100" rx="22.00" fill="#FFFFFF"/>
+<path d="M50.00,55.50 V79.00" stroke="#2EB3EA" stroke-width="16.25" stroke-linecap="round" fill="none"/>
+<path d="M50.00,49.45 C46.95,46.01 30.91,36.08 30.91,29.95 A10.31,10.31 0 0 1 50.00,26.34 A10.31,10.31 0 0 1 69.09,29.95 C69.09,36.08 53.05,46.01 50.00,49.45 Z" fill="#E8323C"/>
+</svg>

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Summary from "@/components/Summary";
 import { cartToken, clearCart, readCart, type CartLine } from "@/lib/cart";
 import { supabase } from "@/lib/supabase";
+import { account } from "@/lib/account";
 import { useQuote } from "@/lib/useQuote";
 
 const PAY_LABEL: Record<string, string> = { mbway: "MB WAY", multibanco: "Multibanco (referência)", transfer: "Transferência bancária" };
@@ -20,7 +21,19 @@ export default function CheckoutPage() {
   const [sending, setSending] = useState(false);
   const { quote, loading } = useQuote(lines, f.region, promoApplied);
 
+  const [signedIn, setSignedIn] = useState(false);
   useEffect(() => {
+    // cliente com conta: preenche os dados guardados
+    account().auth.getSession().then(async ({ data }) => {
+      if (!data.session) return;
+      setSignedIn(true);
+      const { data: me } = await account().rpc("customer_me");
+      if (!me) return;
+      const p = me.profile ?? {}; const a = (me.addresses ?? []).find((x: { kind: string }) => x.kind === "delivery") ?? {};
+      setF((s) => ({ ...s, email: s.email || p.email || "", name: s.name || a.name || p.name || "", phone: s.phone || a.phone || p.phone || "",
+        nif: s.nif || p.nif || "", line1: s.line1 || a.line1 || "", line2: s.line2 || a.line2 || "", zip: s.zip || a.zip || "",
+        city: s.city || a.city || "", region: a.region || s.region }));
+    });
     setLines(readCart());
     supabase.from("settings").select("value").eq("key", "public.payments").maybeSingle().then(({ data }) => {
       const v = (data?.value ?? {}) as Record<string, unknown>;
@@ -59,6 +72,7 @@ export default function CheckoutPage() {
         <div className="form">
           <fieldset>
             <legend>Contacto</legend>
+            {!signedIn && <p className="muted" style={{ fontSize: ".95rem" }}>Já tens conta? <Link href="/conta?seguir=/checkout">Entra</Link> para preencher os dados e acompanhar a encomenda na tua área.</p>}
             <div className="field"><label htmlFor="email">Email</label><input id="email" type="email" required autoComplete="email" value={f.email} onChange={up("email")} /></div>
             <div className="row2">
               <div className="field"><label htmlFor="phone">Telemóvel</label><input id="phone" type="tel" required autoComplete="tel" inputMode="tel" placeholder="9xx xxx xxx" value={f.phone} onChange={up("phone")} /></div>

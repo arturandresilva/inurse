@@ -30,7 +30,7 @@ p { margin: 0; }
 /* cabeçalho */
 .top { position: sticky; top: 0; z-index: 10; background: rgba(250, 251, 250, .94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
 .top .wrap { display: flex; align-items: center; gap: 22px; height: 64px; }
-.logo { font-family: var(--display); font-weight: 800; font-size: 1.55rem; text-decoration: none; letter-spacing: -0.04em; }
+.logo { display: inline-flex; align-items: center; line-height: 0; text-decoration: none; flex: none; }
 .logo span { color: var(--scrub); }
 .top nav { display: flex; gap: 18px; flex: 1; overflow-x: auto; scrollbar-width: none; }
 .top nav a { text-decoration: none; white-space: nowrap; font-size: .97rem; padding: 6px 0; border-bottom: 2px solid transparent; }
@@ -187,3 +187,41 @@ p { margin: 0; }
   .line > :last-child { grid-column: 2; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* conta de cliente */
+.account-link { display: inline-flex; align-items: center; gap: 6px; text-decoration: none; font-weight: 700; }
+.linkbtn { background: none; border: 0; padding: 0; font: inherit; color: var(--scrub); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.fav { display: inline-flex; align-items: center; gap: 8px; margin-top: 14px; background: none; border: 1.5px solid var(--line); border-radius: 999px; padding: 9px 16px; font: 600 .95rem var(--text); color: var(--navy); cursor: pointer; }
+.fav svg { fill: none; stroke: #e8323c; stroke-width: 2; }
+.fav.on svg { fill: #e8323c; }
+.fav:hover { border-color: var(--navy); }
+.account-auth { display: grid; grid-template-columns: 1fr 420px; gap: 48px; padding: 48px 20px 72px; align-items: start; }
+.account-auth h1 { font-size: clamp(2rem, 4vw, 2.8rem); }
+.account-perks { margin: 24px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.account-perks li::before { content: "♥"; color: #e8323c; margin-right: 10px; }
+.account-card { background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 24px; margin-top: 0; }
+.account-card h2 { font-size: 1.3rem; }
+.account { padding: 40px 20px 72px; }
+.account-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
+.account-head h1 { font-size: clamp(2rem, 4vw, 2.8rem); }
+.account-tabs { display: flex; gap: 4px; margin: 28px 0 24px; border-bottom: 1px solid var(--line); overflow-x: auto; }
+.account-tabs button { background: none; border: 0; border-bottom: 3px solid transparent; padding: 10px 16px; font: 700 1rem var(--text); color: var(--ink-soft); cursor: pointer; white-space: nowrap; }
+.account-tabs button.on { color: var(--navy); border-color: var(--scrub); }
+.orders { display: grid; gap: 16px; }
+.order-card { background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 18px 20px; display: grid; gap: 14px; }
+.order-card header, .order-card footer { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: center; }
+.order-status { font-weight: 700; font-size: .9rem; padding: 4px 12px; border-radius: 999px; background: var(--mint); }
+.order-status.s-pending_payment { background: #fdf0dc; color: var(--warn); }
+.order-status.s-cancelled, .order-status.s-refunded { background: #eef1f5; color: var(--ink-soft); }
+.order-items { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.order-items li { display: flex; gap: 12px; align-items: center; }
+.order-items img, .order-items .ph { width: 56px; height: 56px; border-radius: 12px; background: var(--mint); object-fit: contain; mix-blend-mode: multiply; flex: none; }
+.order-links { display: flex; gap: 16px; flex-wrap: wrap; font-weight: 600; }
+.addresses { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; align-items: start; }
+.address-card { background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 18px 20px; }
+.address-card p + p { margin-top: 8px; }
+.account-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+@media (max-width: 900px) {
+  .account-auth, .account-cols { grid-template-columns: 1fr; gap: 28px; }
+  .account-label { display: none; }
+}

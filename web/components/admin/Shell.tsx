@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import type { Session } from "@supabase/supabase-js";
 import { count, rpc, sb, traduz } from "@/lib/admin/sb";
 import { Toasts } from "./ui";
+import Logo from "@/components/Logo";
 
 type Item = { href: string; label: string; badge?: "orders" | "proposals" | "returns" };
 const NAV: { group: string; items: Item[] }[] = [
@@ -122,7 +123,7 @@ export default function Shell({ children }: { children: React.ReactNode }) {
 }
 
 function Brand() {
-  return <div className="a-brand"><span className="a-logo">i</span>Nurse<small>backoffice</small></div>;
+  return <div className="a-brand"><Logo height={22} /><small>backoffice</small></div>;
 }
 
 function Login() {

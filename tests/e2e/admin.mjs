@@ -122,6 +122,39 @@ if (process.env.EXTRA_STEPS) {
   await extra.default({ page, BASE, MOCK, step, settle, shot, toastOk, problems });
 }
 
+// ---------- área de cliente (loja) ----------
+const shop = await newPage({ width: 1280, height: 860 });
+await step('cliente cria conta e vê a sua encomenda', async () => {
+  await shop.goto(`${BASE}/conta`);
+  await shop.click('text=Criar conta nova');
+  await shop.fill('#a-name', 'Ana Costa'); await shop.fill('#a-email', 'ana@exemplo.pt'); await shop.fill('#a-pass', 'cliente12345');
+  await shop.click('button:has-text("Criar conta")');
+  await shop.waitForSelector('text=Encomenda n.º 1001', { timeout: 15000 });
+  await shop.screenshot({ path: `${SHOTS}/60-conta-encomendas.png`, fullPage: true });
+});
+await step('cliente guarda favorito e morada', async () => {
+  await shop.goto(`${BASE}/loja`); await shop.click('.prod >> nth=0');
+  await shop.waitForSelector('button.fav'); await shop.click('button.fav');
+  await shop.waitForSelector('button.fav.on');
+  await shop.goto(`${BASE}/conta?separador=favoritos`); await shop.waitForSelector('.grid .prod');
+  await shop.click('text=Moradas'); await shop.click('text=Adicionar morada');
+  await shop.fill('#ad-name', 'Ana Costa'); await shop.fill('#ad-l1', 'Rua do Hospital 1'); await shop.fill('#ad-zip', '4000-100'); await shop.fill('#ad-city', 'Porto');
+  await shop.click('text=Guardar morada'); await shop.waitForSelector('.address-card >> text=Rua do Hospital 1');
+  await shop.screenshot({ path: `${SHOTS}/61-conta-moradas.png`, fullPage: true });
+});
+await step('checkout preenchido com os dados da conta', async () => {
+  await shop.goto(`${BASE}/loja`); await shop.click('.prod >> nth=1');
+  await shop.click('.opts label:not(:has(input:disabled)) >> nth=0');
+  await shop.click('button:has-text("Adicionar")');
+  await shop.goto(`${BASE}/checkout`);
+  await shop.waitForFunction(() => document.querySelector('#line1')?.value === 'Rua do Hospital 1', null, { timeout: 15000 });
+  await shop.screenshot({ path: `${SHOTS}/62-checkout-preenchido.png`, fullPage: true });
+});
+await step('loja com logótipo novo', async () => {
+  await shop.goto(`${BASE}/`); await shop.waitForSelector('header .logo svg');
+  await shop.screenshot({ path: `${SHOTS}/63-loja-inicio.png` });
+});
+
 // ---------- telemóvel ----------
 const m = await newPage({ width: 390, height: 844 });
 await m.goto(`${BASE}/admin`);
