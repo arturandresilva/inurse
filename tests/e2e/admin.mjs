@@ -227,7 +227,7 @@ await stepShop('modo de manutenção', async () => {
   await shot(page, '20-manutencao-backoffice', false);
   await phone.goto(`${BASE}/`); await phone.waitForSelector('.maint h1');
   await phone.screenshot({ path: `${SHOTS}/t-manutencao.png` });
-  await phone.goto(`${BASE}/p/envios`); await phone.waitForSelector('header');      // páginas legais continuam abertas
+  await phone.goto(`${BASE}/livre-resolucao`); await phone.waitForSelector('header .logo');      // livre resolução e páginas legais continuam abertas
   const admin = await page.context().newPage(); await admin.goto(`${BASE}/`); await admin.waitForSelector('.maint-bar'); await admin.close();
   await page.click('.a-maint-bar button:has-text("Reabrir a loja")'); await toastOk();
   await phone.goto(`${BASE}/`); await phone.waitForSelector('header .logo');
