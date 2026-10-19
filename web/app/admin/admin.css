@@ -2,12 +2,12 @@
 .a-root {
   --a-bg: #f3f5f7;
   --a-card: #fff;
-  --a-ink: #1c2a4a;
+  --a-ink: #0F2F4A;
   --a-soft: #5b6680;
   --a-line: #dfe5ec;
   --a-line-2: #eef2f6;
-  --a-act: #0f6e63;
-  --a-act-2: #0a564d;
+  --a-act: #2A8378;
+  --a-act-2: #1F6B62;
   --a-ok: #1f7a4d;   --a-ok-bg: #e3f4ea;
   --a-warn: #8a4b00; --a-warn-bg: #fdf0dc;
   --a-err: #a32a2a;  --a-err-bg: #fbe5e5;
@@ -20,7 +20,7 @@
 
 /* ---------- Estrutura ---------- */
 .a-app { display: grid; grid-template-columns: 232px minmax(0, 1fr); }
-.a-side { position: sticky; top: 0; height: 100vh; overflow-y: auto; background: #16223c; color: #cdd6e4;
+.a-side { position: sticky; top: 0; height: 100vh; overflow-y: auto; background: #0F2F4A; color: #cdd6e4;
   display: flex; flex-direction: column; padding: 18px 12px; }
 .a-brand { font: 800 1.35rem var(--display); color: #fff; display: flex; align-items: center; gap: 8px; padding: 2px 8px 16px; }
 .a-brand small { font: 600 .68rem var(--text); text-transform: uppercase; letter-spacing: .1em; color: #8fa1bd; }

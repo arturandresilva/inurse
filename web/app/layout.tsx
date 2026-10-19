@@ -19,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
     alternates: { canonical: "/" },
   };
 }
-export const viewport: Viewport = { themeColor: "#1c2a4a" };
+export const viewport: Viewport = { themeColor: "#0F2F4A" };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const locale = await getLocale();

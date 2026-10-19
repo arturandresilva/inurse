@@ -47,5 +47,5 @@ select id, 'final', 'FR 2026/12', total_cents, 'https://exemplo.pt/fatura.pdf', 
 -- campanha da página inicial (faixa a meio da página) para o teste da loja e do backoffice
 insert into home_campaigns (id, name, placement, status) values ('00000000-0000-0000-0000-00000000ca01', 'Campanha de teste', 'faixa', 'active');
 insert into home_slides (campaign_id, position, media_url, title, body, cta_label, cta_url) values
-  ('00000000-0000-0000-0000-00000000ca01', 0, '/marca/inurse-logo-cor.svg', 'Campanha de outono', 'Socas com 10% de desconto até domingo.', 'Ver socas', '/loja'),
-  ('00000000-0000-0000-0000-00000000ca01', 1, '/marca/inurse-logo-cor.svg', 'Segundo diapositivo', null, null, null);
+  ('00000000-0000-0000-0000-00000000ca01', 0, '/marca/png/inurse-partilha-1200x630.png', 'Campanha de outono', 'Socas com 10% de desconto até domingo.', 'Ver socas', '/loja'),
+  ('00000000-0000-0000-0000-00000000ca01', 1, '/marca/png/inurse-partilha-1200x630.png', 'Segundo diapositivo', null, null, null);

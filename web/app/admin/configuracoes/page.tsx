@@ -51,6 +51,8 @@ function Settings() {
               <>
               <MaintenanceCard />
               <KeysCard />
+              <Card title="Marca e logótipos"><p className="a-hint">Logótipo, ícone, cores, letra e regras de uso, com todos os ficheiros para descarregar (site, redes sociais, impressão).</p>
+                <div className="a-formfoot" style={{ justifyContent: "flex-start" }}><a className="a-btn" href="/marca/guia.html" target="_blank" rel="noopener">Abrir o guia de marca</a><a className="a-btn" href="/marca/inurse-marca.zip" download>Descarregar o pack (.zip)</a></div></Card>
               <Card title="Dados da loja">
                 <form onSubmit={(e) => { const f = form(e); save("public.store", { name: f.get("name"), email: String(f.get("email") ?? "").trim(), phone: String(f.get("phone") ?? "").trim(), domain: f.get("domain"), return_days: Math.max(14, Number(f.get("return_days")) || 14) }); }}>
                   <div className="a-form">

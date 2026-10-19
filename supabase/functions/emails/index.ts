@@ -33,18 +33,18 @@ const phone = (p: unknown) => String(p ?? "").replace(/\D/g, "").replace(/^(\d{3
 function layout(title: string, inner: string, site: string) {
   const L = { legal_name: "Artur Silva", nif: "226720462", address: "Praça 20 de Maio", zip: "4590-182", city: "Paços de Ferreira", email: "info@inurse.pt", phone: "918889008", ...Object.fromEntries(Object.entries(LEGAL).filter(([, v]) => v)) };
   return `<!doctype html><html lang="${LANG}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${esc(title)}</title></head>
-<body style="margin:0;background:#f2f5f7;font-family:Arial,Helvetica,sans-serif;color:#1c2a4a">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f2f5f7;padding:24px 12px"><tr><td align="center">
+<body style="margin:0;background:#F1F6F9;font-family:Arial,Helvetica,sans-serif;color:#0F2F4A">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F1F6F9;padding:24px 12px"><tr><td align="center">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border-radius:16px;overflow:hidden">
-<tr><td style="padding:22px 28px;border-bottom:1px solid #e3e9ee"><a href="${site}" style="text-decoration:none;font:700 26px Arial,Helvetica,sans-serif;color:#1C2A4A"><span style="color:#E8323C;font-size:18px">&#10084;</span>&nbsp;inurse</a></td></tr>
+<tr><td style="padding:22px 28px;border-bottom:1px solid #e3e9ee"><a href="${site}" style="text-decoration:none;font:700 28px Arial,Helvetica,sans-serif;color:#0F2F4A"><span style="color:#F27C79;font-size:16px;vertical-align:top">&#10084;</span><span style="color:#48BBAE">i</span>nurse</a></td></tr>
 <tr><td style="padding:28px;font-size:15px;line-height:1.55">${inner}</td></tr>
-<tr><td style="padding:18px 28px;background:#1c2a4a;color:#cfd8e3;font-size:12px;line-height:1.5">
+<tr><td style="padding:18px 28px;background:#0F2F4A;color:#cfd8e3;font-size:12px;line-height:1.5">
 iNurse · ${tx("foot")} · <a href="mailto:${esc(L.email)}" style="color:#fff">${esc(L.email)}</a> · ${esc(phone(L.phone))}<br>
 ${esc(L.legal_name)}, NIF ${esc(L.nif)}, ${esc(L.address)}, ${esc(L.zip)} ${esc(L.city)}</td></tr>
 </table></td></tr></table></body></html>`;
 }
 const button = (href: string, label: string) =>
-  `<p style="margin:22px 0"><a href="${href}" style="display:inline-block;background:#0f6e63;color:#fff;text-decoration:none;font-weight:700;padding:13px 22px;border-radius:12px">${esc(label)}</a></p>`;
+  `<p style="margin:22px 0"><a href="${href}" style="display:inline-block;background:#2A8378;color:#fff;text-decoration:none;font-weight:700;padding:13px 22px;border-radius:12px">${esc(label)}</a></p>`;
 
 
 // ---------- textos dos emails, por língua (a encomenda guarda a língua do cliente) ----------
@@ -145,7 +145,7 @@ async function render(kind: string, o: Row, cfg: Row): Promise<{ subject: string
     const items = ((await rest(`order_items?order_id=eq.${o.id}&select=title,option_value,quantity,unit_price_cents&order=title`)) ?? []) as Row[];
     const pay = await one("settings?key=eq.public.payments&select=value");
     const transfer = o.payment_method === "transfer"
-      ? `<div style="background:#e4f2ec;border-radius:12px;padding:14px 16px;margin:16px 0"><strong>${tx("tr_h")}</strong><br>
+      ? `<div style="background:#E3F4F1;border-radius:12px;padding:14px 16px;margin:16px 0"><strong>${tx("tr_h")}</strong><br>
          IBAN: <strong>${esc(pay?.value?.iban ?? "")}</strong><br>${tx("total")}: <strong>${money(o.total_cents)}</strong><br>${tx("tr_b", N)}</div>`
       : `<p>${tx("pay_other")}</p>`;
     const rows = items.map((i) =>
@@ -166,7 +166,7 @@ async function render(kind: string, o: Row, cfg: Row): Promise<{ subject: string
       <p>${tx("sh_t", { ...N, c: s?.carrier ? tx("with", { c: esc(s.carrier) }) : "" })}</p>
       ${code ? `<p>${tx("track_code")}: <strong>${esc(code)}</strong></p>` : ""}
       ${button(track, code ? tx("track") : tx("view"))}
-      <p style="color:#5b6780;font-size:13px"><a href="${orderUrl}" style="color:#0f6e63">${tx("sh_f")}</a></p>`, site) };
+      <p style="color:#5b6780;font-size:13px"><a href="${orderUrl}" style="color:#2A8378">${tx("sh_f")}</a></p>`, site) };
   }
   const simple: Record<string, [string, string]> = {
     encomenda_paga: ["paid_s", "paid_t"], encomenda_preparacao: ["prep_s", "prep_t"], encomenda_entregue: ["del_s", "del_t"],
@@ -199,7 +199,7 @@ async function renderChat(e: Row, cfg: Row): Promise<{ subject: string; html: st
     const text = esc(p.text ?? "").replace(/\n/g, "<br>");
     return { subject: tx("chat_s"), html: layout(tx("chat_s"), `<p style="margin:0 0 14px">${tx("hi", { n: name ? " " + esc(name) : "" })}</p>
       <p>${tx("chat_t")}</p>
-      <div style="border-left:3px solid #0f6e63;padding:6px 14px;margin:14px 0;color:#1c2a4a">${text}</div>
+      <div style="border-left:3px solid #2A8378;padding:6px 14px;margin:14px 0;color:#0F2F4A">${text}</div>
       <p style="color:#5b6780;font-size:13px">${tx("chat_f")}</p>`, site) };
   }
   LANG = "pt";
