@@ -1,10 +1,15 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { isLocale, LOCALE_COOKIE } from "@/lib/i18n";
 
-// ?lang=en (links partilhados, emails) guarda a língua e volta ao mesmo endereço sem o parâmetro
+// ?lang=en (links partilhados, emails) guarda a língua e volta ao mesmo endereço sem o parâmetro.
+// O endereço pedido segue no cabeçalho x-path (o modo de manutenção deixa algumas páginas abertas).
 export function middleware(req: NextRequest) {
   const lang = req.nextUrl.searchParams.get("lang");
-  if (!lang) return NextResponse.next();
+  if (!lang) {
+    const h = new Headers(req.headers);
+    h.set("x-path", req.nextUrl.pathname);
+    return NextResponse.next({ request: { headers: h } });
+  }
   const url = req.nextUrl.clone();
   url.searchParams.delete("lang");
   const res = NextResponse.redirect(url);

@@ -400,4 +400,8 @@ export const EN: Record<string, string> = {
   "Ir para o diapositivo": "Go to slide",
   "Pausar": "Pause",
   "Não consegui responder agora. Deixe o seu email e respondemos o quanto antes.": "I couldn't answer right now. Leave your email and we'll reply as soon as possible.",
+  "Estamos a melhorar a loja": "We're improving our shop",
+  "A loja está temporariamente em manutenção. Voltamos dentro de pouco tempo.": "The shop is temporarily under maintenance. We'll be back shortly.",
+  "Previsão de regresso: {d}": "Expected back: {d}",
+  "Já fez uma encomenda? Pode continuar a vê-la pelo link do email. Para qualquer dúvida:": "Already placed an order? You can still view it from the link in your email. For any questions:",
 };

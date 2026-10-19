@@ -3,6 +3,7 @@ import CartLink from "./CartLink";
 import AccountLink from "./AccountLink";
 import LangSwitch from "./LangSwitch";
 import Logo from "./Logo";
+import MobileNavCloser from "./MobileNavCloser";
 import { getCategories, getProducts, groupByModel } from "@/lib/catalog";
 import { categoryHref, money } from "@/lib/format";
 import { loc } from "@/lib/i18n";
@@ -62,6 +63,7 @@ export default async function Header() {
               <LangSwitch />
             </div>
           </details>
+          <MobileNavCloser />
           <Link href="/" className="logo" aria-label={t("iNurse, página inicial")}><Logo height={30} /></Link>
           <nav className="mainnav" aria-label={t("Categorias")}>
             <div className="mega-wrap">

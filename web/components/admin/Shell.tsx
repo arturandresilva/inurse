@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { MaintenanceBar } from "./Maintenance";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { Session } from "@supabase/supabase-js";
@@ -122,7 +123,7 @@ export default function Shell({ children }: { children: React.ReactNode }) {
         </div>
       </aside>
       <button className="a-menu-btn" onClick={() => setMenu((m) => !m)} aria-expanded={menu} aria-label="Menu">☰</button>
-      <main className="a-main">{children}</main>
+      <main className="a-main"><MaintenanceBar />{children}</main>
       <Toasts />
     </div>
   );

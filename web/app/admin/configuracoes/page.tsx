@@ -4,6 +4,7 @@ import { Suspense, useState } from "react";
 import { callFunction, run, sb, type Row } from "@/lib/admin/sb";
 import { fromCents, toCents } from "@/lib/admin/format";
 import { Alert, Card, Confirm, Field, Loaded, PageHead, Tabs, useAction, useLoad } from "@/components/admin/ui";
+import { MaintenanceCard } from "@/components/admin/Maintenance";
 
 async function load() {
   const c = sb();
@@ -47,6 +48,7 @@ function Settings() {
               const v = (k: string, d = "") => String(st0[k] ?? d);
               return (
               <>
+              <MaintenanceCard />
               <Card title="Dados da loja">
                 <form onSubmit={(e) => { const f = form(e); save("public.store", { name: f.get("name"), email: String(f.get("email") ?? "").trim(), phone: String(f.get("phone") ?? "").trim(), domain: f.get("domain"), return_days: Math.max(14, Number(f.get("return_days")) || 14) }); }}>
                   <div className="a-form">

@@ -41,3 +41,15 @@ do $$ declare a int; b int; st text; begin
   exception when others then if sqlerrm not like '%email válido%' then raise notice 'ERRO: %', sqlerrm; end if; end;
   if exists (select 1 from settings where key = 'public.chat' and value ? 'whatsapp') then raise notice 'ERRO: WhatsApp ainda nas definições'; end if;
 end $$;
+
+-- Manutenção: com a loja em manutenção não entram encomendas
+update settings set value = '{"enabled":true}' where key = 'public.maintenance';
+do $$ begin
+  begin perform place_order_l('{"email":"x@y.pt","accept_terms":true,"items":[]}'::jsonb); raise notice 'ERRO: encomenda aceite em manutenção';
+  exception when others then if sqlerrm not like '%manutenção%' then raise notice 'ERRO: %', sqlerrm; end if; end;
+end $$;
+update settings set value = '{"enabled":false}' where key = 'public.maintenance';
+do $$ begin
+  begin perform place_order_l('{"email":"x@y.pt","accept_terms":true,"items":[]}'::jsonb);
+  exception when others then if sqlerrm like '%manutenção%' then raise notice 'ERRO: manutenção desligada continua a bloquear'; end if; end;
+end $$;

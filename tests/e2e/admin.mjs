@@ -214,9 +214,23 @@ for (const [name, url, wait] of [['inicio', '/', 'header'], ['loja', '/loja', '.
     await phone.screenshot({ path: `${SHOTS}/t-${name}.png`, fullPage: true });
   });
 }
-await stepShop('telemóvel: menu aberto', async () => {
+await stepShop('telemóvel: menu aberto e fecha ao escolher', async () => {
   await phone.goto(`${BASE}/`); await phone.click('details.mnav > summary'); await phone.waitForTimeout(300);
   await phone.screenshot({ path: `${SHOTS}/t-menu.png` });
+  await phone.locator('.mnav-panel a').first().click();
+  await phone.waitForFunction(() => !document.querySelector('details.mnav[open]'), null, { timeout: 5000 });
+});
+await stepShop('modo de manutenção', async () => {
+  await page.goto(`${BASE}/admin/configuracoes`); await settle(page);
+  await page.click('button:has-text("Pôr a loja em manutenção")'); await toastOk();
+  await page.waitForSelector('.a-maint-bar');
+  await shot(page, '20-manutencao-backoffice', false);
+  await phone.goto(`${BASE}/`); await phone.waitForSelector('.maint h1');
+  await phone.screenshot({ path: `${SHOTS}/t-manutencao.png` });
+  await phone.goto(`${BASE}/p/envios`); await phone.waitForSelector('header');      // páginas legais continuam abertas
+  const admin = await page.context().newPage(); await admin.goto(`${BASE}/`); await admin.waitForSelector('.maint-bar'); await admin.close();
+  await page.click('.a-maint-bar button:has-text("Reabrir a loja")'); await toastOk();
+  await phone.goto(`${BASE}/`); await phone.waitForSelector('header .logo');
 });
 await stepShop('campanha na página inicial (slider)', async () => {
   await shop.goto(`${BASE}/`);

@@ -536,3 +536,16 @@ main .wrap { padding-left: 20px; padding-right: 20px; }       /* .shop/.prose/.c
   .foot .cols { gap: 24px 16px; }
   .foot button { text-align: left; padding-left: 0; }
 }
+
+/* ---------- Manutenção ---------- */
+.maint { min-height: 100svh; display: grid; place-items: center; padding: 24px 16px;
+  background: radial-gradient(900px 420px at 80% 10%, #dff1fb 0%, transparent 60%), linear-gradient(180deg, #f3faf7 0%, var(--paper) 100%); }
+.maint-card { max-width: 560px; width: 100%; background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 40px 32px; text-align: center; display: grid; gap: 14px; justify-items: center; }
+.maint-ico { color: var(--blue); margin-top: 10px; }
+.maint-card h1 { font-size: clamp(1.7rem, 4vw, 2.3rem); line-height: 1.15; }
+.maint-card .lead { color: var(--ink-soft); font-size: 1.08rem; white-space: pre-line; }
+.maint-when { font-weight: 700; color: var(--scrub); }
+.maint-contacts a { color: var(--navy); font-weight: 700; }
+.maint-bar { background: #fff4d6; color: #6b4e00; text-align: center; font-size: .9rem; padding: 8px 16px; border-bottom: 1px solid #f0d58a; }
+.maint-bar a { color: inherit; font-weight: 700; margin-left: 6px; }
+@media (max-width: 640px) { .maint-card { padding: 30px 20px; } }

@@ -27,5 +27,5 @@ fresh; run "faturação InvoiceXpress" -f invoicing_test.sql
 fresh; run "catálogo por modelos" -f models_test.sql
 fresh; run "livre resolução" -f withdrawal_test.sql
 fresh; run "avaliações e emails" -f reviews_test.sql
-fresh; run "página inicial e conversas" -f campaigns_test.sql
+fresh; run "página inicial, conversas e manutenção" -f campaigns_test.sql
 exit $fail
