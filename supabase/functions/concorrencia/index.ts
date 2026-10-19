@@ -148,6 +148,8 @@ async function run(onlyKey: string | undefined, trigger: string) {
         if (!valid.length) { lines.push(`- **${g.label}**: sem ofertas encontradas (nosso preço ${euro(g.our)})`); continue; }
         const best = valid.reduce((a, b) => (Number(a.preco_eur) <= Number(b.preco_eur) ? a : b));
         const cheapest = Math.round(Number(best.preco_eur) * 100);
+        const links = [...valid].sort((a, b) => Number(a.preco_eur) - Number(b.preco_eur)).slice(0, 8).map((o) => ({ shop: String(o.loja).slice(0, 120), url: String(o.url).slice(0, 500),
+          price_cents: Math.round(Number(o.preco_eur) * 100), shipping_cents: o.portes_eur != null ? Math.round(Number(o.portes_eur) * 100) : null }));
         lines.push(`- **${g.label}**: nosso ${euro(g.our)} · mais barato ${euro(cheapest)} em [${best.loja}](${best.url}) · ${valid.length} oferta(s)`);
         if (cheapest >= g.our) continue;
         // margem mínima: preço com IVA que mantém a margem sobre o custo (quando há custo)
@@ -163,11 +165,11 @@ async function run(onlyKey: string | undefined, trigger: string) {
           proposals.push({ kind: "product.prices", title: `${g.label}: baixar para ${euro(target)} (há a ${euro(cheapest)} em ${best.loja})`,
             summary: `Acompanhar o preço mais baixo encontrado. ${changes.length} tamanho(s)/cor(es) passam de até ${euro(g.our)} para ${euro(target)}.`,
             rationale: `Ofertas encontradas: ${valid.map((o) => `${o.loja} ${euro(Math.round(o.preco_eur * 100))}`).join("; ")}. Margem mínima de ${Math.round(minMargin * 100)}% respeitada.${blocked ? ` ${blocked} tamanho(s) não descem tanto por causa da margem mínima.` : ""}`,
-            expected_impact: "Preço igual ou abaixo do mais barato do mercado.", priority: g.our - cheapest > 500 ? "alta" : "media", payload: { changes } });
+            expected_impact: "Preço igual ou abaixo do mais barato do mercado.", priority: g.our - cheapest > 500 ? "alta" : "media", payload: { changes, offers: links } });
         } else if (blocked) {
           proposals.push({ kind: "insight", title: `${g.label}: concorrência a ${euro(cheapest)}, abaixo da tua margem mínima`,
             summary: `${best.loja} vende a ${euro(cheapest)}; o nosso é ${euro(g.our)}. Descer tanto ficaria abaixo da margem mínima de ${Math.round(minMargin * 100)}%.`,
-            rationale: `Vale a pena negociar o custo com o fornecedor ou destacar outra vantagem (envio, troca fácil).`, priority: "baixa", payload: {} });
+            rationale: `Vale a pena negociar o custo com o fornecedor ou destacar outra vantagem (envio, troca fácil).`, priority: "baixa", payload: { offers: links } });
         }
       }
     }

@@ -35,7 +35,10 @@ async function load() {
     run<Row | null>(c.from("settings").select("value").eq("key", "agents").maybeSingle()),
   ]);
   const campaigns = await run(c.from("campaigns").select("*").order("created_at", { ascending: false }).limit(30));
-  return { pending, decided, agents, reports, runs, products, campaigns, policy: (policy?.value ?? {}) as Row };
+  // ofertas da concorrência (com os links) das propostas de preço por decidir
+  const runIds = [...new Set(pending.filter((p) => p.agent_key === "concorrencia" && p.run_id).map((p) => p.run_id))];
+  const offers = runIds.length ? await run(c.from("competitor_prices").select("run_id,label,shop,url,price_cents,shipping_cents,in_stock").in("run_id", runIds).order("price_cents")) : [];
+  return { pending, decided, agents, reports, runs, products, campaigns, offers, policy: (policy?.value ?? {}) as Row };
 }
 
 export default function Agents() {
@@ -85,6 +88,7 @@ export default function Agents() {
                   <p>{p.summary}</p>
                   {p.rationale && <p className="a-small"><strong>Porquê:</strong> {p.rationale}</p>}
                   {p.expected_impact && <p className="a-small"><strong>Impacto esperado:</strong> {p.expected_impact}</p>}
+                  <Offers p={p} all={d.offers} />
                   <PayloadView p={p} products={d.products} />
                 </article>
               )))}
@@ -204,6 +208,30 @@ export default function Agents() {
         }}
       </Loaded>
     </>
+  );
+}
+
+// onde foi encontrado o preço (para confirmar antes de aprovar)
+function Offers({ p, all }: { p: Row; all: Row[] }) {
+  const list: Row[] = p.payload?.offers ?? all.filter((o) => o.run_id === p.run_id && String(p.title).startsWith(`${o.label}:`));
+  if (!list.length) return null;
+  return (
+    <div className="a-offers">
+      <strong>Onde foi encontrado (abre para confirmar):</strong>
+      <ul>
+        {list.map((o, i) => {
+          let host = ""; try { host = new URL(o.url).hostname.replace(/^www\./, ""); } catch { /* link inválido */ }
+          return (
+            <li key={i}>
+              <a href={o.url} target="_blank" rel="noopener noreferrer">{o.shop ?? o.loja} ↗</a>
+              <span className="a-muted"> {host}</span> · <strong>{euro(o.price_cents)}</strong>
+              {o.shipping_cents != null ? <span className="a-muted"> + portes {euro(o.shipping_cents)}</span> : null}
+              {o.in_stock === false ? <span className="a-muted"> · esgotado</span> : null}
+            </li>
+          );
+        })}
+      </ul>
+    </div>
   );
 }
 

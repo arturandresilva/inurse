@@ -269,3 +269,6 @@
 .a-img-slot > div { display: flex; gap: 6px; }
 .a-maint-bar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; background: #fff4d6; color: #6b4e00; border: 1px solid #f0d58a; border-radius: 10px; padding: 10px 14px; margin-bottom: 16px; font-size: .92rem; }
 .a-maint-bar .a-btn { margin-left: auto; }
+.a-offers { background: #f4f8fb; border: 1px solid var(--a-line); border-radius: 10px; padding: 10px 14px; margin: 10px 0; font-size: .9rem; }
+.a-offers ul { margin: 6px 0 0; padding-left: 18px; display: grid; gap: 4px; }
+.a-offers a { font-weight: 700; }

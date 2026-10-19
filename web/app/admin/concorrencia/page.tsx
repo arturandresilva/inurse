@@ -57,16 +57,16 @@ export default function Competition() {
                   return (
                     <Fragment key={m.model_key}>
                       <tr className="click" onClick={() => setOpen(open === m.model_key ? null : m.model_key)}>
-                        <td><strong>{m.label}</strong><br /><span className="a-muted">{m.offers.length} oferta(s)</span></td>
+                        <td><strong>{m.label}</strong><br />{m.offers.length ? <button type="button" className="a-link">{open === m.model_key ? "Esconder" : `Ver as ${m.offers.length} oferta(s) e links`}</button> : <span className="a-muted">sem ofertas</span>}</td>
                         <td>{m.our ? euro(m.our) : "—"}</td>
-                        <td>{m.best ? <>{euro(m.best.price_cents)}<br /><span className="a-muted">{m.best.shop}</span></> : <span className="a-muted">nada encontrado</span>}</td>
+                        <td>{m.best ? <>{euro(m.best.price_cents)}<br /><a href={m.best.url} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>{m.best.shop} ↗</a></> : <span className="a-muted">nada encontrado</span>}</td>
                         <td>{diff == null ? "—" : diff > 0 ? <Badge tone="warn">+{euro(diff)} mais caro</Badge> : <Badge tone="ok">{diff === 0 ? "igual" : `${euro(-diff)} mais barato`}</Badge>}</td>
                         <td>{dateTime(m.checked_at)}</td>
                         <td><button className="a-btn sm" disabled={busy} onClick={(e) => { e.stopPropagation(); search(m.model_key); }}>Pesquisar</button></td>
                       </tr>
                       {open === m.model_key && m.offers.map((o: Row) => (
                         <tr key={o.id} style={{ background: "var(--a-line-2)" }}>
-                          <td colSpan={2}>↳ <a href={o.url} target="_blank" rel="noopener noreferrer">{o.shop}</a>{o.note ? <span className="a-muted"> · {o.note}</span> : null}</td>
+                          <td colSpan={2}>↳ <a href={o.url} target="_blank" rel="noopener noreferrer"><strong>{o.shop} ↗</strong></a> <span className="a-muted">{(() => { try { return new URL(o.url).hostname.replace(/^www\./, ""); } catch { return ""; } })()}</span>{o.note ? <span className="a-muted"> · {o.note}</span> : null}{o.in_stock === false ? <span className="a-muted"> · esgotado</span> : null}</td>
                           <td>{euro(o.price_cents)}</td>
                           <td>{o.shipping_cents != null ? `portes ${euro(o.shipping_cents)}` : ""}</td>
                           <td colSpan={2}>{dateTime(o.seen_at)}</td>
