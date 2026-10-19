@@ -56,6 +56,7 @@
 .a-card.flush .a-card-head { padding: 16px 20px 0; }
 .a-cols { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 18px; align-items: start; }
 .a-cols.even { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.a-cols > *, .a-grid-2 > * { min-width: 0; }
 .a-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-bottom: 18px; }
 .a-stat { background: var(--a-card); border: 1px solid var(--a-line); border-radius: 12px; padding: 14px 16px; display: grid; gap: 2px; }
 .a-stat-l { font-size: .8rem; color: var(--a-soft); }
