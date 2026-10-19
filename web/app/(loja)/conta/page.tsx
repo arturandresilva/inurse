@@ -157,6 +157,7 @@ function Orders({ me }: { me: Me }) {
               {o.invoices.map((iv: { number: string; pdf_url: string }) => <a key={iv.pdf_url} href={iv.pdf_url} target="_blank" rel="noopener">Fatura {iv.number ?? ""}</a>)}
               {!o.invoices.length && ["paid", "processing", "shipped", "delivered"].includes(o.status) && <span className="muted">Fatura enviada por email</span>}
               <Link href={`/encomenda/${o.number}?t=${o.token}`}>Ver detalhe{["shipped", "delivered"].includes(o.status) ? " / trocar" : ""}</Link>
+              {o.status === "delivered" && <Link href={`/avaliar/${o.number}?t=${o.token}`}>Avaliar</Link>}
             </span>
           </footer>
         </article>

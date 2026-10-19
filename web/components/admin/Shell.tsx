@@ -7,7 +7,7 @@ import { count, rpc, sb, traduz } from "@/lib/admin/sb";
 import { Toasts } from "./ui";
 import Logo from "@/components/Logo";
 
-type Item = { href: string; label: string; badge?: "orders" | "proposals" | "returns" };
+type Item = { href: string; label: string; badge?: "orders" | "proposals" | "returns" | "reviews" };
 const NAV: { group: string; items: Item[] }[] = [
   { group: "Vendas", items: [
     { href: "/admin", label: "Painel" },
@@ -15,6 +15,7 @@ const NAV: { group: string; items: Item[] }[] = [
     { href: "/admin/devolucoes", label: "Devoluções", badge: "returns" },
     { href: "/admin/clientes", label: "Clientes" },
     { href: "/admin/promocoes", label: "Promoções" },
+    { href: "/admin/avaliacoes", label: "Avaliações", badge: "reviews" },
   ] },
   { group: "Catálogo", items: [
     { href: "/admin/produtos", label: "Produtos" },
@@ -35,13 +36,13 @@ const NAV: { group: string; items: Item[] }[] = [
   ] },
 ];
 
-type Badges = { orders: number; proposals: number; returns: number };
+type Badges = { orders: number; proposals: number; returns: number; reviews: number };
 
 export default function Shell({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null | undefined>(undefined);
   const [admin, setAdmin] = useState<boolean | null>(null);
   const [recovery, setRecovery] = useState(false);
-  const [badges, setBadges] = useState<Badges>({ orders: 0, proposals: 0, returns: 0 });
+  const [badges, setBadges] = useState<Badges>({ orders: 0, proposals: 0, returns: 0, reviews: 0 });
   const [menu, setMenu] = useState(false);
   const path = usePathname();
 
@@ -67,7 +68,8 @@ export default function Shell({ children }: { children: React.ReactNode }) {
       count("orders", (q) => q.in("status", ["paid", "processing"])),
       count("proposals", (q) => q.eq("status", "pending")),
       count("returns", (q) => q.in("status", ["requested", "approved", "label_sent", "in_transit", "received"])),
-    ]).then(([orders, proposals, returns]) => alive && setBadges({ orders, proposals, returns })).catch(() => {});
+      count("reviews", (q) => q.eq("status", "pending")),
+    ]).then(([orders, proposals, returns, reviews]) => alive && setBadges({ orders, proposals, returns, reviews })).catch(() => {});
     load();
     const t = setInterval(load, 60_000);
     return () => { alive = false; clearInterval(t); };

@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import WithdrawalForm from "@/components/WithdrawalForm";
+import { fullAddress, getLegal, ralHtml } from "@/lib/legal";
+
+export const revalidate = 600;
 
 export const metadata: Metadata = {
   title: "Direito de livre resolução",
@@ -8,18 +11,19 @@ export const metadata: Metadata = {
   alternates: { canonical: "/livre-resolucao" },
 };
 
-export default function WithdrawalPage() {
+export default async function WithdrawalPage() {
+  const l = await getLegal();
+  const to = `${l.legal_name} (${l.name}), ${fullAddress(l)}`;
   return (
     <article className="wrap prose">
       <h1>Direito de livre resolução</h1>
       <p>
-        Tem o direito de resolver o contrato de compra, sem necessidade de indicar qualquer motivo, no prazo de <strong>15 dias</strong> a
+        Tem o direito de resolver o contrato de compra, sem necessidade de indicar qualquer motivo, no prazo de <strong>{l.return_days} dias</strong> a
         contar do dia em que recebe os artigos (o mínimo legal são 14 dias, nos termos do Decreto-Lei n.º 24/2014).
       </p>
       <p>
         Para exercer este direito, basta comunicar-nos a sua decisão através de uma declaração inequívoca: preenchendo o formulário abaixo,
-        enviando-nos um email para <a href="mailto:info@inurse.pt">info@inurse.pt</a> ou uma carta para Artur Silva (iNurse), Praça 20 de Maio,
-        4590-182 Paços de Ferreira. Pode utilizar o modelo de formulário que se encontra no fim desta página, mas não é obrigatório.
+        enviando-nos um email para <a href={`mailto:${l.email}`}>{l.email}</a> ou uma carta para {to}. Pode utilizar o modelo de formulário que se encontra no fim desta página, mas não é obrigatório.
         Para que o prazo seja respeitado, basta que a comunicação seja enviada antes de terminar o prazo.
       </p>
 
@@ -35,12 +39,12 @@ export default function WithdrawalPage() {
         <li>Só é responsável pela depreciação dos artigos que resulte de uma manipulação que exceda o necessário para verificar a sua natureza, características e funcionamento. Pode experimentar o calçado como faria numa loja, de preferência numa superfície limpa e sem uso no exterior.</li>
         <li>Por razões de proteção da saúde e de higiene, as meias e collants de compressão ou de descanso só podem ser devolvidos com a embalagem selada; depois de abertos, não há direito de livre resolução (artigo 17.º, n.º 1, alínea e) do Decreto-Lei n.º 24/2014).</li>
       </ul>
-      <p>Mais informação em <Link href="/p/trocas-e-devolucoes">Trocas e devoluções</Link> e nos <Link href="/p/termos-e-condicoes">Termos e Condições</Link>.</p>
+      <p>Mais informação em <Link href="/p/trocas-e-devolucoes">Trocas e devoluções</Link> e nos <Link href="/p/termos-e-condicoes">Termos e Condições</Link>. Em caso de litígio pode recorrer a <span dangerouslySetInnerHTML={{ __html: ralHtml(l) }} />.</p>
 
       <h2 id="modelo">Modelo de formulário de livre resolução</h2>
       <p className="muted">(Só deve preencher e enviar este formulário se pretender resolver o contrato. Pode enviá-lo por email ou por carta.)</p>
       <div className="notice model-form">
-        <p>— Para: Artur Silva (iNurse), Praça 20 de Maio, 4590-182 Paços de Ferreira, info@inurse.pt</p>
+        <p>— Para: {to}, {l.email}</p>
         <p>— Pela presente comunico que resolvo o meu contrato de compra e venda relativo aos seguintes bens: ……</p>
         <p>— Encomendado em …… / recebido em ……</p>
         <p>— Número da encomenda: ……</p>

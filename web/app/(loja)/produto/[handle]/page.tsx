@@ -4,6 +4,9 @@ import { notFound } from "next/navigation";
 import BuyBox from "@/components/BuyBox";
 import FavoriteButton from "@/components/FavoriteButton";
 import Gallery from "@/components/Gallery";
+import ReviewList from "@/components/ReviewList";
+import Stars from "@/components/Stars";
+import { getProductReviews } from "@/lib/reviews";
 import { colorLabel, getCategories, getModelColors, getProduct, image, sellable } from "@/lib/catalog";
 import { categoryHref, categoryLabel, SITE_URL, stripHtml } from "@/lib/format";
 
@@ -24,7 +27,7 @@ export default async function ProductPage({ params, searchParams }: { params: Pr
   const [{ handle }, sp] = await Promise.all([params, searchParams]);
   const p = await getProduct(handle);
   if (!p) notFound();
-  const [cats, colors] = await Promise.all([getCategories(), getModelColors(p)]);
+  const [cats, colors, rv] = await Promise.all([getCategories(), getModelColors(p), getProductReviews(p)]);
   const main = cats.find((c) => p.product_categories.some((pc) => pc.category_id === c.id) && c.path.split(">").length === 2 && !c.path.includes("COMPRAR POR"));
   const images = p.product_images.map((i) => i.url);
   const out = p.status === "out_of_stock" || !p.variants.some(sellable);
@@ -32,6 +35,7 @@ export default async function ProductPage({ params, searchParams }: { params: Pr
   const ld = {
     "@context": "https://schema.org", "@type": "Product", name: p.title, image: images, description: stripHtml(p.description_html, 500),
     brand: p.brand ? { "@type": "Brand", name: p.brand } : undefined, sku: p.handle,
+    aggregateRating: rv.count ? { "@type": "AggregateRating", ratingValue: rv.avg.toFixed(1), reviewCount: rv.count } : undefined,
     offers: { "@type": "AggregateOffer", priceCurrency: "EUR", lowPrice: (Math.min(...prices) / 100).toFixed(2), highPrice: (Math.max(...prices) / 100).toFixed(2),
       offerCount: p.variants.length, availability: out ? "https://schema.org/OutOfStock" : "https://schema.org/InStock", url: `${SITE_URL}/produto/${p.handle}` },
   };
@@ -44,6 +48,7 @@ export default async function ProductPage({ params, searchParams }: { params: Pr
           <p className="crumbs"><Link href="/loja">Loja</Link>{main ? <> / <Link href={categoryHref(main.path)}>{categoryLabel(main.name)}</Link></> : null}</p>
           {p.brand && <p className="brand">{p.brand}</p>}
           <h1>{p.model ?? p.title}</h1>
+          {rv.count > 0 && <a href="#avaliacoes" className="rating-link"><Stars value={rv.avg} /> {rv.avg.toFixed(1).replace(".", ",")} · {rv.count} {rv.count === 1 ? "avaliação" : "avaliações"}</a>}
           {p.excerpt && <p className="muted" style={{ marginTop: 10 }}>{p.excerpt}</p>}
           {p.model && (
             <div className="color-choice">
@@ -81,6 +86,7 @@ export default async function ProductPage({ params, searchParams }: { params: Pr
           )}
         </div>
       </div>
+      <ReviewList s={rv} title="Avaliações de quem comprou" empty="Ainda não há avaliações deste modelo. Depois de receber a encomenda, enviamos-lhe um email para dar a sua opinião." />
     </div>
   );
 }

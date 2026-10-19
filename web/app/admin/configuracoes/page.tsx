@@ -7,12 +7,13 @@ import { Alert, Card, Confirm, Field, Loaded, PageHead, Tabs, useAction, useLoad
 
 async function load() {
   const c = sb();
-  const [settings, admins, invites] = await Promise.all([
+  const [settings, admins, invites, outbox] = await Promise.all([
     run(c.from("settings").select("key,value")),
     run(c.from("admins").select("user_id,email,created_at")),
     run(c.from("admin_invites").select("*")),
+    run(c.from("email_outbox").select("id,kind,to_email,status,send_after,sent_at,error,orders(number)").order("created_at", { ascending: false }).limit(25)),
   ]);
-  return { s: Object.fromEntries(settings.map((r) => [r.key, r.value])) as Record<string, Row>, admins, invites };
+  return { s: Object.fromEntries(settings.map((r) => [r.key, r.value])) as Record<string, Row>, admins, invites, outbox };
 }
 
 export default function SettingsPage() {
@@ -37,24 +38,51 @@ function Settings() {
   return (
     <>
       <PageHead title="Configurações" />
-      <Tabs tabs={[["loja", "Loja"], ["pagamentos", "Pagamentos"], ["ctt", "CTT"], ["faturacao", "Faturação"], ["agentes", "Agentes IA"], ["acessos", "Acessos"]]} value={tab} onChange={setTab} />
+      <Tabs tabs={[["loja", "Loja"], ["pagamentos", "Pagamentos"], ["ctt", "CTT"], ["faturacao", "Faturação"], ["email", "Emails"], ["agentes", "Agentes IA"], ["acessos", "Acessos"]]} value={tab} onChange={setTab} />
       <Loaded s={st}>
-        {({ s, admins, invites }) => (
+        {({ s, admins, invites, outbox }) => (
           <>
-            {tab === "loja" && (
+            {tab === "loja" && (() => {
+              const st0 = s["public.store"] ?? {};
+              const v = (k: string, d = "") => String(st0[k] ?? d);
+              return (
+              <>
               <Card title="Dados da loja">
-                <form onSubmit={(e) => { const f = form(e); save("public.store", { name: f.get("name"), email: f.get("email"), phone: f.get("phone"), domain: f.get("domain"), return_days: Number(f.get("return_days")) || 14 }); }}>
+                <form onSubmit={(e) => { const f = form(e); save("public.store", { name: f.get("name"), email: String(f.get("email") ?? "").trim(), phone: String(f.get("phone") ?? "").trim(), domain: f.get("domain"), return_days: Math.max(14, Number(f.get("return_days")) || 14) }); }}>
                   <div className="a-form">
-                    <Field label="Nome"><input name="name" defaultValue={s["public.store"]?.name ?? "iNurse"} /></Field>
-                    <Field label="Email de contacto" hint="Aparece na loja e nos emails aos clientes"><input name="email" type="email" defaultValue={s["public.store"]?.email ?? ""} /></Field>
-                    <Field label="Telefone"><input name="phone" defaultValue={s["public.store"]?.phone ?? ""} /></Field>
-                    <Field label="Domínio"><input name="domain" defaultValue={s["public.store"]?.domain ?? "www.inurse.pt"} /></Field>
-                    <Field label="Prazo para pedir devolução (dias)"><input name="return_days" type="number" min={14} defaultValue={s["public.store"]?.return_days ?? 14} /></Field>
+                    <Field label="Nome da loja"><input name="name" defaultValue={v("name", "iNurse")} /></Field>
+                    <Field label="Email de contacto" hint="Aparece na loja, nas páginas legais e nos emails aos clientes"><input name="email" type="email" defaultValue={v("email")} /></Field>
+                    <Field label="Telefone"><input name="phone" defaultValue={v("phone")} /></Field>
+                    <Field label="Domínio"><input name="domain" defaultValue={v("domain", "www.inurse.pt")} /></Field>
+                    <Field label="Prazo de livre resolução e devolução (dias)" hint="Mínimo legal: 14"><input name="return_days" type="number" min={14} defaultValue={v("return_days", "14")} /></Field>
                   </div>
                   <div className="a-formfoot"><button className="a-btn primary" disabled={busy}>Guardar</button></div>
                 </form>
               </Card>
-            )}
+              <Card title="Dados legais">
+                <p className="a-hint" style={{ marginBottom: 12 }}>Usados nos Termos e Condições, Privacidade, Contactos, livre resolução e emails aos clientes. Ao corrigir aqui, muda em todo o site (pode demorar até 10 minutos a aparecer).</p>
+                <form onSubmit={(e) => { const f = form(e); const g = (k: string) => String(f.get(k) ?? "").trim();
+                  save("public.store", { legal_name: g("legal_name"), nif: g("nif").replace(/\D/g, ""), address: g("address"), zip: g("zip"), city: g("city"),
+                    ral_name: g("ral_name"), ral_url: g("ral_url"), ral_address: g("ral_address") }, "Dados legais guardados."); }}>
+                  <div className="a-form">
+                    <Field label="Nome ou empresa (titular)"><input name="legal_name" defaultValue={v("legal_name", "Artur Silva")} /></Field>
+                    <Field label="NIF"><input name="nif" inputMode="numeric" defaultValue={v("nif", "226720462")} /></Field>
+                    <Field label="Morada (rua e número)" wide><input name="address" defaultValue={v("address", "Praça 20 de Maio")} /></Field>
+                    <Field label="Código postal"><input name="zip" defaultValue={v("zip", "4590-182")} /></Field>
+                    <Field label="Localidade"><input name="city" defaultValue={v("city", "Paços de Ferreira")} /></Field>
+                  </div>
+                  <h3 style={{ margin: "18px 0 8px" }}>Resolução alternativa de litígios</h3>
+                  <div className="a-form">
+                    <Field label="Entidade" wide><input name="ral_name" defaultValue={v("ral_name", "CNIACC – Centro Nacional de Informação e Arbitragem de Conflitos de Consumo")} /></Field>
+                    <Field label="Site"><input name="ral_url" defaultValue={v("ral_url", "https://www.cniacc.pt")} /></Field>
+                    <Field label="Morada da entidade (opcional)" wide><input name="ral_address" defaultValue={v("ral_address")} /></Field>
+                  </div>
+                  <div className="a-formfoot"><button className="a-btn primary" disabled={busy}>Guardar dados legais</button></div>
+                </form>
+              </Card>
+              </>
+              );
+            })()}
 
             {tab === "pagamentos" && (
               <>
@@ -121,6 +149,54 @@ function Settings() {
                 </form>
               </Card>
             )}
+
+            {tab === "email" && (() => {
+              const e0 = s.email ?? {};
+              const KINDS: [string, string][] = [["encomenda_recebida", "Encomenda recebida (com dados de pagamento)"], ["encomenda_paga", "Pagamento confirmado"],
+                ["encomenda_preparacao", "Em preparação"], ["encomenda_enviada", "Enviada (com código de seguimento)"], ["encomenda_entregue", "Entregue"],
+                ["encomenda_cancelada", "Cancelada"], ["encomenda_reembolsada", "Reembolsada"], ["avaliacao", "Pedido de avaliação depois da entrega"]];
+              const ST: Record<string, string> = { pending: "na fila", sent: "enviado", skipped: "não enviado", error: "falhou" };
+              return (
+              <>
+              <Card title="Emails aos clientes">
+                <Alert tone="info">Os emails saem pelo Resend (resend.com, gratuito até 3000 por mês). Cria a conta, verifica o domínio inurse.pt (o Resend indica os registos DNS a pôr no domínio) e guarda a chave da API nos segredos das Edge Functions do Supabase com o nome RESEND_API_KEY.</Alert>
+                <form onSubmit={(ev) => { const f = form(ev); const g = (k: string) => String(f.get(k) ?? "").trim();
+                  save("email", { enabled: f.get("enabled") === "on", from: g("from"), reply_to: g("reply_to"), site_url: g("site_url"),
+                    review_delay_hours: Math.max(1, Number(f.get("review_delay_hours")) || 24),
+                    kinds: Object.fromEntries(KINDS.map(([k]) => [k, f.get(`k_${k}`) === "on"])) }); }}>
+                  <div className="a-form">
+                    <Field label="Remetente" hint='Ex.: iNurse <info@inurse.pt> (o domínio tem de estar verificado no Resend)'><input name="from" defaultValue={e0.from ?? "iNurse <info@inurse.pt>"} /></Field>
+                    <Field label="Responder para"><input name="reply_to" type="email" defaultValue={e0.reply_to ?? "info@inurse.pt"} /></Field>
+                    <Field label="Endereço do site nos links" hint="Mudar para https://www.inurse.pt quando o domínio apontar para a loja nova"><input name="site_url" defaultValue={e0.site_url ?? "https://www.inurse.pt"} /></Field>
+                    <Field label="Pedido de avaliação: horas depois da entrega"><input name="review_delay_hours" type="number" min={1} defaultValue={e0.review_delay_hours ?? 24} /></Field>
+                  </div>
+                  <h3 style={{ margin: "16px 0 8px" }}>Que emails enviar</h3>
+                  <div style={{ display: "grid", gap: 4 }}>
+                    {KINDS.map(([k, l]) => <label key={k} className="a-check"><input type="checkbox" name={`k_${k}`} defaultChecked={e0.kinds?.[k] !== false} /> {l}</label>)}
+                  </div>
+                  <label className="a-check" style={{ marginTop: 14 }}><input type="checkbox" name="enabled" defaultChecked={!!e0.enabled} /> <strong>Ligar o envio de emails</strong></label>
+                  {e0.active_since && <p className="a-hint">Ligado desde {new Date(e0.active_since).toLocaleString("pt-PT")}. Emails de encomendas anteriores não são enviados.</p>}
+                  <div className="a-formfoot">
+                    <button type="button" className="a-btn" disabled={busy} onClick={() => {
+                      const to = window.prompt("Enviar um exemplo de cada email para:", s["public.store"]?.email || "info@inurse.pt");
+                      if (to) act(() => callFunction("emails", { mode: "test", to }), `Exemplos enviados para ${to}.`);
+                    }}>Enviar exemplos</button>
+                    <button className="a-btn primary" disabled={busy}>Guardar</button>
+                  </div>
+                </form>
+              </Card>
+              <Card title="Últimos emails">
+                {outbox.length ? (
+                  <div className="a-table-wrap"><table className="a-table"><thead><tr><th>Encomenda</th><th>Email</th><th>Para</th><th>Estado</th><th>Quando</th></tr></thead>
+                    <tbody>{outbox.map((o: Row) => (
+                      <tr key={o.id}><td>#{o.orders?.number ?? "—"}</td><td>{KINDS.find(([k]) => k === o.kind)?.[1] ?? o.kind}</td><td>{o.to_email}</td>
+                        <td title={o.error ?? ""}>{ST[o.status] ?? o.status}{o.error ? " ⚠" : ""}</td>
+                        <td>{new Date(o.sent_at ?? o.send_after).toLocaleString("pt-PT", { dateStyle: "short", timeStyle: "short" })}</td></tr>))}</tbody></table></div>
+                ) : <p className="a-muted">Ainda não há emails na fila.</p>}
+              </Card>
+              </>
+              );
+            })()}
 
             {tab === "faturacao" && (
               <Card title="InvoiceXpress">

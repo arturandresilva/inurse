@@ -269,3 +269,25 @@ p { margin: 0; }
 .withdrawal-receipt hr { border: 0; border-top: 1px solid var(--line); width: 100%; }
 .model-form p { margin-bottom: 8px; }
 @media print { header, footer, .cookie-notice, .prose > :not(.withdrawal-receipt):not(h1) { display: none !important; } }
+
+/* avaliações */
+.stars { position: relative; display: inline-block; line-height: 1; letter-spacing: 1px; vertical-align: -1px; }
+.stars-bg { color: #d6dde5; }
+.stars-fg { position: absolute; left: 0; top: 0; overflow: hidden; white-space: nowrap; color: #f2a516; }
+.rating-link { display: inline-flex; gap: 8px; align-items: center; margin-top: 8px; font-size: .95rem; color: var(--ink-soft); text-decoration: none; }
+.reviews { padding: 24px 0 64px; border-top: 1px solid var(--line); }
+.reviews-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
+.reviews-avg { display: flex; gap: 8px; align-items: center; }
+.review-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+.review-list li { background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 18px; display: grid; gap: 8px; align-content: start; }
+.review-by { font-size: .88rem; }
+.review-reply { background: var(--mint); border-radius: 12px; padding: 10px 12px; font-size: .93rem; }
+.review-form { display: grid; gap: 18px; margin-top: 18px; }
+.review-form fieldset { border: 0; margin: 0; display: grid; gap: 12px; }
+.review-form legend { font-weight: 700; font-family: var(--display); font-size: 1.15rem; padding: 0; margin-bottom: 4px; float: left; width: 100%; }
+.review-product-row { display: flex; gap: 14px; align-items: center; }
+.review-product-row img { border-radius: 12px; background: #fff; object-fit: contain; }
+.star-input { display: inline-flex; gap: 4px; }
+.star-input button { border: 0; background: none; font-size: 34px; line-height: 1; color: #d6dde5; cursor: pointer; padding: 2px; }
+.star-input button.on { color: #f2a516; }
+.star-input button:hover { transform: scale(1.08); }
