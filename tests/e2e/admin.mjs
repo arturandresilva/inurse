@@ -11,7 +11,7 @@ const MOCK = process.env.MOCK || 'http://127.0.0.1:3002';
 fs.mkdirSync(SHOTS, { recursive: true });
 
 const problems = [];
-const ok = (...a) => console.log('✔', ...a);
+const ok = (...a) => { console.log('✔', ...a); fs.appendFileSync(`${SHOTS}/passos.log`, `✔ ${a.join(' ')}\n`); };
 const browser = await chromium.launch();
 
 async function newPage(viewport) {
@@ -22,6 +22,9 @@ async function newPage(viewport) {
     if (m.type() === 'error' && !/Failed to load resource|favicon|net::ERR/.test(m.text())) problems.push(`[${page.url()}] consola: ${m.text()}`);
   });
   page.on('dialog', (d) => d.accept());
+  page.on('console', (m2) => fs.appendFileSync(`${SHOTS}/consola.log`, `[${m2.type()}] ${page.url()} ${m2.text()}\n`));
+  page.on('response', (r) => { if (r.status() >= 400) fs.appendFileSync(`${SHOTS}/rede.log`, `${r.status()} ${r.request().method()} ${r.url()}\n`); });
+  page.on('requestfailed', (r) => fs.appendFileSync(`${SHOTS}/rede.log`, `FALHOU ${r.request ? '' : ''}${r.method()} ${r.url()} ${r.failure()?.errorText}\n`));
   // imagens externas (CDN antigo) não interessam ao teste
   await page.route(/lojasonlinectt|supabase\.co\/storage/, (r) => r.fulfill({ status: 404, body: '' }));
   return page;
@@ -36,8 +39,10 @@ async function settle(page) {
 }
 const shot = (page, name, full = true) => page.screenshot({ path: `${SHOTS}/${name}.png`, fullPage: full });
 
+let page;
+async function main() {
 // ---------- entrar ----------
-const page = await newPage({ width: 1400, height: 900 });
+page = await newPage({ width: 1400, height: 900 });
 await page.goto(`${BASE}/admin`);
 await page.waitForSelector('form.a-auth');
 await shot(page, '00-entrar', false);
@@ -124,6 +129,11 @@ await other.click('button.a-btn.primary');
 await other.waitForSelector('h1:has-text("Sem acesso")');
 ok('conta sem permissões vê "Sem acesso"');
 
+}
+try { await main(); } catch (e) {
+  problems.push(`o percurso parou: ${e.message.split('\n').slice(0, 3).join(' ')}`);
+  try { await page?.screenshot({ path: `${SHOTS}/zz-parou.png`, fullPage: true }); } catch {}
+}
 await browser.close();
 if (problems.length) {
   console.log(`\n✗ ${problems.length} problema(s):`);
