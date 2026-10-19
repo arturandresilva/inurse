@@ -23,4 +23,5 @@ fresh; run "operações do backoffice" -f admin_ops_test.sql
 fresh; run "importação: ligar a produtos existentes" -f import_link_test.sql
 fresh; run "área de cliente" -f customer_test.sql
 fresh; run "várias transportadoras" -f shipping_options_test.sql
+fresh; run "faturação InvoiceXpress" -f invoicing_test.sql
 exit $fail

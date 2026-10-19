@@ -59,14 +59,14 @@ await shot(page, '01-painel');
 
 // ---------- todas as páginas ----------
 const ROUTES = (process.env.ROUTES || [
-  'encomendas', 'encomendas/1001', 'devolucoes', 'clientes', 'promocoes', 'produtos', 'importar', 'precos', 'fornecedores',
-  'envios', 'agentes', 'contas', 'paginas', 'configuracoes',
+  'encomendas', 'encomendas/1001', 'encomendas/1002', 'devolucoes', 'clientes', 'promocoes', 'produtos', 'importar', 'precos', 'fornecedores',
+  'envios', 'agentes', 'contas', 'paginas', 'configuracoes', 'configuracoes?tab=faturacao',
 ].join(',')).split(',');
 for (const [i, r] of ROUTES.entries()) {
   const resp = await page.goto(`${BASE}/admin/${r}`);
   if (!resp || resp.status() >= 400) { problems.push(`/admin/${r} respondeu ${resp?.status()}`); continue; }
   await settle(page);
-  await shot(page, `${String(i + 2).padStart(2, '0')}-${r.replace(/\//g, '_')}`);
+  await shot(page, `${String(i + 2).padStart(2, '0')}-${r.replace(/[\/?=]/g, '_')}`);
   ok('página', r);
 }
 

@@ -40,3 +40,6 @@ insert into reports (agent_key, title, body_md) values ('contabilista', 'Resumo 
 insert into expenses (category, description, amount_cents, recurrence, vendor) values
   ('plataforma', 'Alojamento e base de dados', 0, 'monthly', 'Supabase/Vercel'), ('dominio', 'Domínio inurse.pt', 1500, 'yearly', 'PTisp'),
   ('faturacao', 'InvoiceXpress', 990, 'monthly', 'InvoiceXpress');
+-- fatura emitida na 1002 (para ver o cartão "Fatura")
+insert into invoices (order_id, status, number, total_cents, pdf_url, permalink, sent_to, external_id)
+select id, 'final', 'FR 2026/12', total_cents, 'https://exemplo.pt/fatura.pdf', 'https://exemplo.app.invoicexpress.com/p/1', email, '77' from orders where number = 1002;

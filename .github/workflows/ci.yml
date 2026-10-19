@@ -45,7 +45,7 @@ jobs:
         with:
           node-version: 22
       - name: Testes do leitor de folhas (backoffice)
-        run: node --experimental-strip-types --no-warnings --test tests/import-js/importer.test.ts
+        run: node --experimental-strip-types --no-warnings --test tests/import-js/importer.test.ts tests/functions/faturas.test.mjs
 
   loja:
     name: Loja (tipos + compilação)

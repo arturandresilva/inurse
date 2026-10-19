@@ -226,3 +226,5 @@
 }
 .a-img.cover { outline: 3px solid var(--a-act); outline-offset: -3px; }
 .a-cover-tag { position: absolute; top: 6px; left: 6px; z-index: 1; background: var(--a-act); color: #fff; font-size: .72rem; font-weight: 700; border-radius: 6px; padding: 2px 7px; }
+.a-invoice + .a-invoice { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--a-line, #e6e9ef); }
+.a-invoice p { margin: 0 0 4px; }

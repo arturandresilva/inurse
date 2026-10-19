@@ -1,7 +1,7 @@
 "use client";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
-import { run, sb, type Row } from "@/lib/admin/sb";
+import { callFunction, run, sb, type Row } from "@/lib/admin/sb";
 import { fromCents, toCents } from "@/lib/admin/format";
 import { Alert, Card, Confirm, Field, Loaded, PageHead, Tabs, useAction, useLoad } from "@/components/admin/ui";
 
@@ -24,6 +24,7 @@ function Settings() {
   const [tab, setTab] = useState(params.get("tab") ?? "loja");
   const st = useLoad(load);
   const { busy, act } = useAction();
+  const [ixCheck, setIxCheck] = useState<Row | null>(null);
 
   const save = (key: string, value: Row, msg = "Guardado.") => act(async () => {
     const cur = st.data?.s[key] ?? {};
@@ -123,15 +124,29 @@ function Settings() {
 
             {tab === "faturacao" && (
               <Card title="InvoiceXpress">
-                <Alert tone="info">A chave da API do InvoiceXpress fica nos segredos das Edge Functions do Supabase (INVOICEXPRESS_API_KEY), nunca aqui. Com ela ligada, cada encomenda paga gera a fatura-recibo e o PDF fica na encomenda.</Alert>
-                <form onSubmit={(e) => { const f = form(e); save("invoicing", { provider: "invoicexpress", account: String(f.get("account") ?? "").trim(), auto_invoice: f.get("auto_invoice") === "on", sequence: f.get("sequence") }); }}>
+                <Alert tone="info">A chave da API do InvoiceXpress fica nos segredos das Edge Functions do Supabase com o nome INVOICEXPRESS_API_KEY, nunca aqui. Com a emissão automática ligada, cada encomenda paga gera a fatura-recibo (em até 10 minutos, ou logo ao marcares como paga), o PDF fica na encomenda e na área do cliente, e o InvoiceXpress envia-a ao cliente por email.</Alert>
+                <form onSubmit={(e) => { const f = form(e); save("invoicing", { ...(s.invoicing ?? {}), provider: "invoicexpress", account: String(f.get("account") ?? "").trim(), auto_invoice: f.get("auto_invoice") === "on", send_email: f.get("send_email") === "on", sequence: String(f.get("sequence") ?? "").trim() }); }}>
                   <div className="a-form">
                     <Field label="Nome da conta" hint="O que aparece antes de .app.invoicexpress.com"><input name="account" defaultValue={s.invoicing?.account ?? ""} /></Field>
-                    <Field label="Série (opcional)"><input name="sequence" defaultValue={s.invoicing?.sequence ?? ""} /></Field>
+                    <Field label="Série (opcional)" hint="Vazio usa a série por defeito. Usa “Testar ligação” para ver os números das séries."><input name="sequence" inputMode="numeric" defaultValue={s.invoicing?.sequence ?? ""} /></Field>
                   </div>
                   <label className="a-check" style={{ marginTop: 12 }}><input type="checkbox" name="auto_invoice" defaultChecked={s.invoicing?.auto_invoice !== false} /> Emitir fatura automaticamente quando a encomenda é paga</label>
-                  <div className="a-formfoot"><button className="a-btn primary" disabled={busy}>Guardar</button></div>
+                  <label className="a-check"><input type="checkbox" name="send_email" defaultChecked={s.invoicing?.send_email !== false} /> Enviar a fatura ao cliente por email (pelo InvoiceXpress)</label>
+                  {s.invoicing?.active_since && <p className="a-hint">Emissão automática ativa desde {new Date(s.invoicing.active_since).toLocaleString("pt-PT")}. Encomendas pagas antes disso faturam-se a partir da própria encomenda.</p>}
+                  <div className="a-formfoot">
+                    <button type="button" className="a-btn" disabled={busy} onClick={() => act(async () => {
+                      const r = await callFunction<Row>("faturas", { mode: "check" });
+                      setIxCheck(r);
+                    }, "Ligação ao InvoiceXpress a funcionar.")}>Testar ligação</button>
+                    <button className="a-btn primary" disabled={busy}>Guardar</button>
+                  </div>
                 </form>
+                {ixCheck && (
+                  <div style={{ marginTop: 12 }}>
+                    <p>Conta <strong>{ixCheck.account}</strong> ligada. Séries disponíveis:</p>
+                    <ul>{(ixCheck.sequences ?? []).map((q: Row) => <li key={q.id}>Série {q.serie} — número <code>{q.id}</code>{q.default ? " (por defeito)" : ""}</li>)}</ul>
+                  </div>
+                )}
               </Card>
             )}
 

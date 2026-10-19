@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState } from "react";
-import { rpc, run, sb, type Row } from "@/lib/admin/sb";
+import { callFunction, rpc, run, sb, type Row } from "@/lib/admin/sb";
 import { dateTime, euro, fromCents, ORDER_STATUS, ORDER_TONE, PAYMENT, RETURN_STATUS, toCents } from "@/lib/admin/format";
 import { Alert, Badge, Card, Confirm, Field, Loaded, Modal, PageHead, useAction, useLoad } from "@/components/admin/ui";
 
@@ -10,13 +10,14 @@ async function load(number: number) {
   const c = sb();
   const o = await run<Row | null>(c.from("orders").select("*, order_items(*), shipments(*), payments(*), invoices(*), returns(id,number,status,reason,created_at)").eq("number", number).maybeSingle());
   if (!o) throw new Error(`A encomenda #${number} não existe.`);
-  const [events, pickups, suppliers, ctt] = await Promise.all([
+  const [events, pickups, suppliers, ctt, invoicing] = await Promise.all([
     run(c.from("order_events").select("*").eq("order_id", o.id).order("created_at", { ascending: false })),
     run(c.from("pickup_addresses").select("id,label,supplier_id,is_default_pickup").eq("active", true).order("label")),
     run(c.from("suppliers").select("id,name")),
     run<Row | null>(c.from("settings").select("value").eq("key", "ctt").maybeSingle()),
+    run<Row | null>(c.from("settings").select("value").eq("key", "invoicing").maybeSingle()),
   ]);
-  return { o, events, pickups, suppliers, cttEnabled: !!ctt?.value?.enabled };
+  return { o, events, pickups, suppliers, cttEnabled: !!ctt?.value?.enabled, invoicing: (invoicing?.value ?? {}) as Row };
 }
 
 const NEXT: Record<string, [string, string][]> = {
@@ -36,7 +37,21 @@ export default function OrderPage() {
   const [note, setNote] = useState("");
 
   const status = (o: Row, st: string, msg: string) =>
-    act(async () => { await rpc("set_order_status", { p_order: o.id, p_status: st, p_note: null }); await s.reload(); }, msg);
+    act(async () => {
+      await rpc("set_order_status", { p_order: o.id, p_status: st, p_note: null });
+      await s.reload();
+      // paga → fatura logo (em segundo plano; se falhar, o agendador tenta de novo e o erro fica no cartão "Fatura")
+      const inv = s.data?.invoicing;
+      if (st === "paid" && inv?.auto_invoice !== false && inv?.account) {
+        callFunction("faturas", { order_id: o.id }).catch(() => null).finally(() => s.reload());
+      }
+    }, msg);
+  const invoice = (o: Row, body: Row, msg: string) =>
+    act(async () => {
+      const r = await callFunction<Row>("faturas", { order_id: o.id, ...body });
+      await s.reload();
+      if (r?.skipped) throw new Error(r.reason);
+    }, msg);
 
   return (
     <Loaded s={s}>
@@ -154,10 +169,28 @@ export default function OrderPage() {
                   <p>{addr.name}<br />{addr.line1}{addr.line2 ? <><br />{addr.line2}</> : null}<br />{addr.zip} {addr.city}<br />{addr.region}</p>
                   {o.billing_address && <><h3 style={{ marginTop: 14 }}>Faturação</h3><p>{o.billing_address.name}<br />{o.billing_address.line1}<br />{o.billing_address.zip} {o.billing_address.city}</p></>}
                 </Card>
-                <Card title="Fatura">
+                <Card title="Fatura" actions={(() => {
+                  const fin = o.invoices.find((i: Row) => i.status === "final");
+                  if (fin) return <button className="a-btn sm" disabled={busy} onClick={() => invoice(o, { email: true }, `Fatura reenviada para ${o.email}.`)}>Reenviar ao cliente</button>;
+                  if (["paid", "processing", "shipped", "delivered"].includes(o.status)) return <button className="a-btn sm primary" disabled={busy} onClick={() => invoice(o, { force: true }, "Fatura emitida.")}>Emitir fatura</button>;
+                  return null;
+                })()}>
                   {o.invoices.length ? o.invoices.map((i: Row) => (
-                    <p key={i.id}>{i.number ?? "Por emitir"} · {i.status}{i.pdf_url && <> · <a href={i.pdf_url} target="_blank" rel="noreferrer">PDF</a></>}</p>
-                  )) : <p className="a-muted">Por emitir. A emissão automática no InvoiceXpress fica ativa quando ligarmos a conta.</p>}
+                    <div key={i.id} className="a-invoice">
+                      <p>
+                        <strong>{i.number ?? "Fatura-recibo"}</strong>{" "}
+                        <Badge tone={i.status === "final" ? "ok" : i.status === "error" ? "err" : "warn"}>{i.status === "final" ? "Emitida" : i.status === "error" ? "Falhou" : "A emitir"}</Badge>
+                        {i.total_cents != null && <> · {euro(i.total_cents)}</>}
+                      </p>
+                      <p className="a-hint">
+                        {i.pdf_url && <><a href={i.pdf_url} target="_blank" rel="noreferrer">Abrir PDF</a> · </>}
+                        {i.permalink && <><a href={i.permalink} target="_blank" rel="noreferrer">Ver no InvoiceXpress</a> · </>}
+                        {i.sent_to ? `enviada para ${i.sent_to}` : i.status === "final" ? "ainda não enviada ao cliente" : ""}
+                      </p>
+                      {i.error && <p className="a-hint" style={{ color: "var(--a-err)" }}>{i.error}</p>}
+                      {i.status === "final" && ["cancelled", "refunded"].includes(o.status) && <p className="a-hint" style={{ color: "var(--a-warn)" }}>Encomenda {o.status === "refunded" ? "reembolsada" : "cancelada"} depois de faturada: emite a nota de crédito desta fatura no InvoiceXpress.</p>}
+                    </div>
+                  )) : <p className="a-muted">{o.status === "pending_payment" ? "A fatura é emitida quando a encomenda estiver paga." : s.data?.invoicing?.account ? "Ainda por emitir." : "Por emitir. Liga o InvoiceXpress em Configurações → Faturação."}</p>}
                 </Card>
                 <Card title="Margem desta encomenda" actions={open && <button className="a-btn sm" onClick={() => setCostOpen(true)}>Corrigir custos</button>}>
                   <div className="a-lines">
