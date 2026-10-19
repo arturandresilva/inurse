@@ -515,7 +515,10 @@ main .wrap { padding-left: 20px; padding-right: 20px; }       /* .shop/.prose/.c
   .hero2 h1 { font-size: 2.25rem; max-width: none; }
   .hero2 .lead { font-size: 1.02rem; margin-top: 12px; }
   .hero2-cta { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 22px; }
-  .hero2-cta .btn { padding-left: 10px; padding-right: 10px; }
+  .hero2-cta .btn { padding-left: 8px; padding-right: 8px; font-size: .95rem; white-space: nowrap; justify-content: center; text-align: center; }
+  .prod .meta { flex-direction: column; gap: 0; }
+  .prod .meta > :last-child { font-size: .82rem; }
+  .prod .swatches .sw { width: 22px; height: 22px; }
   .trust-grid { grid-template-columns: 1fr 1fr; gap: 14px 12px; padding: 16px; }
   .trust-grid > div { gap: 8px; }
   .trust-grid svg { width: 22px; height: 22px; }
