@@ -404,4 +404,7 @@ export const ES: Record<string, string> = {
   "A loja está temporariamente em manutenção. Voltamos dentro de pouco tempo.": "La tienda está temporalmente en mantenimiento. Volvemos en breve.",
   "Previsão de regresso: {d}": "Volvemos previsiblemente: {d}",
   "Já fez uma encomenda? Pode continuar a vê-la pelo link do email. Para qualquer dúvida:": "¿Ya has hecho un pedido? Puedes seguir viéndolo desde el enlace del email. Para cualquier duda:",
+  "Calçado e meias para profissionais de saúde": "Calzado y medias para profesionales sanitarios",
+  "Procurar modelo, marca ou cor": "Buscar modelo, marca o color",
+  "Procurar": "Buscar",
 };

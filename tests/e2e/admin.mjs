@@ -193,7 +193,7 @@ await stepShop('formulário de livre resolução', async () => {
 });
 await stepShop('loja em inglês', async () => {
   await shop.goto(`${BASE}/?lang=en`); await shop.waitForSelector('html[lang="en"]');
-  await shop.waitForSelector('text=Made for twelve-hour shifts');
+  await shop.waitForSelector('text=Footwear and socks for healthcare professionals');
   await shop.screenshot({ path: `${SHOTS}/69-loja-ingles.png` });
   await shop.goto(`${BASE}/?lang=pt`); await shop.waitForSelector('html[lang="pt-PT"]');
 });

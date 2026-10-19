@@ -549,3 +549,27 @@ main .wrap { padding-left: 20px; padding-right: 20px; }       /* .shop/.prose/.c
 .maint-bar { background: #fff4d6; color: #6b4e00; text-align: center; font-size: .9rem; padding: 8px 16px; border-bottom: 1px solid #f0d58a; }
 .maint-bar a { color: inherit; font-weight: 700; margin-left: 6px; }
 @media (max-width: 640px) { .maint-card { padding: 30px 20px; } }
+
+/* ---------- Entrada simples (procurar e comprar depressa) ---------- */
+.hero3 { background: radial-gradient(1100px 460px at 85% 10%, #dff1fb 0%, transparent 60%), linear-gradient(180deg, #f3faf7 0%, var(--paper) 100%); padding: 44px 0 36px; overflow: hidden; }
+.hero3-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 36px; align-items: center; }
+.hero3 h1 { font-size: clamp(2rem, 4.2vw, 3.2rem); line-height: 1.08; letter-spacing: -.02em; max-width: 16ch; }
+.hero-search { display: flex; gap: 8px; margin-top: 22px; max-width: 520px; background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 6px; box-shadow: var(--shadow); }
+.hero-search input { flex: 1; min-width: 0; border: 0; outline: 0; font: inherit; font-size: 1.02rem; padding: 10px 12px; background: transparent; }
+.hero-search .btn { padding: 10px 18px; border-radius: 12px; }
+.quick { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.quick a { text-decoration: none; font-weight: 700; font-size: .95rem; padding: 9px 16px; border-radius: 999px; background: #fff; border: 1px solid var(--line); color: var(--navy); }
+.quick a:hover { border-color: var(--scrub); color: var(--scrub); }
+.quick a:last-child { background: var(--navy); border-color: var(--navy); color: #fff; }
+.hero3 .hero2-art { height: 340px; }
+.hero3 .hero2-art .b0 { width: 270px; height: 270px; }
+.hero3 .hero2-art .b1 { width: 170px; height: 170px; }
+.hero3 .hero2-art .b2 { width: 130px; height: 130px; }
+@media (max-width: 860px) { .hero3-grid { grid-template-columns: 1fr; } .hero3 .hero2-art { display: none; } }
+@media (max-width: 640px) {
+  .hero3 { padding: 22px 0 20px; }
+  .hero3 h1 { font-size: 1.85rem; }
+  .hero-search { margin-top: 16px; }
+  .quick { flex-wrap: nowrap; overflow-x: auto; margin: 14px -16px 0; padding: 0 16px 4px; scrollbar-width: none; }
+  .quick a { white-space: nowrap; flex: none; }
+}
