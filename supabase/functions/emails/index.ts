@@ -36,7 +36,7 @@ function layout(title: string, inner: string, site: string) {
 <body style="margin:0;background:#f2f5f7;font-family:Arial,Helvetica,sans-serif;color:#1c2a4a">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f2f5f7;padding:24px 12px"><tr><td align="center">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border-radius:16px;overflow:hidden">
-<tr><td style="padding:22px 28px;border-bottom:1px solid #e3e9ee"><a href="${site}" style="text-decoration:none;font:700 24px Arial,sans-serif;letter-spacing:2px;color:#2EB3EA"><span style="color:#E8323C">&#10084;</span>iNURSE</a></td></tr>
+<tr><td style="padding:22px 28px;border-bottom:1px solid #e3e9ee"><a href="${site}" style="text-decoration:none;font:700 26px Arial,Helvetica,sans-serif;color:#1C2A4A"><span style="color:#E8323C;font-size:18px">&#10084;</span>&nbsp;inurse</a></td></tr>
 <tr><td style="padding:28px;font-size:15px;line-height:1.55">${inner}</td></tr>
 <tr><td style="padding:18px 28px;background:#1c2a4a;color:#cfd8e3;font-size:12px;line-height:1.5">
 iNurse · ${tx("foot")} · <a href="mailto:${esc(L.email)}" style="color:#fff">${esc(L.email)}</a> · ${esc(phone(L.phone))}<br>

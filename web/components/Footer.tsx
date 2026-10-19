@@ -11,7 +11,7 @@ export default async function Footer() {
       <div className="wrap">
         <div className="cols">
           <div>
-            <Logo height={28} mono="#fff" />
+            <Logo height={28} light />
             <p style={{ marginTop: 10, maxWidth: "40ch" }}>{t("Calçado profissional e meias de descanso para quem passa o turno de pé. Enviamos para todo o país com CTT.")}</p>
             <p className="foot-contact">
               <a href={`mailto:${l.email}`}>{l.email}</a><br />

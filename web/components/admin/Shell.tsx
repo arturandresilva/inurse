@@ -102,7 +102,7 @@ export default function Shell({ children }: { children: React.ReactNode }) {
   return (
     <div className={`a-root a-app${menu ? " menu-open" : ""}`}>
       <aside className="a-side">
-        <Brand />
+        <Brand light />
         <nav aria-label="Backoffice">
           {NAV.map((g) => (
             <div key={g.group} className="a-nav-group">
@@ -129,8 +129,8 @@ export default function Shell({ children }: { children: React.ReactNode }) {
   );
 }
 
-function Brand() {
-  return <div className="a-brand"><Logo height={22} /><small>backoffice</small></div>;
+function Brand({ light }: { light?: boolean }) {
+  return <div className="a-brand"><Logo height={22} light={light} /><small>backoffice</small></div>;
 }
 
 function Login() {
