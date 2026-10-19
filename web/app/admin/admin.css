@@ -272,3 +272,15 @@
 .a-offers { background: #f4f8fb; border: 1px solid var(--a-line); border-radius: 10px; padding: 10px 14px; margin: 10px 0; font-size: .9rem; }
 .a-offers ul { margin: 6px 0 0; padding-left: 18px; display: grid; gap: 4px; }
 .a-offers a { font-weight: 700; }
+.a-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px; }
+@media (max-width: 900px) { .a-stats { grid-template-columns: 1fr 1fr; } }
+.a-bars { display: flex; align-items: flex-end; gap: 2px; height: 160px; padding-top: 18px; }
+.a-bars > div { flex: 1; height: 100%; display: flex; align-items: flex-end; position: relative; min-width: 2px; }
+.a-bars span { display: block; width: 100%; background: #2EB3EA; border-radius: 3px 3px 0 0; min-height: 1px; }
+.a-bars b { position: absolute; top: -16px; left: 50%; transform: translateX(-50%); font-size: .7rem; color: var(--a-ok, #0f6e63); }
+.a-funnel { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.a-funnel li { display: grid; grid-template-columns: 170px 1fr 60px 52px; gap: 10px; align-items: center; font-size: .9rem; }
+.a-funnel li div { background: var(--a-line-2); border-radius: 6px; height: 14px; overflow: hidden; }
+.a-funnel li i { display: block; height: 100%; background: #0f6e63; border-radius: 6px; }
+.a-funnel strong { text-align: right; } .a-funnel small { color: var(--a-soft); text-align: right; }
+@media (max-width: 600px) { .a-funnel li { grid-template-columns: 1fr 50px 46px; } .a-funnel li div { display: none; } }

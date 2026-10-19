@@ -53,3 +53,16 @@ do $$ begin
   begin perform place_order_l('{"email":"x@y.pt","accept_terms":true,"items":[]}'::jsonb);
   exception when others then if sqlerrm like '%manutenção%' then raise notice 'ERRO: manutenção desligada continua a bloquear'; end if; end;
 end $$;
+
+-- Estatísticas: o mesmo IP+navegador no mesmo dia conta como um visitante; o IP não fica guardado
+select track_view('{"path":"/","ip":"1.2.3.4","ua":"Mozilla","device":"telemovel","country":"PT","ref_host":"google.com"}');
+select track_view('{"path":"/produto/x","ip":"1.2.3.4","ua":"Mozilla","device":"telemovel","country":"PT"}');
+select track_view('{"path":"/","ip":"5.6.7.8","ua":"Mozilla","device":"computador"}');
+select track_view('{"path":"/admin/encomendas","ip":"5.6.7.8","ua":"Mozilla"}');
+do $$ declare s jsonb; begin
+  s := analytics_summary(current_date - 1, current_date + 1);
+  if (s->>'visitors')::int <> 2 then raise notice 'ERRO: % visitantes (esperado 2)', s->>'visitors'; end if;
+  if (s->>'views')::int <> 3 then raise notice 'ERRO: % páginas (esperado 3, sem o backoffice)', s->>'views'; end if;
+  if (s->'funnel'->>'product')::int <> 1 then raise notice 'ERRO: funil produto %', s->'funnel'; end if;
+  if exists (select 1 from page_views where visitor like '%1.2.3.4%') then raise notice 'ERRO: IP guardado'; end if;
+end $$;

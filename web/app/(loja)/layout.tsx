@@ -5,6 +5,8 @@ import Footer from "@/components/Footer";
 import CookieNotice from "@/components/CookieNotice";
 import ChatWidget from "@/components/ChatWidget";
 import MaintenancePage from "@/components/MaintenancePage";
+import Track from "@/components/Track";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 import { getMaintenance, OPEN_PATHS, PREVIEW_COOKIE } from "@/lib/maintenance";
 import { getLegal } from "@/lib/legal";
 import { getT } from "@/lib/i18n/server";
@@ -33,6 +35,8 @@ export default async function StoreLayout({ children }: { children: React.ReactN
       <Footer />
       <CookieNotice />
       {!m.enabled && <ChatWidget />}
+      {!preview && <Track />}
+      <GoogleAnalytics />
     </>
   );
 }

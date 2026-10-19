@@ -12,6 +12,7 @@ type Item = { href: string; label: string; badge?: "orders" | "proposals" | "ret
 const NAV: { group: string; items: Item[] }[] = [
   { group: "Vendas", items: [
     { href: "/admin", label: "Painel" },
+    { href: "/admin/estatisticas", label: "Estatísticas" },
     { href: "/admin/encomendas", label: "Encomendas", badge: "orders" },
     { href: "/admin/devolucoes", label: "Devoluções", badge: "returns" },
     { href: "/admin/clientes", label: "Clientes" },

@@ -407,4 +407,8 @@ export const FR: Record<string, string> = {
   "Calçado e meias para profissionais de saúde": "Chaussures et chaussettes pour les professionnels de santé",
   "Procurar modelo, marca ou cor": "Rechercher un modèle, une marque ou une couleur",
   "Procurar": "Rechercher",
+  "Pode pedir até {d}.": "Vous pouvez la demander jusqu'au {d}.",
+  "Olá! Como podemos ajudar?": "Bonjour ! Comment pouvons-nous vous aider ?",
+  "Escolher modelo, tamanho ou ver uma encomenda": "Choisir un modèle ou une pointure, ou suivre une commande",
+  "Fechar a sugestão": "Fermer",
 };

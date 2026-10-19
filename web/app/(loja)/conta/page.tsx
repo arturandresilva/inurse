@@ -6,9 +6,16 @@ import { account, loadMe, traduzAuth, useSession, type Me } from "@/lib/account"
 import { money } from "@/lib/format";
 import { INTL } from "@/lib/i18n";
 import { useLocale, useT } from "@/lib/i18n/client";
+import ReturnForm from "@/components/ReturnForm";
 
 const STATUS: Record<string, string> = { pending_payment: "A aguardar pagamento", paid: "Paga, em preparação", processing: "Em preparação",
   shipped: "Enviada", delivered: "Entregue", cancelled: "Cancelada", refunded: "Reembolsada" };
+const RSTATUS: Record<string, string> = { requested: "recebido, em análise", approved: "aprovado", label_sent: "etiqueta enviada", in_transit: "a caminho",
+  received: "recebido no armazém", refunded: "reembolsado", exchanged: "troca enviada", rejected: "recusado", cancelled: "cancelado" };
+// pode pedir troca/devolução: enviada ou entregue, dentro do prazo e sem outro pedido em curso
+const canReturn = (o: Record<string, any>) => ["shipped", "delivered"].includes(o.status)
+  && !(o.returns ?? []).some((r: { status: string }) => !["rejected", "cancelled"].includes(r.status))
+  && (!o.return_until || new Date(o.return_until) >= new Date(new Date().toDateString()));
 const dt = (d: string, l = "pt") => new Date(d).toLocaleDateString(INTL[l as keyof typeof INTL] ?? "pt-PT", { day: "2-digit", month: "long", year: "numeric" });
 const track = (c: string) => `https://www.ctt.pt/feapl_2/app/open/objectSearch/objectSearch.jspx?objects=${encodeURIComponent(c)}`;
 
@@ -164,10 +171,24 @@ function Orders({ me }: { me: Me }) {
               {o.tracking.map((x: { code: string }) => <a key={x.code} href={track(x.code)} target="_blank" rel="noopener">{t("Seguir envio")} {x.code}</a>)}
               {o.invoices.map((iv: { number: string; pdf_url: string }) => <a key={iv.pdf_url} href={iv.pdf_url} target="_blank" rel="noopener">{t("Fatura")} {iv.number ?? ""}</a>)}
               {!o.invoices.length && ["paid", "processing", "shipped", "delivered"].includes(o.status) && <span className="muted">{t("Fatura enviada por email")}</span>}
-              <Link href={`/encomenda/${o.number}?t=${o.token}`}>{t("Ver detalhe")}{["shipped", "delivered"].includes(o.status) ? " / " + t("trocar") : ""}</Link>
+              <Link href={`/encomenda/${o.number}?t=${o.token}`}>{t("Ver detalhe")}</Link>
               {o.status === "delivered" && <Link href={`/avaliar/${o.number}?t=${o.token}`}>{t("Avaliar")}</Link>}
             </span>
           </footer>
+          {(o.returns ?? []).length > 0 && (
+            <ul className="order-returns">
+              {o.returns.map((r: Record<string, string>) => (
+                <li key={r.number}>{t("Pedido n.º {n}", { n: r.number })} ({t(r.kind)}): <strong>{t(RSTATUS[r.status] ?? r.status)}</strong>
+                  {r.label_url ? <> · <a href={r.label_url} target="_blank" rel="noopener">{t("etiqueta CTT")}</a></> : null}{r.tracking_code ? ` · ${r.tracking_code}` : ""}</li>
+              ))}
+            </ul>
+          )}
+          {canReturn(o) && (
+            <div className="order-return">
+              <span className="muted">{t("O tamanho não serve?")}{o.return_until ? " " + t("Pode pedir até {d}.", { d: dt(o.return_until, locale) }) : ""}</span>
+              <ReturnForm number={o.number} token={o.token} items={o.items} />
+            </div>
+          )}
         </article>
       ))}
     </div>

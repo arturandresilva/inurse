@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { useLocale, useT } from "@/lib/i18n/client";
+import { CONSENT_EVENT, getConsent } from "@/lib/consent";
 
 type Msg = { role: "user" | "assistant" | "staff"; content: string; created_at?: string };
 const KEY = "inurse.chat";
@@ -27,11 +28,32 @@ export default function ChatWidget() {
   const [text, setText] = useState("");
   const [busy, setBusy] = useState(false);
   const end = useRef<HTMLDivElement>(null);
+  const [teaser, setTeaser] = useState(false);
 
   useEffect(() => {
     supabase.from("settings").select("value").eq("key", "public.chat").maybeSingle().then(({ data }) => setCfg((data?.value as never) ?? { enabled: true }));
     const s = load(); if (s?.id) { setConv({ id: s.id, token: s.token }); setMsgs(s.msgs ?? []); }
   }, []);
+  // balão "Como podemos ajudar?": aparece uma vez, alguns segundos depois de entrar, e não volta durante 7 dias se for fechado.
+  // Só depois de o aviso de cookies estar respondido, para não tapar nada.
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const arm = () => {
+      if (timer || !getConsent()) return;
+      try {
+        const until = Number(localStorage.getItem("inurse.chat.teaser") ?? 0);
+        if (until > Date.now() || load()?.id || sessionStorage.getItem("inurse.chat.teaser")) return;
+      } catch { return; }
+      timer = setTimeout(() => {
+        setTeaser(true);
+        try { sessionStorage.setItem("inurse.chat.teaser", "1"); } catch { /* sem storage */ }
+        timer = setTimeout(() => setTeaser(false), 15000);   // desaparece sozinho
+      }, 6000);
+    };
+    arm(); window.addEventListener(CONSENT_EVENT, arm);
+    return () => { if (timer) clearTimeout(timer); window.removeEventListener(CONSENT_EVENT, arm); };
+  }, []);
+  const hideTeaser = () => { setTeaser(false); try { localStorage.setItem("inurse.chat.teaser", String(Date.now() + 7 * 86400e3)); } catch { /* sem storage */ } };
   useEffect(() => { if (conv) save({ ...conv, msgs: msgs.slice(-40) }); end.current?.scrollIntoView({ block: "end" }); }, [msgs, conv]);
   // respostas da equipa (backoffice) aparecem aqui
   useEffect(() => {
@@ -61,8 +83,17 @@ export default function ChatWidget() {
 
   return (
     <>
+      {!open && teaser && (
+        <div className="chat-teaser" role="dialog" aria-label={t("Olá! Como podemos ajudar?")}>
+          <button type="button" className="chat-teaser-open" onClick={() => { hideTeaser(); setOpen(true); }}>
+            <strong>{t("Olá! Como podemos ajudar?")}</strong>
+            <span>{t("Escolher modelo, tamanho ou ver uma encomenda")}</span>
+          </button>
+          <button type="button" className="chat-teaser-x" onClick={hideTeaser} aria-label={t("Fechar a sugestão")}>×</button>
+        </div>
+      )}
       {!open && (
-        <button type="button" className="chat-fab" onClick={() => setOpen(true)} aria-label={t("Abrir conversa com a iNurse")}>
+        <button type="button" className="chat-fab" onClick={() => { hideTeaser(); setOpen(true); }} aria-label={t("Abrir conversa com a iNurse")}>
           <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path d="M4 5h16v10H9l-5 4z" fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" /></svg>
         </button>
       )}
