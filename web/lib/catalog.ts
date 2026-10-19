@@ -1,0 +1,46 @@
+import { supabase } from "./supabase";
+
+export type Variant = { id: string; option_value: string; price_cents: number; compare_at_cents: number | null; stock: number | null; active: boolean; position: number; allow_backorder: boolean };
+export type Product = {
+  id: string; handle: string; title: string; excerpt: string | null; description_html: string | null; brand: string | null;
+  status: string; featured: boolean; vat_rate: number; seo_title: string | null; seo_description: string | null; position: number;
+  updated_at: string;
+  variants: Variant[]; product_images: { url: string; position: number }[]; product_categories: { category_id: string }[];
+};
+export type Category = { id: string; name: string; slug: string; path: string; parent_id: string | null; position: number };
+
+const PRODUCT_FIELDS =
+  "id,handle,title,excerpt,description_html,brand,status,featured,vat_rate,seo_title,seo_description,position,updated_at," +
+  "variants(id,option_value,price_cents,compare_at_cents,stock,active,position,allow_backorder),product_images(url,position),product_categories(category_id)";
+
+function tidy(p: Product): Product {
+  p.variants = (p.variants ?? []).filter((v) => v.active && v.price_cents > 0).sort((a, b) => a.position - b.position);
+  p.product_images = (p.product_images ?? []).sort((a, b) => a.position - b.position);
+  return p;
+}
+
+export async function getProducts(): Promise<Product[]> {
+  const { data, error } = await supabase.from("products").select(PRODUCT_FIELDS)
+    .in("status", ["active", "out_of_stock"]).order("position").order("title").limit(2000);
+  if (error) throw new Error(error.message);
+  return ((data ?? []) as unknown as Product[]).map(tidy).filter((p) => p.variants.length > 0);
+}
+
+export async function getProduct(handle: string): Promise<Product | null> {
+  const { data } = await supabase.from("products").select(PRODUCT_FIELDS).eq("handle", handle).in("status", ["active", "out_of_stock"]).maybeSingle();
+  return data ? tidy(data as unknown as Product) : null;
+}
+
+export async function getCategories(): Promise<Category[]> {
+  const { data } = await supabase.from("categories").select("id,name,slug,path,parent_id,position").order("path");
+  return (data ?? []) as Category[];
+}
+
+export async function searchProducts(q: string): Promise<string[]> {
+  const { data } = await supabase.from("products").select("id").textSearch("search", q, { type: "websearch", config: "portuguese" }).limit(200);
+  return (data ?? []).map((r: { id: string }) => r.id);
+}
+
+export const sellable = (v: Variant) => v.stock == null || v.stock > 0 || v.allow_backorder;
+export const minPrice = (p: Product) => Math.min(...p.variants.map((v) => v.price_cents));
+export const image = (p: Product) => p.product_images[0]?.url ?? null;
