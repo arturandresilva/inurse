@@ -496,3 +496,4 @@ p { margin: 0; }
   .slider-faixa { border-radius: 14px; }
 }
 @media (prefers-reduced-motion: reduce) { .slide, .slide.on { transition: none; } }
+@media (min-width: 701px) { .slider-faixa .slide-copy { padding-left: 76px; padding-right: 76px; } .slider-topo .slide-copy { padding-left: 64px; padding-right: 64px; } }

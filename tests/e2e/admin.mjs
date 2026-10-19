@@ -91,6 +91,10 @@ await step('registar envio da 1001', async () => {
   await page.waitForSelector('text=EA000000001PT');
   await shot(page, '50-encomenda-enviada');
 });
+await step('nota interna', async () => {
+  await page.fill('input[aria-label="Nota interna"]', 'Teste automático');
+  await page.click('button:has-text("Guardar nota")'); await page.waitForSelector('.a-timeline >> text=Teste automático');
+});
 await step('editar campanha da página inicial', async () => {
   await page.goto(`${BASE}/admin/pagina-inicial`); await settle(page);
   await page.click('tr:has-text("Campanha de teste") button:has-text("Editar")');
@@ -100,10 +104,6 @@ await step('editar campanha da página inicial', async () => {
   await shot(page, '18-pagina-inicial-campanha');
   await page.click('button[role=tab]:has-text("Imagens da página inicial")'); await settle(page);
   await shot(page, '19-pagina-inicial-imagens');
-});
-await step('nota interna', async () => {
-  await page.fill('input[aria-label="Nota interna"]', 'Teste automático');
-  await page.click('button:has-text("Guardar nota")'); await page.waitForSelector('.a-timeline >> text=Teste automático');
 });
 await step('editar preço de um produto', async () => {
   await page.goto(`${BASE}/admin/produtos`); await settle(page);
@@ -200,6 +200,23 @@ await stepShop('loja em inglês', async () => {
 await stepShop('loja com logótipo novo', async () => {
   await shop.goto(`${BASE}/`); await shop.waitForSelector('header .logo svg');
   await shop.screenshot({ path: `${SHOTS}/63-loja-inicio.png` });
+});
+// ---------- loja no telemóvel: fotografias de cada página para rever o aspeto ----------
+const phone = await newPage({ width: 390, height: 844 });
+for (const [name, url, wait] of [['inicio', '/', 'header'], ['loja', '/loja', '.prod'], ['categoria', '/c/calcado/socas', 'header'], ['produto', null, '.buybox, .colors, h1'],
+  ['carrinho', '/carrinho', 'header'], ['checkout', '/checkout', 'header'], ['pagina', '/p/envios', 'h1'], ['livre-resolucao', '/livre-resolucao', 'h1'], ['conta', '/conta', 'header']]) {
+  await stepShop(`telemóvel: ${name}`, async () => {
+    if (url) await phone.goto(`${BASE}${url}`);
+    else { await phone.goto(`${BASE}/loja`); await phone.locator('.prod').first().click(); await phone.waitForURL(/\/produto\//); }
+    await phone.waitForSelector(wait); await phone.waitForTimeout(400);
+    const over = await phone.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    if (over > 1) problems.push(`[telemóvel ${name}] a página é ${over}px mais larga que o ecrã (desliza para o lado)`);
+    await phone.screenshot({ path: `${SHOTS}/t-${name}.png`, fullPage: true });
+  });
+}
+await stepShop('telemóvel: menu aberto', async () => {
+  await phone.goto(`${BASE}/`); await phone.click('details.mnav > summary'); await phone.waitForTimeout(300);
+  await phone.screenshot({ path: `${SHOTS}/t-menu.png` });
 });
 await stepShop('campanha na página inicial (slider)', async () => {
   await shop.goto(`${BASE}/`);
