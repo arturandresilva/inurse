@@ -1,7 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Atkinson_Hyperlegible, Bricolage_Grotesque } from "next/font/google";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import { SITE_URL } from "@/lib/format";
 import "./globals.css";
 
@@ -20,12 +18,7 @@ export const viewport: Viewport = { themeColor: "#1c2a4a" };
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-PT" className={`${display.variable} ${text.variable}`}>
-      <body>
-        <a href="#conteudo" className="sr-only">Saltar para o conteúdo</a>
-        <Header />
-        <main id="conteudo">{children}</main>
-        <Footer />
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

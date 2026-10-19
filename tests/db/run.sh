@@ -19,4 +19,5 @@ fresh; run "núcleo: preços, importação, checkout" -f v2_core_test.sql; run "
 fresh; psql -q -d t -c "insert into auth.users(id,email) values ('00000000-0000-0000-0000-000000000001','artur.impact@gmail.com')"; run "finanças" -f finance_test.sql
 fresh; run "portes e preço PVPR" -f ship_price_test.sql
 fresh; run "recolhas e devoluções" -f returns_test.sql
+fresh; run "operações do backoffice" -f admin_ops_test.sql
 exit $fail
