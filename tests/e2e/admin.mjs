@@ -101,6 +101,22 @@ await step('editar preço de um produto', async () => {
   await page.click('button:has-text("Guardar")'); await toastOk();
   await shot(page, '51-produto');
 });
+await step('importar folha CSV e aplicar', async () => {
+  const csv = `${SHOTS}/folha-teste.csv`;
+  fs.writeFileSync(csv, 'Tabela 2026;;;;;\nReferência;Designação;Cor;Tamanhos;Preço;PVP\nTST01;SOCA TESTE;Azul;36 a 39;30,00;59,90\nTST02;SOCA TESTE;Branco;36 a 38;30,00;59,90\n');
+  await page.goto(`${BASE}/admin/importar`); await settle(page);
+  await page.selectOption('label:has-text("Fornecedor") select', { label: 'Nursing Care' });
+  await page.setInputFiles('input[type=file]', csv);
+  await page.waitForSelector('text=Continuar para revisão');
+  await shot(page, '52-importar-colunas');
+  await page.click('text=Continuar para revisão');
+  await page.waitForURL(/\/admin\/importar\/[0-9a-f-]{36}/, { timeout: 20000 }); await settle(page);
+  await shot(page, '53-importar-revisao');
+  await page.click('button:has-text("Aplicar ao catálogo")');
+  await page.click('dialog[open] button.a-btn.primary'); await toastOk();
+  await page.waitForSelector('text=Aplicada:');
+  await shot(page, '54-importar-aplicada');
+});
 if (process.env.EXTRA_STEPS) {
   const extra = await import(process.env.EXTRA_STEPS);
   await extra.default({ page, BASE, MOCK, step, settle, shot, toastOk, problems });

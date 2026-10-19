@@ -53,7 +53,8 @@ http.createServer(async (req, res) => {
       const headers = { ...req.headers }; delete headers.host; delete headers.apikey;
       if (headers.authorization && headers.authorization.split('.').length !== 3) delete headers.authorization;
       const pr = http.request({ host: '127.0.0.1', port: PGREST, path: req.url.slice(8), method: req.method, headers }, (pres) => {
-        res.writeHead(pres.statusCode, { ...pres.headers, ...cors }); pres.pipe(res);
+        const h = Object.fromEntries(Object.entries(pres.headers).filter(([k]) => !k.startsWith('access-control-')));
+        res.writeHead(pres.statusCode, { ...h, ...cors }); pres.pipe(res);
       });
       pr.on('error', (e) => send(502, { message: e.message }));
       pr.end(raw.length ? raw : undefined);

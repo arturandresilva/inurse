@@ -36,6 +36,11 @@ jobs:
       - run: pip install pdfplumber==0.11.4
       - name: Testes do extrator
         run: python -m unittest discover -s tools/import -p "test_*.py" -v
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Testes do leitor de folhas (backoffice)
+        run: node --experimental-strip-types --no-warnings --test tests/import-js/importer.test.ts
 
   loja:
     name: Loja (tipos + compilação)

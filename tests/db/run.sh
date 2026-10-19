@@ -20,4 +20,5 @@ fresh; psql -q -d t -c "insert into auth.users(id,email) values ('00000000-0000-
 fresh; run "portes e preço PVPR" -f ship_price_test.sql
 fresh; run "recolhas e devoluções" -f returns_test.sql
 fresh; run "operações do backoffice" -f admin_ops_test.sql
+fresh; run "importação: ligar a produtos existentes" -f import_link_test.sql
 exit $fail
