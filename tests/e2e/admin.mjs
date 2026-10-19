@@ -124,7 +124,8 @@ if (process.env.EXTRA_STEPS) {
 
 // ---------- área de cliente (loja) ----------
 const shop = await newPage({ width: 1280, height: 860 });
-await step('cliente cria conta e vê a sua encomenda', async () => {
+const stepShop = async (name, fn) => { try { await fn(); ok(name); } catch (e) { problems.push(`ação "${name}" falhou: ${e.message.split('\n')[0]}`); await shop.screenshot({ path: `${SHOTS}/falha-loja-${name.replace(/\W+/g, '-')}.png`, fullPage: true }); } };
+await stepShop('cliente cria conta e vê a sua encomenda', async () => {
   await shop.goto(`${BASE}/conta`);
   await shop.click('text=Criar conta nova');
   await shop.fill('#a-name', 'Ana Costa'); await shop.fill('#a-email', 'ana@exemplo.pt'); await shop.fill('#a-pass', 'cliente12345');
@@ -132,7 +133,7 @@ await step('cliente cria conta e vê a sua encomenda', async () => {
   await shop.waitForSelector('text=Encomenda n.º 1001', { timeout: 15000 });
   await shop.screenshot({ path: `${SHOTS}/60-conta-encomendas.png`, fullPage: true });
 });
-await step('cliente guarda favorito e morada', async () => {
+await stepShop('cliente guarda favorito e morada', async () => {
   await shop.goto(`${BASE}/loja`); await shop.click('.prod >> nth=0');
   await shop.waitForSelector('button.fav'); await shop.click('button.fav');
   await shop.waitForSelector('button.fav.on');
@@ -142,7 +143,7 @@ await step('cliente guarda favorito e morada', async () => {
   await shop.click('text=Guardar morada'); await shop.waitForSelector('.address-card >> text=Rua do Hospital 1');
   await shop.screenshot({ path: `${SHOTS}/61-conta-moradas.png`, fullPage: true });
 });
-await step('checkout preenchido com os dados da conta', async () => {
+await stepShop('checkout preenchido com os dados da conta', async () => {
   await shop.goto(`${BASE}/loja`); await shop.click('.prod >> nth=1');
   await shop.click('.opts label:not(:has(input:disabled)) >> nth=0');
   await shop.click('button:has-text("Adicionar")');
@@ -150,7 +151,7 @@ await step('checkout preenchido com os dados da conta', async () => {
   await shop.waitForFunction(() => document.querySelector('#line1')?.value === 'Rua do Hospital 1', null, { timeout: 15000 });
   await shop.screenshot({ path: `${SHOTS}/62-checkout-preenchido.png`, fullPage: true });
 });
-await step('loja com logótipo novo', async () => {
+await stepShop('loja com logótipo novo', async () => {
   await shop.goto(`${BASE}/`); await shop.waitForSelector('header .logo svg');
   await shop.screenshot({ path: `${SHOTS}/63-loja-inicio.png` });
 });

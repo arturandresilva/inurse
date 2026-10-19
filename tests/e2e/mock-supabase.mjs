@@ -36,7 +36,7 @@ http.createServer(async (req, res) => {
         return id ? send(200, session(id, email)) : send(400, { error_description: 'Invalid Refresh Token' });
       }
       if (ep === 'signup') {
-        const id = sql(`insert into auth.users(email, encrypted_password) values (lower(${lit(b.email)}), md5(${lit(b.password)})) on conflict (email) do nothing returning id`);
+        const id = sql(`insert into auth.users(email, encrypted_password) values (lower(${lit(b.email)}), md5(${lit(b.password)})) on conflict (email) do nothing returning id`).split('\n')[0];
         if (!id) return send(422, { code: 422, error_code: 'user_already_exists', msg: 'User already registered' });
         return send(200, session(id, b.email));
       }
