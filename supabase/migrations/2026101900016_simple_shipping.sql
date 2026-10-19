@@ -82,7 +82,7 @@ begin
   elsif sp is not null then
     opts := jsonb_build_array(jsonb_build_object('key', 'CTT Expresso|simples', 'carrier', 'CTT Expresso', 'service', coalesce(sp->>'service', '48h'),
               'label', 'CTT Expresso', 'delivery', 'domicilio', 'eta', sp->>'eta', 'price_cents', (sp->>'price_cents')::int,
-              'cost_cents', (sp->>'cost_cents')::int, 'volume_l', sp->'volume_l', 'by', sp->>'by'));
+              'volume_l', sp->'volume_l', 'by', sp->>'by'));
   end if;
   -- uma opção por transportadora/serviço: o escalão mais baixo que aguenta o peso
   for o in select distinct on (r.carrier, r.service) r.* from shipping_rates r
@@ -119,7 +119,7 @@ end $$;
 
 create or replace function public.estimate_order_costs(p_order uuid) returns void
 language plpgsql security definer set search_path = public as $$
-declare o orders; fees jsonb; ship int := 0; s record; fee int := 0; f jsonb; w int; rate shipping_rates; carrier int;
+declare o orders; fees jsonb; ship int := 0; s record; fee int := 0; f jsonb; w int; rate shipping_rates; carrier int; simple_cost int;
 begin
   select * into o from orders where id = p_order;
   if o.id is null or o.costs_confirmed then return; end if;
@@ -137,8 +137,15 @@ begin
   w := chargeable_weight_g((select jsonb_agg(jsonb_build_object('variant_id', variant_id, 'qty', quantity)) from order_items where order_id = p_order and variant_id is not null));
   -- custo da transportadora que o cliente escolheu (ou, se não houver escolha, o escalão normal)
   select * into rate from shipping_rates where id = o.shipping_rate_id;
-  if rate.id is null and o.shipping_method->>'cost_cents' is null then rate := shipping_rate_for(coalesce(o.shipping_address->>'region', 'Continente'), w); end if;
-  carrier := coalesce(nullif(o.shipping_method->>'cost_cents', '')::int, rate.cost_cents, round(rate.price_cents / 1.23), (fees->>'carrier_cents_per_order')::int, 0);
+  -- tabela simples: o custo vem da tabela (até X kg / acima, até X litros / acima)
+  if o.shipping_method->>'key' = 'CTT Expresso|simples' then
+    simple_cost := (simple_shipping(coalesce(o.shipping_address->>'region', 'Continente'),
+      (select jsonb_agg(jsonb_build_object('variant_id', variant_id, 'qty', quantity)) from order_items where order_id = p_order and variant_id is not null))->>'cost_cents')::int;
+  end if;
+  if rate.id is null and o.shipping_method->>'key' is distinct from 'CTT Expresso|simples' then rate := shipping_rate_for(coalesce(o.shipping_address->>'region', 'Continente'), w); end if;
+  carrier := coalesce(simple_cost, rate.cost_cents, round(rate.price_cents / 1.23),
+                      case when o.shipping_method->>'key' = 'CTT Expresso|simples' then round(o.shipping_cents / 1.23) end,
+                      (fees->>'carrier_cents_per_order')::int, 0);
   update orders set cost_supplier_shipping_cents = ship, cost_payment_fee_cents = fee, cost_carrier_cents = carrier,
          cost_packaging_cents = coalesce((fees->>'packaging_cents_per_order')::int, 0), weight_g = w, shipping_rate_id = rate.id
    where id = p_order;
