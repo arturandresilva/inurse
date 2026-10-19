@@ -6,7 +6,6 @@ const URL = Deno.env.get("SUPABASE_URL")!;
 const SERVICE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const ANON = Deno.env.get("SUPABASE_ANON_KEY")!;
 const KEY = Deno.env.get("ANTHROPIC_API_KEY") ?? "";
-const CRON_SECRET = Deno.env.get("CRON_SECRET") ?? "";
 const PRICE: Record<string, [number, number]> = { "claude-sonnet-5-5": [2, 10], "claude-opus-5-5": [4, 20], "claude-haiku-5-5": [0.1, 0.5], "claude-fable-5-1": [4, 20] };
 
 const CORS = {
@@ -153,7 +152,13 @@ Usa só ids que existam no contexto. Valores em cêntimos quando o campo termina
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
   try {
-    const cron = !!CRON_SECRET && req.headers.get("x-cron-secret") === CRON_SECRET;
+    // o agendador (pg_cron) envia o segredo guardado na base de dados (settings "cron", só visível ao servidor e administradores)
+    const given = req.headers.get("x-cron-secret") ?? "";
+    let cron = false;
+    if (given) {
+      const [c] = ((await rest("settings?key=eq.cron&select=value")) ?? []) as Row[];
+      cron = !!c?.value?.secret && given === c.value.secret;
+    }
     if (!cron) {
       const chk = await fetch(`${URL}/rest/v1/rpc/is_admin`, { method: "POST", headers: { apikey: ANON, Authorization: req.headers.get("Authorization") ?? "", "Content-Type": "application/json" }, body: "{}" });
       if (!chk.ok || (await chk.json()) !== true) return json({ error: "sem permissão" }, 403);

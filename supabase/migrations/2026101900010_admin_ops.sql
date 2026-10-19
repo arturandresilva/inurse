@@ -122,8 +122,8 @@ grant execute on function public.set_order_costs(uuid, jsonb) to authenticated;
 -- Pesquisa de clientes com totais (histórico CTT + encomendas novas)
 create or replace view public.customer_overview with (security_invoker = true) as
 select c.id, c.email, c.name, c.phone, c.nif, c.company, c.newsletter, c.created_at,
-       c.legacy_total_orders + coalesce(o.n, 0) as total_orders,
-       c.legacy_total_spent_cents + coalesce(o.cents, 0) as total_spent_cents,
+       coalesce(c.legacy_total_orders, 0) + coalesce(o.n, 0) as total_orders,
+       coalesce(c.legacy_total_spent_cents, 0) + coalesce(o.cents, 0) as total_spent_cents,
        o.last_at as last_order_at
   from customers c
   left join (select customer_id, count(*) as n, sum(total_cents) as cents, max(created_at) as last_at

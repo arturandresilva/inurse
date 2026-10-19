@@ -3,14 +3,18 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { money } from "@/lib/format";
+import ReturnForm from "@/components/ReturnForm";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "A tua encomenda", robots: { index: false } };
 
 type Order = { number: number; status: string; payment_method: string; total_cents: number; subtotal_cents: number; shipping_cents: number;
-  discount_cents: number; iban: string | null; items: { title: string; option_value: string; quantity: number; unit_price_cents: number }[];
+  discount_cents: number; iban: string | null; items: { id: string; title: string; option_value: string; quantity: number; unit_price_cents: number }[];
+  tracking?: { carrier: string; code: string }[]; returns?: { number: number; status: string; kind: string; tracking_code: string | null; label_url: string | null }[]; return_until?: string | null;
   shipping_address: { name: string; line1: string; line2?: string; zip: string; city: string } };
 
+const RSTATUS: Record<string, string> = { requested: "recebido, em análise", approved: "aprovado", label_sent: "etiqueta enviada", in_transit: "a caminho",
+  received: "recebido no armazém", refunded: "reembolsado", exchanged: "troca enviada", rejected: "recusado", cancelled: "cancelado" };
 const STATUS: Record<string, string> = { pending_payment: "A aguardar pagamento", paid: "Paga — em preparação", processing: "Em preparação",
   shipped: "Enviada", delivered: "Entregue", cancelled: "Cancelada", refunded: "Reembolsada" };
 
@@ -42,6 +46,21 @@ export default async function OrderPage({ params, searchParams }: { params: Prom
       <p><strong>Total: {money(o.total_cents)}</strong></p>
       <h2 style={{ fontSize: "1.3rem", margin: "24px 0 10px" }}>Entrega</h2>
       <p>{o.shipping_address.name}<br />{o.shipping_address.line1} {o.shipping_address.line2}<br />{o.shipping_address.zip} {o.shipping_address.city}</p>
+      {(o.tracking ?? []).length > 0 && (<>
+        <h2 style={{ fontSize: "1.3rem", margin: "24px 0 10px" }}>Seguimento</h2>
+        <ul>{o.tracking!.map((x) => <li key={x.code}>{x.carrier}: <a href={`https://www.ctt.pt/feapl_2/app/open/objectSearch/objectSearch.jspx?objects=${encodeURIComponent(x.code)}`} target="_blank" rel="noopener">{x.code}</a></li>)}</ul>
+      </>)}
+      {(o.returns ?? []).length > 0 && (<>
+        <h2 style={{ fontSize: "1.3rem", margin: "24px 0 10px" }}>Trocas e devoluções</h2>
+        <ul>{o.returns!.map((r) => <li key={r.number}>Pedido n.º {r.number} ({r.kind}): {RSTATUS[r.status] ?? r.status}{r.label_url ? <> · <a href={r.label_url} target="_blank" rel="noopener">etiqueta CTT</a></> : null}{r.tracking_code ? ` · ${r.tracking_code}` : ""}</li>)}</ul>
+      </>)}
+      {["shipped", "delivered"].includes(o.status) && !(o.returns ?? []).some((r) => !["rejected", "cancelled"].includes(r.status))
+        && (!o.return_until || new Date(o.return_until) >= new Date()) && (
+        <div style={{ marginTop: 24 }}>
+          <h2 style={{ fontSize: "1.3rem", marginBottom: 10 }}>O tamanho não serve?</h2>
+          <ReturnForm number={o.number} token={t} items={o.items} />
+        </div>
+      )}
       <p style={{ marginTop: 24 }}>Guarda esta página: é por aqui que acompanhas a encomenda e pedes uma troca. <Link href="/loja">Continuar a comprar</Link></p>
     </div>
   );
