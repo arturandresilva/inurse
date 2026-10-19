@@ -573,3 +573,7 @@ main .wrap { padding-left: 20px; padding-right: 20px; }       /* .shop/.prose/.c
   .quick { flex-wrap: nowrap; overflow-x: auto; margin: 14px -16px 0; padding: 0 16px 4px; scrollbar-width: none; }
   .quick a { white-space: nowrap; flex: none; }
 }
+.hero-search { width: 100%; box-sizing: border-box; }
+.hero-search input { width: auto; }
+.hero-search .btn { flex: none; }
+@media (max-width: 640px) { .hero-search .btn { padding: 10px 14px; } .hero-search input { padding: 10px 8px; font-size: 1rem; } }
