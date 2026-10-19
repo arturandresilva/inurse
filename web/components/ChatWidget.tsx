@@ -34,26 +34,25 @@ export default function ChatWidget() {
     supabase.from("settings").select("value").eq("key", "public.chat").maybeSingle().then(({ data }) => setCfg((data?.value as never) ?? { enabled: true }));
     const s = load(); if (s?.id) { setConv({ id: s.id, token: s.token }); setMsgs(s.msgs ?? []); }
   }, []);
-  // balão "Como podemos ajudar?": aparece uma vez, alguns segundos depois de entrar, e não volta durante 7 dias se for fechado.
-  // Só depois de o aviso de cookies estar respondido, para não tapar nada.
+  // balão "Como podemos ajudar?": aparece 4 s depois de entrar, uma vez por visita, e fica até o cliente o fechar (×) ou abrir a conversa.
+  // Quem o fecha não o volta a ver nesse dia. Espera que o aviso de cookies esteja respondido, para não se sobreporem.
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout> | undefined;
     const arm = () => {
       if (timer || !getConsent()) return;
       try {
         const until = Number(localStorage.getItem("inurse.chat.teaser") ?? 0);
-        if (until > Date.now() || load()?.id || sessionStorage.getItem("inurse.chat.teaser")) return;
-      } catch { return; }
+        if (until > Date.now() || sessionStorage.getItem("inurse.chat.teaser")) return;
+      } catch { /* sem storage: mostra na mesma */ }
       timer = setTimeout(() => {
         setTeaser(true);
         try { sessionStorage.setItem("inurse.chat.teaser", "1"); } catch { /* sem storage */ }
-        timer = setTimeout(() => setTeaser(false), 15000);   // desaparece sozinho
-      }, 6000);
+      }, 4000);
     };
     arm(); window.addEventListener(CONSENT_EVENT, arm);
     return () => { if (timer) clearTimeout(timer); window.removeEventListener(CONSENT_EVENT, arm); };
   }, []);
-  const hideTeaser = () => { setTeaser(false); try { localStorage.setItem("inurse.chat.teaser", String(Date.now() + 7 * 86400e3)); } catch { /* sem storage */ } };
+  const hideTeaser = () => { setTeaser(false); try { localStorage.setItem("inurse.chat.teaser", String(Date.now() + 86400e3)); } catch { /* sem storage */ } };
   useEffect(() => { if (conv) save({ ...conv, msgs: msgs.slice(-40) }); end.current?.scrollIntoView({ block: "end" }); }, [msgs, conv]);
   // respostas da equipa (backoffice) aparecem aqui
   useEffect(() => {

@@ -232,6 +232,13 @@ await stepShop('modo de manutenção', async () => {
   await page.click('.a-maint-bar button:has-text("Reabrir a loja")'); await toastOk();
   await phone.goto(`${BASE}/`); await phone.waitForSelector('header .logo');
 });
+await stepShop('balão de ajuda aparece e fecha', async () => {
+  const v = await newPage({ width: 1280, height: 800 });
+  await v.goto(`${BASE}/`); await v.waitForSelector('.chat-teaser', { timeout: 10000 });
+  await v.screenshot({ path: `${SHOTS}/71-balao-ajuda.png` });
+  await v.click('.chat-teaser-x'); await v.waitForSelector('.chat-teaser', { state: 'detached', timeout: 3000 });
+  await v.close();
+});
 await stepShop('campanha na página inicial (slider)', async () => {
   await shop.goto(`${BASE}/`);
   await shop.waitForSelector('.slider-faixa .slide.on >> text=Campanha de outono');
