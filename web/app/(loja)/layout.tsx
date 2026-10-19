@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import CookieNotice from "@/components/CookieNotice";
 
 export default function StoreLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -8,6 +9,7 @@ export default function StoreLayout({ children }: { children: React.ReactNode })
       <Header />
       <main id="conteudo">{children}</main>
       <Footer />
+      <CookieNotice />
     </>
   );
 }

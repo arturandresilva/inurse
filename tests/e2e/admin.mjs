@@ -14,8 +14,10 @@ const problems = [];
 const ok = (...a) => { console.log('✔', ...a); fs.appendFileSync(`${SHOTS}/passos.log`, `✔ ${a.join(' ')}\n`); };
 const browser = await chromium.launch();
 
-async function newPage(viewport) {
+async function newPage(viewport, { cookies = true } = {}) {
   const ctx = await browser.newContext({ viewport, locale: 'pt-PT', timezoneId: 'Europe/Lisbon' });
+  // o aviso de cookies já respondido, para não tapar botões nos outros testes
+  if (cookies) await ctx.addInitScript(() => { try { localStorage.setItem('inurse.cookies', JSON.stringify({ v: 1, stats: false, marketing: false, at: '2026-01-01' })); } catch {} });
   const page = await ctx.newPage();
   page.on('pageerror', (e) => problems.push(`[${page.url()}] erro JS: ${e.message}`));
   page.on('console', (m) => {
@@ -150,6 +152,16 @@ await stepShop('checkout preenchido com os dados da conta', async () => {
   await shop.goto(`${BASE}/checkout`);
   await shop.waitForFunction(() => document.querySelector('#line1')?.value === 'Rua do Hospital 1', null, { timeout: 15000 });
   await shop.screenshot({ path: `${SHOTS}/62-checkout-preenchido.png`, fullPage: true });
+});
+await stepShop('aviso de cookies aparece na primeira visita e some ao escolher', async () => {
+  const fresh = await newPage({ width: 390, height: 844 }, { cookies: false });
+  await fresh.goto(`${BASE}/`); await fresh.waitForSelector('.cookie-notice');
+  await fresh.screenshot({ path: `${SHOTS}/64-cookies-telemovel.png` });
+  await fresh.click('.cookie-notice button:has-text("Só essenciais")');
+  await fresh.waitForSelector('.cookie-notice', { state: 'detached' });
+  await fresh.reload(); await fresh.waitForTimeout(500);
+  if (await fresh.$('.cookie-notice')) throw new Error('voltou a aparecer depois de escolher');
+  await fresh.click('footer button:has-text("Preferências de cookies")'); await fresh.waitForSelector('.cookie-notice');
 });
 await stepShop('loja com logótipo novo', async () => {
   await shop.goto(`${BASE}/`); await shop.waitForSelector('header .logo svg');

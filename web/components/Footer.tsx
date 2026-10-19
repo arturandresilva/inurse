@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CookiePrefsLink } from "@/components/CookieNotice";
 import Logo from "./Logo";
 
 export default function Footer() {
@@ -23,7 +24,8 @@ export default function Footer() {
             <h2>Informação legal</h2>
             <ul>
               <li><Link href="/p/termos-e-condicoes">Termos e condições</Link></li>
-              <li><Link href="/p/privacidade">Política de privacidade</Link></li>
+              <li><Link href="/p/privacidade">Política de privacidade e cookies</Link></li>
+              <li><CookiePrefsLink /></li>
               <li><a href="https://www.livroreclamacoes.pt" target="_blank" rel="noopener noreferrer">Livro de Reclamações</a></li>
               <li><a href="https://www.consumidor.gov.pt/resolucao-de-litigios.aspx" target="_blank" rel="noopener noreferrer">Resolução alternativa de litígios</a></li>
             </ul>

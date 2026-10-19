@@ -234,3 +234,12 @@ p { margin: 0; }
 .ship-name { font-weight: 700; }
 .ship-name small { display: block; font-weight: 400; color: var(--ink-soft); font-size: .9rem; }
 .ship-price { font-weight: 700; white-space: nowrap; }
+
+/* aviso de cookies: cartão pequeno no canto, não tapa a loja */
+.cookie-notice { position: fixed; left: 16px; bottom: 16px; z-index: 60; max-width: 380px; background: #fff; color: var(--navy);
+  border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; box-shadow: 0 10px 30px rgba(28, 42, 74, .14); font-size: 14px; line-height: 1.45; }
+.cookie-notice a { font-weight: 600; }
+.cookie-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 10px; }
+.cookie-actions .btn { padding: 8px 14px; font-size: 14px; border-radius: 10px; min-height: 0; }
+@media (max-width: 520px) { .cookie-notice { left: 10px; right: 10px; bottom: 10px; max-width: none; } }
+.linklike { background: none; border: 0; padding: 0; font: inherit; color: inherit; text-decoration: underline; cursor: pointer; }
