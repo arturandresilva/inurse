@@ -6,6 +6,8 @@ import { categoryHref, SIZES } from "@/lib/format";
 import { loc } from "@/lib/i18n";
 import { getT } from "@/lib/i18n/server";
 import { getStoreReviews } from "@/lib/reviews";
+import { getHome } from "@/lib/home";
+import HeroSlider from "@/components/HeroSlider";
 
 const ICONS: Record<string, React.ReactNode> = {
   truck: <path d="M3 6h11v9H3zM14 9h4l3 3v3h-7M7 18.5a1.5 1.5 0 1 0 0-.01M17 18.5a1.5 1.5 0 1 0 0-.01" />,
@@ -16,19 +18,24 @@ const ICONS: Record<string, React.ReactNode> = {
 const Icon = ({ k }: { k: string }) => <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">{ICONS[k]}</svg>;
 
 export default async function Home() {
-  const [{ t, locale }, products, cats, store] = await Promise.all([getT(), getProducts(), getCategories(), getStoreReviews(6)]);
+  const { t, locale } = await getT();
+  const [products, cats, store, home] = await Promise.all([getProducts(), getCategories(), getStoreReviews(6), getHome(locale)]);
+  const top = home.campaigns.find((c) => c.placement === "topo");
+  const bands = home.campaigns.filter((c) => c.placement === "faixa");
+  const labels = { prev: t("Anterior"), next: t("Seguinte"), go: t("Ir para o diapositivo"), pause: t("Pausar"), play: t("Continuar") };
   const active = products.filter((p) => p.status === "active");
   const groups = groupByModel([...active.filter((p) => p.featured), ...active.filter((p) => !p.featured)]);
   const featured = groups.slice(0, 8);
-  const heroImgs = groups.map((g) => image(g.lead)).filter(Boolean).slice(0, 3) as string[];
+  const heroImgs = (home.settings.hero_images.length ? home.settings.hero_images : groups.map((g) => image(g.lead)).filter(Boolean)).slice(0, 3) as string[];
   const inCat = (path: string) => { const ids = new Set(cats.filter((c) => c.path === path || c.path.startsWith(path + ">")).map((c) => c.id)); return active.find((p: Product) => p.product_categories.some((pc) => ids.has(pc.category_id)) && image(p)); };
   const tiles = [...cats.filter((c) => c.path.startsWith("CALÇADO>") && c.path.split(">").length === 2 && !c.path.includes("COMPRAR POR")), ...cats.filter((c) => !c.parent_id && c.path !== "CALÇADO")]
-    .map((c) => ({ c, p: inCat(c.path) })).slice(0, 4);
+    .map((c) => ({ c, img: home.settings.tiles[c.id] || (inCat(c.path) ? image(inCat(c.path)!) : null) })).slice(0, 4);
   const profs = cats.filter((c) => c.path.startsWith("CALÇADO>COMPRAR POR PROFISSÃO>"));
   const cname = (n: string) => n.charAt(0) + n.slice(1).toLowerCase();
 
   return (
     <>
+      {top ? <HeroSlider c={top} labels={labels} /> : (
       <section className="hero2">
         <div className="wrap hero2-grid">
           <div>
@@ -48,6 +55,7 @@ export default async function Home() {
           </div>
         </div>
       </section>
+      )}
 
       <section className="trust">
         <div className="wrap trust-grid">
@@ -58,14 +66,16 @@ export default async function Home() {
         </div>
       </section>
 
+      {bands.map((c) => <div key={c.id} className="slider-faixa-wrap"><HeroSlider c={c} labels={labels} /></div>)}
+
       {tiles.length > 0 && (
         <section className="section">
           <div className="wrap">
             <div className="section-head"><h2>{t("Compra por categoria")}</h2><Link href="/loja">{t("Ver tudo")}</Link></div>
             <div className="cat-tiles">
-              {tiles.map(({ c, p }) => (
+              {tiles.map(({ c, img }) => (
                 <Link key={c.id} href={categoryHref(c.path)} className="cat-tile">
-                  <div className="ph">{p ? <img src={image(p)!} alt="" loading="lazy" /> : null}</div>
+                  <div className="ph">{img ? <img src={img} alt="" loading="lazy" /> : null}</div>
                   <span>{cname(loc(c, locale, "name"))} <b aria-hidden="true">→</b></span>
                 </Link>
               ))}

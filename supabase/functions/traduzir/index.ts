@@ -1,5 +1,5 @@
 // Tradutor: traduz para inglês, espanhol e francês os conteúdos da loja que ainda não têm tradução ou cujo original mudou
-// (produtos: resumo, descrição, SEO e cor; categorias: nome; páginas: título, texto e SEO). Usa a API Anthropic.
+// (produtos: resumo, descrição, SEO e cor; categorias: nome; páginas: título, texto e SEO; campanhas da página inicial: textos). Usa a API Anthropic.
 //  POST {}  — agendador (agente "tradutor", de madrugada) ou backoffice ("Traduzir agora")
 // Cada execução trabalha até ~110 s; o que faltar fica para a seguinte.
 const SB = Deno.env.get("SUPABASE_URL")!;
@@ -29,8 +29,8 @@ export async function hash(o: Row) {
   return [...new Uint8Array(d)].slice(0, 8).map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
-type Job = { table: "products" | "categories" | "pages"; id: string; src: Row; h: string; current: Row };
-const FIELDS = { products: ["excerpt", "description_html", "seo_title", "seo_description", "color"], categories: ["name"], pages: ["title", "body_html", "seo_title", "seo_description"] };
+type Job = { table: "products" | "categories" | "pages" | "home_slides"; id: string; src: Row; h: string; current: Row };
+const FIELDS = { products: ["excerpt", "description_html", "seo_title", "seo_description", "color"], categories: ["name"], pages: ["title", "body_html", "seo_title", "seo_description"], home_slides: ["eyebrow", "title", "body", "cta_label"] };
 
 async function pending(limit: number): Promise<Job[]> {
   const jobs: Job[] = [];
@@ -46,6 +46,7 @@ async function pending(limit: number): Promise<Job[]> {
     }
   };
   await add("categories", ((await rest("categories?select=id,name,translations")) ?? []) as Row[]);
+  if (jobs.length < limit) await add("home_slides", ((await rest("home_slides?select=id,eyebrow,title,body,cta_label,translations")) ?? []) as Row[]);
   if (jobs.length < limit) await add("pages", ((await rest("pages?published=eq.true&select=id,title,body_html,seo_title,seo_description,translations")) ?? []) as Row[]);
   if (jobs.length < limit) await add("products", ((await rest("products?status=in.(active,out_of_stock)&select=id,excerpt,description_html,seo_title,seo_description,color,translations&order=featured.desc,position&limit=2000")) ?? []) as Row[]);
   return jobs;

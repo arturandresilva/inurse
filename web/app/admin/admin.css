@@ -244,3 +244,26 @@
 .a-chat-msg small { display: block; color: var(--a-soft); font-size: .75rem; margin-bottom: 2px; }
 .a-chat-msg.user { background: #e6f1fb; justify-self: end; }
 .a-chat-msg.staff { background: #e7f4f1; }
+.a-h3 { font-size: 1rem; margin: 0 0 4px; }
+.a-table tr.on td { background: #f3f7fa; }
+.a-slides { display: grid; gap: 16px; }
+.a-slide { display: grid; grid-template-columns: minmax(240px, 380px) 1fr; gap: 18px; padding: 14px; border: 1px solid var(--a-line); border-radius: 12px; background: #fff; }
+@media (max-width: 900px) { .a-slide { grid-template-columns: 1fr; } }
+.a-slide-prev { position: relative; aspect-ratio: 12 / 5; border-radius: 10px; overflow: hidden; background: #1c2a4a; align-self: start; }
+.a-slide-prev img, .a-slide-prev video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.a-slide-prev .a-badge { position: absolute; top: 8px; right: 8px; }
+.a-slide-txt { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; gap: 2px; padding: 14px; font-size: .78rem; }
+.a-slide-prev.theme-dark .a-slide-txt { color: #fff; background: linear-gradient(90deg, rgba(14,24,46,.65), transparent 75%); }
+.a-slide-prev.theme-light .a-slide-txt { color: #1c2a4a; background: linear-gradient(90deg, rgba(255,255,255,.85), transparent 75%); }
+.a-slide-prev.al-center .a-slide-txt { align-items: center; text-align: center; }
+.a-slide-prev.al-right .a-slide-txt { align-items: flex-end; text-align: right; }
+.a-slide-txt strong { font-size: 1.05rem; line-height: 1.15; max-width: 60%; }
+.a-slide-txt span { max-width: 60%; opacity: .9; }
+.a-slide-txt em { font-style: normal; margin-top: 6px; background: #0f7a63; color: #fff; padding: 3px 9px; border-radius: 6px; align-self: inherit; width: max-content; }
+.a-slide-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; }
+.a-img-slots { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 10px; }
+.a-img-slot { width: 180px; display: grid; gap: 6px; justify-items: center; text-align: center; }
+.a-img-slot > img, .a-img-slot > span { width: 180px; height: 220px; object-fit: cover; border-radius: 10px; background: #f3f5f8; display: grid; place-items: center; color: var(--a-soft); border: 1px solid var(--a-line); }
+.a-img-slot.round > img, .a-img-slot.round > span { width: 150px; height: 150px; border-radius: 50%; object-fit: contain; background: #e9f6fd; }
+.a-img-slot img.auto { opacity: .55; }
+.a-img-slot > div { display: flex; gap: 6px; }

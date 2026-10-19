@@ -33,6 +33,7 @@ const NAV: { group: string; items: Item[] }[] = [
     { href: "/admin/contas", label: "Contabilista" },
   ] },
   { group: "Loja", items: [
+    { href: "/admin/pagina-inicial", label: "Página inicial" },
     { href: "/admin/paginas", label: "Páginas" },
     { href: "/admin/configuracoes", label: "Configurações" },
   ] },

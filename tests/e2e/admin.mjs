@@ -62,7 +62,7 @@ await shot(page, '01-painel');
 // ---------- todas as páginas ----------
 const ROUTES = (process.env.ROUTES || [
   'encomendas', 'encomendas/1001', 'encomendas/1002', 'devolucoes', 'clientes', 'promocoes', 'produtos', 'importar', 'precos', 'fornecedores',
-  'envios', 'agentes', 'contas', 'paginas', 'configuracoes', 'configuracoes?tab=faturacao',
+  'envios', 'agentes', 'contas', 'pagina-inicial', 'paginas', 'configuracoes', 'configuracoes?tab=faturacao',
 ].join(',')).split(',');
 for (const [i, r] of ROUTES.entries()) {
   const resp = await page.goto(`${BASE}/admin/${r}`);
@@ -90,6 +90,16 @@ await step('registar envio da 1001', async () => {
   await page.click('dialog[open] button.a-btn.primary'); await toastOk();
   await page.waitForSelector('text=EA000000001PT');
   await shot(page, '50-encomenda-enviada');
+});
+await step('editar campanha da página inicial', async () => {
+  await page.goto(`${BASE}/admin/pagina-inicial`); await settle(page);
+  await page.click('tr:has-text("Campanha de teste") button:has-text("Editar")');
+  await page.waitForSelector('.a-slide');
+  await page.fill('.a-slide >> nth=0 >> input[placeholder="Nova coleção"]', 'Só esta semana');
+  await page.click('.a-slide >> nth=0 >> button:has-text("Guardar textos")'); await toastOk();
+  await shot(page, '18-pagina-inicial-campanha');
+  await page.click('button[role=tab]:has-text("Imagens da página inicial")'); await settle(page);
+  await shot(page, '19-pagina-inicial-imagens');
 });
 await step('nota interna', async () => {
   await page.fill('input[aria-label="Nota interna"]', 'Teste automático');
@@ -190,6 +200,16 @@ await stepShop('loja em inglês', async () => {
 await stepShop('loja com logótipo novo', async () => {
   await shop.goto(`${BASE}/`); await shop.waitForSelector('header .logo svg');
   await shop.screenshot({ path: `${SHOTS}/63-loja-inicio.png` });
+});
+await stepShop('campanha na página inicial (slider)', async () => {
+  await shop.goto(`${BASE}/`);
+  await shop.waitForSelector('.slider-faixa .slide.on >> text=Campanha de outono');
+  await shop.locator('.slider-faixa').scrollIntoViewIfNeeded();
+  await shop.click('.slider-faixa .slider-dots button[aria-label$=" 2"]');
+  await shop.waitForSelector('.slider-faixa .slide.on >> text=Segundo diapositivo');
+  await shop.click('.slider-faixa .slider-dots button[aria-label$=" 1"]');
+  await shop.waitForTimeout(800);
+  await shop.locator('.slider-faixa').screenshot({ path: `${SHOTS}/70-loja-campanha.png` });
 });
 
 // ---------- telemóvel ----------

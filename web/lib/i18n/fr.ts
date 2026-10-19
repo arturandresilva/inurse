@@ -397,4 +397,8 @@ export const FR: Record<string, string> = {
   "Preferir WhatsApp": "Préférer WhatsApp",
   "As conversas ficam guardadas para o podermos ajudar.": "Les conversations sont conservées pour pouvoir vous aider.",
   "Privacidade": "Confidentialité",
+  "Anterior": "Précédent",
+  "Seguinte": "Suivant",
+  "Ir para o diapositivo": "Aller à la diapositive",
+  "Pausar": "Pause",
 };

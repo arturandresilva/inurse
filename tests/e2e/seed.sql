@@ -43,3 +43,9 @@ insert into expenses (category, description, amount_cents, recurrence, vendor) v
 -- fatura emitida na 1002 (para ver o cartão "Fatura")
 insert into invoices (order_id, status, number, total_cents, pdf_url, permalink, sent_to, external_id)
 select id, 'final', 'FR 2026/12', total_cents, 'https://exemplo.pt/fatura.pdf', 'https://exemplo.app.invoicexpress.com/p/1', email, '77' from orders where number = 1002;
+
+-- campanha da página inicial (faixa a meio da página) para o teste da loja e do backoffice
+insert into home_campaigns (id, name, placement, status) values ('00000000-0000-0000-0000-00000000ca01', 'Campanha de teste', 'faixa', 'active');
+insert into home_slides (campaign_id, position, media_url, title, body, cta_label, cta_url) values
+  ('00000000-0000-0000-0000-00000000ca01', 0, '/marca/inurse-logo-cor.svg', 'Campanha de outono', 'Socas com 10% de desconto até domingo.', 'Ver socas', '/loja'),
+  ('00000000-0000-0000-0000-00000000ca01', 1, '/marca/inurse-logo-cor.svg', 'Segundo diapositivo', null, null, null);

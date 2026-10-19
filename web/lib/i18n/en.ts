@@ -397,4 +397,8 @@ export const EN: Record<string, string> = {
   "Preferir WhatsApp": "Use WhatsApp instead",
   "As conversas ficam guardadas para o podermos ajudar.": "Conversations are stored so we can help you.",
   "Privacidade": "Privacy",
+  "Anterior": "Previous",
+  "Seguinte": "Next",
+  "Ir para o diapositivo": "Go to slide",
+  "Pausar": "Pause",
 };
