@@ -12,7 +12,7 @@ concurrency:
 jobs:
   base-de-dados:
     name: Base de dados (migrações + testes)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     services:
       postgres:
         image: postgres:16
@@ -26,22 +26,22 @@ jobs:
       PGUSER: postgres
       PGPASSWORD: postgres
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Testes SQL
         run: bash tests/db/run.sh
 
   importacao:
     name: Importação de tabelas de fornecedores
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - run: pip install pdfplumber==0.11.4
       - name: Testes do extrator
         run: python -m unittest discover -s tools/import -p "test_*.py" -v
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
       - name: Testes do leitor de folhas (backoffice)
@@ -49,13 +49,13 @@ jobs:
 
   loja:
     name: Loja (tipos + compilação)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     defaults:
       run:
         working-directory: web
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
       - run: npm install --no-audit --no-fund
@@ -75,7 +75,7 @@ jobs:
   backoffice:
     name: Backoffice (percurso no browser)
     needs: loja
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       contents: write
     services:
@@ -94,8 +94,8 @@ jobs:
       NEXT_PUBLIC_SUPABASE_KEY: chave-de-teste
       NEXT_PUBLIC_SITE_URL: http://127.0.0.1:3000
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
       - name: Base de dados de teste
