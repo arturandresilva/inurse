@@ -106,7 +106,10 @@ jobs:
         working-directory: web
         run: |
           npm install --no-audit --no-fund
-          npm run build
+          if ! npm run build > /tmp/build.txt 2>&1; then
+            grep -iE "error|failed" -A3 /tmp/build.txt | head -30 | sed 's/^/::error::/'
+            tail -40 /tmp/build.txt; exit 1
+          fi
           nohup npx next start -p 3000 > /tmp/next.log 2>&1 &
           for i in $(seq 1 30); do curl -sf http://127.0.0.1:3000/admin > /dev/null && break; sleep 1; done
       - name: Playwright
