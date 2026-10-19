@@ -163,6 +163,24 @@ await stepShop('aviso de cookies aparece na primeira visita e some ao escolher',
   if (await fresh.$('.cookie-notice')) throw new Error('voltou a aparecer depois de escolher');
   await fresh.click('footer button:has-text("Preferências de cookies")'); await fresh.waitForSelector('.cookie-notice');
 });
+await stepShop('loja agrupada por modelos com escolha da cor', async () => {
+  await shop.goto(`${BASE}/loja`); await shop.waitForSelector('.prod');
+  await shop.screenshot({ path: `${SHOTS}/65-loja-modelos.png` });
+  const card = shop.locator('.prod:has(.swatches)').first();
+  if (await card.count()) {
+    await card.click(); await shop.waitForSelector('.colors .color.on');
+    await shop.screenshot({ path: `${SHOTS}/66-produto-cores.png` });
+    await shop.locator('.colors .color:not(.on)').first().click(); await shop.waitForURL(/\/produto\//);
+  }
+});
+await stepShop('formulário de livre resolução', async () => {
+  await shop.goto(`${BASE}/livre-resolucao`);
+  await shop.fill('#w-number', '1002'); await shop.fill('#w-email', 'rui@exemplo.pt');
+  await shop.click('button:has-text("Continuar")'); await shop.waitForSelector('#w-name');
+  await shop.screenshot({ path: `${SHOTS}/67-livre-resolucao-form.png`, fullPage: true });
+  await shop.click('button:has-text("Enviar declaração")'); await shop.waitForSelector('.withdrawal-receipt');
+  await shop.screenshot({ path: `${SHOTS}/68-livre-resolucao-comprovativo.png`, fullPage: true });
+});
 await stepShop('loja com logótipo novo', async () => {
   await shop.goto(`${BASE}/`); await shop.waitForSelector('header .logo svg');
   await shop.screenshot({ path: `${SHOTS}/63-loja-inicio.png` });
