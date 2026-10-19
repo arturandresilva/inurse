@@ -320,7 +320,7 @@ p { margin: 0; }
 .top-actions { display: flex; align-items: center; gap: 16px; }
 .search input { width: 190px; background: var(--paper); }
 .lang-switch { display: inline-flex; align-items: center; gap: 4px; color: var(--ink-soft); }
-.lang-switch select { border: 0; background: transparent; font: inherit; font-size: .9rem; font-weight: 700; color: var(--navy); cursor: pointer; padding: 4px 0; max-width: 64px; }
+.lang-switch select { border: 0; background: transparent; font: inherit; font-size: .9rem; font-weight: 700; color: var(--navy); cursor: pointer; padding: 4px 0; }
 .account-link { display: inline-flex; gap: 6px; align-items: center; text-decoration: none; font-weight: 700; }
 .cart-link svg { margin-right: 2px; }
 

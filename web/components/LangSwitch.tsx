@@ -16,7 +16,7 @@ export default function LangSwitch() {
         document.cookie = `${LOCALE_COOKIE}=${l}; path=/; max-age=31536000; samesite=lax`;
         router.refresh();
       }}>
-        {LOCALES.map((l) => <option key={l} value={l}>{l.toUpperCase()} · {LOCALE_NAMES[l]}</option>)}
+        {LOCALES.map((l) => <option key={l} value={l} title={LOCALE_NAMES[l]}>{l.toUpperCase()}</option>)}
       </select>
     </label>
   );
