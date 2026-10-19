@@ -49,11 +49,22 @@ jobs:
         with:
           node-version: 22
       - run: npm install --no-audit --no-fund
-      - run: npm run typecheck
-      - run: npm run build
+      - name: Tipos
+        run: |
+          npx tsc --noEmit --pretty false > /tmp/tsc.txt 2>&1 && exit 0
+          # erros como anotações (file/line), legíveis pela API do GitHub
+          sed -E 's#^([^(]+)\(([0-9]+),([0-9]+)\): (.*)$#::error file=web/\1,line=\2,col=\3::\1:\2 \4#' /tmp/tsc.txt | head -40
+          exit 1
+      - name: Compilação
+        run: |
+          npm run build > /tmp/build.txt 2>&1 && { tail -40 /tmp/build.txt; exit 0; }
+          grep -iE "error|failed|Type error" -A3 /tmp/build.txt | head -30 | sed 's/^/::error::/'
+          tail -60 /tmp/build.txt
+          exit 1
 
   backoffice:
     name: Backoffice (percurso no browser)
+    needs: loja
     runs-on: ubuntu-latest
     permissions:
       contents: write

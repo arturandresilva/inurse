@@ -34,7 +34,7 @@ function Editor({ d, reload }: { d: Awaited<ReturnType<typeof load>>; reload: ()
   const router = useRouter();
   const { busy, act } = useAction();
   const [p, setP] = useState<Row>(() => ({ ...blank, ...(d.p ?? {}) }));
-  const [cats, setCats] = useState<Set<string>>(() => new Set((d.p?.product_categories ?? []).map((x: Row) => x.category_id)));
+  const [cats, setCats] = useState<Set<string>>(() => new Set<string>((d.p?.product_categories ?? []).map((x: Row) => String(x.category_id))));
   const [vars, setVars] = useState<V[]>(() => [...(d.p?.variants ?? [])].sort((a, b) => a.position - b.position).map((v) => ({ ...v, _key: v.id })));
   const [imgs, setImgs] = useState<Row[]>(() => [...(d.p?.product_images ?? [])].sort((a, b) => a.position - b.position));
   const [preview, setPreview] = useState<Row[] | null>(null);
@@ -72,7 +72,7 @@ function Editor({ d, reload }: { d: Awaited<ReturnType<typeof load>>; reload: ()
     else pid = (await run<Row>(c.from("products").insert(row).select("id").single())).id as string;
 
     // categorias
-    const before = new Set((d.p?.product_categories ?? []).map((x: Row) => x.category_id as string));
+    const before = new Set<string>((d.p?.product_categories ?? []).map((x: Row) => String(x.category_id)));
     const add = [...cats].filter((x) => !before.has(x));
     const del = [...before].filter((x) => !cats.has(x));
     if (add.length) await run(c.from("product_categories").insert(add.map((category_id) => ({ product_id: pid, category_id }))));

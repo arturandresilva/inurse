@@ -127,7 +127,7 @@ ok('conta sem permissões vê "Sem acesso"');
 await browser.close();
 if (problems.length) {
   console.log(`\n✗ ${problems.length} problema(s):`);
-  for (const p of problems) console.log(' -', p);
+  for (const p of problems) console.log(process.env.CI ? `::error::${p.replace(/\n/g, ' ')}` : ` - ${p}`);
   process.exit(1);
 }
 console.log('\nTudo certo.');
