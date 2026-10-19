@@ -130,7 +130,7 @@ Usa só ids que existam no contexto. Valores em cêntimos quando o campo termina
     const r = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: { "x-api-key": KEY, "anthropic-version": "2023-06-01", "content-type": "application/json" },
-      body: JSON.stringify({ model, max_tokens: 8000, system, tools: [tool], tool_choice: { type: "tool", name: tool.name },
+      body: JSON.stringify({ model, max_tokens: 8000, system: `${system}\nEntrega sempre o trabalho chamando a ferramenta ${tool.name}.`, tools: [tool], tool_choice: { type: "auto" },
         messages: [{ role: "user", content: `Contexto atual da loja (JSON):\n${JSON.stringify(ctx)}\n\nFaz a tua análise de ${agent.name.toLowerCase()} e entrega o trabalho.` }] }),
     });
     const data = await r.json();

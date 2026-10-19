@@ -63,7 +63,7 @@ async function translateBatch(batch: Job[], instructions: string) {
   const input = batch.map((j) => ({ id: j.id, tipo: j.table, campos: j.src }));
   const r = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST", headers: { "x-api-key": KEY, "anthropic-version": "2023-06-01", "content-type": "application/json" },
-    body: JSON.stringify({ model: MODEL, max_tokens: 16000, system: instructions, tools: [TOOL], tool_choice: { type: "tool", name: TOOL.name },
+    body: JSON.stringify({ model: MODEL, max_tokens: 16000, system: `${instructions}\n\nEntrega sempre as traduções chamando a ferramenta ${TOOL.name}.`, tools: [TOOL], tool_choice: { type: "auto" },
       messages: [{ role: "user", content: `Traduz cada item para ${LANGS.map((l) => `${l} = ${NAMES[l]}`).join(", ")}. Devolve, para cada id, os mesmos campos traduzidos (mesmos nomes de campo). Itens:\n${JSON.stringify(input)}` }] }),
   });
   const data = await r.json();

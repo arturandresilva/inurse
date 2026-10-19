@@ -89,13 +89,21 @@ async function logRun(summary: string, tin: number, tout: number, error?: string
 }
 
 async function ask(content: unknown[], label: string) {
-  const r = await fetch("https://api.anthropic.com/v1/messages", {
+  // os modelos atuais não aceitam forçar a ferramenta (tool_choice "tool"): pedimos no texto e, se não a usar, insistimos uma vez
+  const messages: unknown[] = [{ role: "user", content }];
+  const call = () => fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: { "x-api-key": KEY, "anthropic-version": "2023-06-01", "content-type": "application/json" },
-    body: JSON.stringify({ model: MODEL, max_tokens: 16000, system: SYSTEM, tools: [TOOL], tool_choice: { type: "tool", name: TOOL.name },
-      messages: [{ role: "user", content }] }),
+    body: JSON.stringify({ model: MODEL, max_tokens: 16000, system: `${SYSTEM}\n\nEntrega sempre o resultado chamando a ferramenta ${TOOL.name} (uma única vez, com todas as linhas).`,
+      tools: [TOOL], tool_choice: { type: "auto" }, messages }),
   });
-  const data = await r.json();
+  let r = await call();
+  let data = await r.json();
+  if (r.ok && !(data.content ?? []).some((c: { type: string }) => c.type === "tool_use") && data.stop_reason !== "max_tokens") {
+    messages.push({ role: "assistant", content: data.content }, { role: "user", content: `Chama agora a ferramenta ${TOOL.name} com o resultado.` });
+    const first = data.usage; r = await call(); data = await r.json();
+    if (data.usage && first) { data.usage.input_tokens += first.input_tokens ?? 0; data.usage.output_tokens += first.output_tokens ?? 0; }
+  }
   if (!r.ok) {
     const msg = data?.error?.message ?? `erro ${r.status}`;
     await logRun(`Leitura falhou: ${label}`, 0, 0, msg);
