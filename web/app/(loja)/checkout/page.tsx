@@ -91,7 +91,7 @@ export default function CheckoutPage() {
             <div className="field"><label htmlFor="region">Zona</label>
               <select id="region" value={f.region} onChange={up("region")}><option>Continente</option><option>Açores</option><option>Madeira</option></select></div>
           </fieldset>
-          {(quote?.shipping_options?.length ?? 0) > 0 && (
+          {(quote?.shipping_options?.length ?? 0) > 1 && (
             <fieldset>
               <legend>Como queres receber</legend>
               <div className="ship-opts" role="radiogroup" aria-label="Transportadora">
