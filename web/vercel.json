@@ -1,0 +1,3 @@
+{
+  "git": { "deploymentEnabled": { "dev": false, "e2e-shots": false } }
+}

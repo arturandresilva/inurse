@@ -50,7 +50,7 @@ export default async function Footer() {
           </div>
         </div>
         <div className="legal">
-          <span>© {new Date().getFullYear()} iNurse · {l.legal_name} · NIF {l.nif}</span>
+          <span>© {new Date().getFullYear()} iNurse</span>
           <span className="pay-badges" aria-label={t("Métodos de pagamento")}><b>MB WAY</b><b>Multibanco</b><b>{t("Transferência")}</b></span>
         </div>
       </div>

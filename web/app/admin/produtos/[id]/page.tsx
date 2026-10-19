@@ -284,15 +284,44 @@ function Editor({ d, reload }: { d: Awaited<ReturnType<typeof load>>; reload: ()
             </div>
             <p className="a-hint" style={{ marginTop: 8 }}>Sem peso, os portes usam o peso por defeito das configurações de envio.</p>
           </Card>
-          <Card title="Categorias">
-            <div style={{ display: "grid", gap: 4, maxHeight: 320, overflow: "auto" }}>
-              {d.categories.map((c) => (
-                <label key={c.id} className="a-check" style={{ paddingLeft: (c.path.split(">").length - 1) * 14 }}>
-                  <input type="checkbox" checked={cats.has(c.id)} onChange={(e) => { setCats((x) => { const n = new Set(x); if (e.target.checked) n.add(c.id); else n.delete(c.id); return n; }); setDirty(true); }} />
-                  {c.name}
+          <Card title="Onde aparece na loja">
+            {(() => {
+              const toggle = (id: string, on: boolean) => { setCats((x) => { const n = new Set(x); if (on) n.add(id); else n.delete(id); return n; }); setDirty(true); };
+              const nice = (n: string) => (n === n.toUpperCase() ? n.charAt(0) + n.slice(1).toLowerCase() : n);
+              const menu = [...d.categories.filter((c) => c.path.startsWith("CALÇADO>") && c.path.split(">").length === 2 && !c.path.includes("COMPRAR POR")),
+                ...d.categories.filter((c) => !c.path.includes(">") && c.path !== "CALÇADO")];
+              const profs = d.categories.filter((c) => c.path.startsWith("CALÇADO>COMPRAR POR PROFISSÃO>"));
+              const shown = new Set([...menu, ...profs].map((c) => c.id));
+              const rest = d.categories.filter((c) => !shown.has(c.id));
+              const Chip = ({ c }: { c: Row }) => (
+                <label className={`a-chip${cats.has(c.id) ? " on" : ""}`}>
+                  <input type="checkbox" checked={cats.has(c.id)} onChange={(e) => toggle(c.id, e.target.checked)} />{nice(c.name)}
                 </label>
-              ))}
-            </div>
+              );
+              return (
+                <>
+                  <p className="a-hint" style={{ marginBottom: 8 }}>Menu da loja (escolhe pelo menos um):</p>
+                  <div className="a-chips">{menu.map((c) => <Chip key={c.id} c={c} />)}</div>
+                  {profs.length > 0 && <>
+                    <p className="a-hint" style={{ margin: "14px 0 8px" }}>Profissões:</p>
+                    <div className="a-chips">{profs.map((c) => <Chip key={c.id} c={c} />)}</div>
+                  </>}
+                  {!menu.some((c) => cats.has(c.id)) && <p className="a-hint" style={{ color: "var(--a-warn)", marginTop: 10 }}>Sem categoria do menu, o produto só aparece na pesquisa e em “Todos os modelos”.</p>}
+                  {rest.length > 0 && (
+                    <details style={{ marginTop: 14 }}>
+                      <summary className="a-hint" style={{ cursor: "pointer" }}>Outras categorias ({rest.filter((c) => cats.has(c.id)).length} escolhidas)</summary>
+                      <div style={{ display: "grid", gap: 4, maxHeight: 260, overflow: "auto", marginTop: 8 }}>
+                        {rest.map((c) => (
+                          <label key={c.id} className="a-check" style={{ paddingLeft: (c.path.split(">").length - 1) * 14 }}>
+                            <input type="checkbox" checked={cats.has(c.id)} onChange={(e) => toggle(c.id, e.target.checked)} />{nice(c.name)}
+                          </label>
+                        ))}
+                      </div>
+                    </details>
+                  )}
+                </>
+              );
+            })()}
           </Card>
           <Card title="Etiquetas">
             <Field label="Separadas por vírgulas" hint="Usadas na pesquisa da loja."><input value={Array.isArray(p.tags) ? p.tags.join(", ") : p.tags ?? ""} onChange={(e) => set("tags", e.target.value)} /></Field>

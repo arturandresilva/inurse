@@ -5,7 +5,7 @@ const SERVICE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const ANON = Deno.env.get('SUPABASE_ANON_KEY')!;
 const CORS = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, apikey, content-type, x-client-info',
+  'Access-Control-Allow-Headers': 'authorization, apikey, content-type, x-client-info, x-cron-secret',
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
 };
 const json = (b: unknown, status = 200) =>
@@ -16,11 +16,20 @@ const svc = { apikey: SERVICE, Authorization: `Bearer ${SERVICE}` };
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS });
   try {
-    const auth = req.headers.get('Authorization') ?? '';
-    const chk = await fetch(`${URL}/rest/v1/rpc/is_admin`, {
-      method: 'POST', headers: { apikey: ANON, Authorization: auth, 'Content-Type': 'application/json' }, body: '{}',
-    });
-    if (!chk.ok || (await chk.json()) !== true) return json({ error: 'sem permissão' }, 403);
+    // administrador (backoffice) ou o agendador da base de dados (cabeçalho x-cron-secret)
+    const given = req.headers.get('x-cron-secret') ?? '';
+    let cron = false;
+    if (given) {
+      const s = await (await fetch(`${URL}/rest/v1/settings?key=eq.cron&select=value`, { headers: svc })).json();
+      cron = !!s?.[0]?.value?.secret && s[0].value.secret === given;
+    }
+    if (!cron) {
+      const auth = req.headers.get('Authorization') ?? '';
+      const chk = await fetch(`${URL}/rest/v1/rpc/is_admin`, {
+        method: 'POST', headers: { apikey: ANON, Authorization: auth, 'Content-Type': 'application/json' }, body: '{}',
+      });
+      if (!chk.ok || (await chk.json()) !== true) return json({ error: 'sem permissão' }, 403);
+    }
 
     const { limit = 25 } = await req.json().catch(() => ({}));
     const pending = `${URL}/rest/v1/product_images?url=like.*lojasonlinectt*`;
