@@ -423,3 +423,26 @@ p { margin: 0; }
 .top .mnav-panel { height: auto; }
 .mega { z-index: 20; }
 .mnav-panel .search { display: flex; }
+
+/* assistente de contacto */
+.chat-fab { position: fixed; right: 18px; bottom: 18px; z-index: 55; width: 58px; height: 58px; border-radius: 50%; border: 0; background: var(--navy); color: #fff;
+  display: grid; place-items: center; cursor: pointer; box-shadow: 0 8px 24px rgba(28, 42, 74, .28); }
+.chat-fab:hover { background: var(--scrub); }
+.chat-panel { position: fixed; right: 18px; bottom: 18px; z-index: 70; width: 370px; max-width: calc(100vw - 20px); height: 560px; max-height: calc(100vh - 40px);
+  background: #fff; border-radius: 20px; box-shadow: 0 18px 50px rgba(28, 42, 74, .25); display: flex; flex-direction: column; overflow: hidden; font-size: .95rem; }
+.chat-panel header { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; background: var(--navy); color: #fff; }
+.chat-panel header span { display: block; font-size: .78rem; opacity: .8; }
+.chat-panel header button { background: none; border: 0; color: #fff; font-size: 26px; line-height: 1; cursor: pointer; }
+.chat-body { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 8px; background: #f6f8fa; }
+.chat-msg { margin: 0; padding: 9px 12px; border-radius: 14px; max-width: 85%; white-space: pre-wrap; line-height: 1.45; }
+.chat-msg.assistant, .chat-msg.staff { background: #fff; border: 1px solid var(--line); align-self: flex-start; }
+.chat-msg.staff { border-color: var(--scrub); }
+.chat-msg.user { background: var(--navy); color: #fff; align-self: flex-end; }
+.chat-msg.user a { color: #fff; }
+.chat-msg a { color: var(--scrub); font-weight: 600; word-break: break-all; }
+.chat-panel form { display: flex; gap: 8px; padding: 10px; border-top: 1px solid var(--line); }
+.chat-panel form input { flex: 1; border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; font: inherit; }
+.chat-panel form .btn { padding: 10px 14px; font-size: .92rem; border-radius: 12px; }
+.chat-panel footer { padding: 8px 12px 12px; font-size: .75rem; color: var(--ink-soft); display: flex; gap: 10px; flex-wrap: wrap; justify-content: space-between; }
+.chat-panel footer a { color: var(--scrub); font-weight: 700; }
+@media (max-width: 520px) { .chat-panel { right: 0; bottom: 0; width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh; border-radius: 0; } .chat-fab { bottom: 84px; } }
