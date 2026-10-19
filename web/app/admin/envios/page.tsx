@@ -52,6 +52,16 @@ function Rates({ d, reload }: { d: D; reload: () => Promise<void> }) {
   // campos da opção (transportadora, serviço, nome, tipo, prazo) valem para todos os escalões dessa opção
   const updGroup = (g: string, k: string, v: unknown) => setRows((xs) => xs.map((x) => (x._g === g ? { ...x, [k]: v, _dirty: true } : x)));
   const groups = [...new Set(rows.filter((r) => !r._del).map((r) => r._g as string))];
+  const simple: Row = cfg.simple ?? { enabled: false, zones: {} };
+  const sz = (z: string): Row => simple.zones?.[z] ?? {};
+  const setSimple = (patch: Row) => setCfg((c) => ({ ...c, simple: { ...(c.simple ?? { zones: {} }), ...patch } }));
+  const setSz = (z: string, k: string, v: unknown) => setCfg((c) => {
+    const cur = c.simple ?? { zones: {} };
+    return { ...c, simple: { ...cur, zones: { ...(cur.zones ?? {}), [z]: { ...(cur.zones?.[z] ?? {}), [k]: v } } } };
+  });
+  const money = (z: string, k: string, label: string) => (
+    <input className="money" inputMode="decimal" aria-label={label} defaultValue={fromCents(sz(z)[k])} onBlur={(e) => setSz(z, k, toCents(e.target.value))} />
+  );
 
   async function save(confirm: boolean) {
     for (const r of rows) {
@@ -82,6 +92,46 @@ function Rates({ d, reload }: { d: D; reload: () => Promise<void> }) {
   return (
     <>
       {!d.cfg.rates_confirmed && <Alert tone="warn">Estes escalões são um ponto de partida. Copia os valores do teu contrato com cada transportadora (custo) e decide quanto cobras ao cliente; depois carrega em “Guardar e confirmar”.</Alert>}
+      <Card title="Tabela de portes CTT (simples)" actions={<label className="a-check"><input type="checkbox" checked={!!simple.enabled} onChange={(e) => setSimple({ enabled: e.target.checked })} /> Usar esta tabela</label>}>
+        <p className="a-hint" style={{ marginBottom: 12 }}>Defines um preço até um peso e outro acima dele, e o mesmo para o volume da encomenda. O cliente paga o mais caro dos dois. “Custa-te” é o que a CTT te cobra (sem IVA), para o Contabilista; vazio = igual ao preço sem IVA.</p>
+        <div className="a-table-wrap">
+          <table className="a-table">
+            <thead><tr><th>Zona</th><th>Peso</th><th className="num">Cliente paga</th><th className="num">Custa-te</th><th>Volume</th><th className="num">Cliente paga</th><th className="num">Custa-te</th><th>Prazo</th></tr></thead>
+            <tbody>
+              {ZONES.map((z) => {
+                const on = sz(z).available !== false;
+                return [
+                  <tr key={`${z}-a`} style={on ? undefined : { opacity: 0.5 }}>
+                    <td rowSpan={2}><strong>{z}</strong><br /><label className="a-check a-small"><input type="checkbox" checked={on} onChange={(e) => setSz(z, "available", e.target.checked)} /> envia para cá</label></td>
+                    <td className="nowrap">até <input className="small" inputMode="decimal" aria-label="Limite de peso (kg)" defaultValue={sz(z).weight_limit_g ? String(sz(z).weight_limit_g / 1000).replace(".", ",") : ""} onBlur={(e) => setSz(z, "weight_limit_g", Math.round(Number(e.target.value.replace(",", ".")) * 1000) || null)} /> kg</td>
+                    <td className="num">{money(z, "weight_up_cents", "Preço até ao limite de peso")}</td>
+                    <td className="num">{money(z, "weight_up_cost_cents", "Custo até ao limite de peso")}</td>
+                    <td className="nowrap">até <input className="small" inputMode="decimal" aria-label="Limite de volume (litros)" defaultValue={sz(z).volume_limit_l ?? ""} onBlur={(e) => setSz(z, "volume_limit_l", Number(e.target.value.replace(",", ".")) || null)} /> L</td>
+                    <td className="num">{money(z, "volume_up_cents", "Preço até ao limite de volume")}</td>
+                    <td className="num">{money(z, "volume_up_cost_cents", "Custo até ao limite de volume")}</td>
+                    <td rowSpan={2}><input defaultValue={sz(z).eta ?? ""} placeholder="2 dias úteis" onBlur={(e) => setSz(z, "eta", e.target.value)} aria-label="Prazo" style={{ width: 120 }} /></td>
+                  </tr>,
+                  <tr key={`${z}-b`} style={on ? undefined : { opacity: 0.5 }}>
+                    <td>acima</td>
+                    <td className="num">{money(z, "weight_over_cents", "Preço acima do limite de peso")}</td>
+                    <td className="num">{money(z, "weight_over_cost_cents", "Custo acima do limite de peso")}</td>
+                    <td>acima</td>
+                    <td className="num">{money(z, "volume_over_cents", "Preço acima do limite de volume")}</td>
+                    <td className="num">{money(z, "volume_over_cost_cents", "Custo acima do limite de volume")}</td>
+                  </tr>,
+                ];
+              })}
+            </tbody>
+          </table>
+        </div>
+        <div className="a-form" style={{ marginTop: 12 }}>
+          <Field label="Volume de um artigo sem medidas (litros)" hint="Ex.: caixa de socas ≈ 6 L. O volume do produto = comprimento × largura × altura (cm) ÷ 1000. 0 = ignorar o volume nesses artigos.">
+            <input inputMode="decimal" defaultValue={simple.default_item_volume_l ?? ""} onBlur={(e) => setSimple({ default_item_volume_l: Number(e.target.value.replace(",", ".")) || 0 })} />
+          </Field>
+        </div>
+      </Card>
+      <details style={{ marginBottom: 18 }} open={!simple.enabled}>
+        <summary className="a-link" style={{ cursor: "pointer", marginBottom: 12 }}>{simple.enabled ? "Avançado: escalões por transportadora (não usado enquanto a tabela simples estiver ativa)" : "Escalões por transportadora"}</summary>
       <Alert tone="info">No checkout, o cliente vê todas as opções ativas para a zona e o peso da encomenda e escolhe a que prefere (e paga esse envio). Com portes grátis, a mais barata fica a 0 € e as outras custam só a diferença.</Alert>
       {groups.map((g) => {
         const first = rows.find((r) => r._g === g && !r._del)!;
@@ -120,6 +170,7 @@ function Rates({ d, reload }: { d: D; reload: () => Promise<void> }) {
         );
       })}
       <p style={{ marginBottom: 18 }}><button className="a-btn" onClick={addOption}>+ Nova opção de envio (outra transportadora)</button></p>
+      </details>
       <div className="a-cols even">
         <Card title="Portes grátis">
           <div className="a-form" style={{ gridTemplateColumns: "1fr" }}>
