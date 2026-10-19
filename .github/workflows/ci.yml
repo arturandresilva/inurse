@@ -127,6 +127,8 @@ jobs:
           [ -d "$RUNNER_TEMP/shots" ] || exit 0
           cd "$RUNNER_TEMP/shots"
           cp /tmp/next.log /tmp/mock.log /tmp/pgrst.log . 2>/dev/null || true
+          # o Vercel olha para a pasta "web" de cada ramo: este ramo diz-lhe para não publicar nada
+          mkdir -p web && printf '{"git":{"deploymentEnabled":false}}\n' > web/vercel.json
           git init -q -b e2e-shots && git add -A
           git -c user.name=ci -c user.email=ci@users.noreply.github.com commit -qm "fotografias ${GITHUB_SHA::7}"
           git push -qf "https://x-access-token:${{ github.token }}@github.com/${GITHUB_REPOSITORY}.git" e2e-shots
