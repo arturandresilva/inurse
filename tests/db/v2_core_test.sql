@@ -3,9 +3,8 @@
 -- admin
 insert into auth.users(id, email) values ('00000000-0000-0000-0000-000000000001', 'artur.impact@gmail.com');
 set test.uid = '00000000-0000-0000-0000-000000000001';
-select import_catalog(pg_read_file('/var/tmp/pgtest/f/catalog_00.json')::jsonb) is not null as cat0;
-select import_catalog(pg_read_file('/var/tmp/pgtest/f/catalog_01.json')::jsonb) is not null as cat1;
-select import_customers(pg_read_file('/var/tmp/pgtest/f/customers_00.json')::jsonb) is not null as cus0;
+select import_catalog(:'catalog'::jsonb) is not null as cat0;
+select import_customers(:'customers'::jsonb) is not null as cus0;
 
 \echo '== arredondamentos'
 select round_price(5703, '0.90') a, round_price(5791, '0.90') b, round_price(5700, '0.99') c, round_price(5701, '1.00') d, round_price(5700, '1.00') e, round_price(5730,'0.50') f;
