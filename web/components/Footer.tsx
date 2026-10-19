@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Logo from "./Logo";
 
 export default function Footer() {
   return (
@@ -6,7 +7,7 @@ export default function Footer() {
       <div className="wrap">
         <div className="cols">
           <div>
-            <p style={{ fontFamily: "var(--display)", fontWeight: 800, fontSize: "1.5rem", color: "#fff" }}>iNurse</p>
+            <Logo height={26} mono="#fff" />
             <p style={{ marginTop: 8, maxWidth: "42ch" }}>Calçado profissional e meias de descanso para quem passa o turno de pé. Enviamos para todo o país com CTT.</p>
           </div>
           <div>
