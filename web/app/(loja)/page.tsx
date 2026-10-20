@@ -62,7 +62,7 @@ export default async function Home() {
               </nav>
             </div>
             <div className="h4-art" aria-hidden="true">
-              <HeroParticles labels={{ logo: "iNurse", soca: t("Socas"), meia: t("Meias de descanso") }} images={holo} />
+              <HeroParticles labels={{ logo: "iNurse", soca: t("Socas"), meia: t("Meias de compressão") }} images={holo} />
               <div className="h4-chip c1"><Icon k="grip" s={18} /> {t("Sola antiderrapante")}</div>
               <div className="h4-chip c2">{store.count > 0 ? <><Stars value={store.avg} /> <b>{store.avg.toFixed(1).replace(".", ",")}</b></> : <><Icon k="swap" s={18} /> {t("Troca de tamanho fácil")}</>}</div>
             </div>
