@@ -33,6 +33,7 @@ const NAV: { group: string; items: Item[] }[] = [
   ] },
   { group: "Equipa IA", items: [
     { href: "/admin/agentes", label: "Propostas", badge: "proposals" },
+    { href: "/admin/redes", label: "Redes sociais" },
     { href: "/admin/contas", label: "Contabilista" },
   ] },
   { group: "Loja", items: [

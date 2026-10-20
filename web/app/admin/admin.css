@@ -307,3 +307,44 @@
 .a-picker-item img, .a-picker-item video { width: 100%; aspect-ratio: 1; object-fit: contain; background: #f3f5f8; border-radius: 6px; display: block; }
 .a-picker-item span { font-size: .75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .a-picker-item small { font-size: .68rem; color: var(--a-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Publicações para redes sociais */
+.a-post { display: grid; grid-template-columns: minmax(220px, 340px) 1fr; gap: 20px; align-items: start; margin-top: 10px; }
+.a-post-canvas canvas { width: 100%; height: auto; border-radius: 12px; box-shadow: 0 8px 24px rgba(15, 47, 74, .14); display: block; background: #fff; }
+.a-post-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+@media (max-width: 900px) { .a-post { grid-template-columns: 1fr; } }
+.a-tabs-mini { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+.a-tabs-mini button { border: 1px solid var(--a-line); background: #fff; border-radius: 999px; padding: 6px 12px; font: inherit; font-size: .85rem; cursor: pointer; }
+.a-tabs-mini button.on { background: #0F2F4A; color: #fff; border-color: #0F2F4A; }
+.a-phone-wrap { display: flex; justify-content: center; }
+.a-phone { width: 360px; max-width: 100%; border-radius: 36px; border: 10px solid #111; background: #fff; overflow: hidden; position: relative; font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: #111; }
+.a-phone img { display: block; }
+.ig-head { display: flex; align-items: center; gap: 10px; padding: 10px 12px; font-size: .85rem; }
+.ig-head img { width: 32px; height: 32px; border-radius: 50%; }
+.ig-head span { margin-left: auto; color: #555; }
+.ig-img { width: 100%; object-fit: cover; }
+.ig-icons { display: flex; gap: 14px; padding: 10px 12px 4px; }
+.ig-cap { padding: 0 12px 14px; font-size: .84rem; line-height: 1.35; }
+.ig-cap p { margin: 4px 0; }
+.ig-cap .tags { color: #00376b; }
+.ig-cap small { color: #8e8e8e; font-size: .7rem; }
+.ig-more { border: 0; background: none; color: #8e8e8e; padding: 0; font: inherit; cursor: pointer; }
+.a-phone.story, .a-phone.tiktok { aspect-ratio: 9 / 16; background: #000; color: #fff; }
+.a-phone.story img, .a-phone.tiktok img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.st-bar { position: absolute; left: 10px; right: 10px; top: 10px; height: 3px; background: rgba(255,255,255,.35); border-radius: 2px; } .st-bar i { display: block; width: 45%; height: 100%; background: #fff; border-radius: 2px; }
+.st-head { position: absolute; left: 12px; top: 22px; display: flex; align-items: center; gap: 8px; font-size: .82rem; text-shadow: 0 1px 3px rgba(0,0,0,.4); }
+.st-head img { width: 30px; height: 30px; border-radius: 50%; position: static !important; }
+.st-head span { opacity: .8; }
+.st-foot { position: absolute; left: 12px; right: 12px; bottom: 14px; display: flex; align-items: center; gap: 10px; }
+.st-foot span { flex: 1; border: 1px solid rgba(255,255,255,.7); border-radius: 999px; padding: 9px 14px; font-size: .82rem; }
+.tt-side { position: absolute; right: 10px; bottom: 120px; display: grid; gap: 18px; filter: drop-shadow(0 1px 2px rgba(0,0,0,.5)); }
+.tt-side svg { width: 30px; height: 30px; }
+.tt-cap { position: absolute; left: 12px; right: 60px; bottom: 18px; font-size: .82rem; text-shadow: 0 1px 3px rgba(0,0,0,.6); }
+.tt-cap p { margin: 4px 0 0; } .tt-cap .tags { font-weight: 600; }
+.a-social-accounts { display: grid; gap: 10px; }
+.a-social-acc { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 10px 12px; border: 1px solid var(--a-line); border-radius: 10px; }
+.a-social-acc strong { min-width: 90px; }
+.a-steps { padding-left: 20px; display: grid; gap: 8px; line-height: 1.5; margin-bottom: 10px; }
+.a-channels { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+.a-channel { border: 1px solid var(--a-line); border-radius: 10px; padding: 12px; display: grid; gap: 6px; align-content: start; }
+.a-channel p { margin: 0; }

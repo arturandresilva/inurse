@@ -36,6 +36,14 @@ insert into proposals (agent_key, kind, title, summary, rationale, expected_impa
    'As socas são 70% das vendas; o Dia Internacional do Enfermeiro é a data com mais procura.', '+8 a 12 encomendas', 'alta',
    '{"name":"Dia do Enfermeiro","code":"ENFERMEIRO10","kind":"percent","value":10}'),
   ('contabilista', 'insight', 'Margem das meias abaixo do objetivo', 'As meias de compressão estão com margem média de 31%.', 'Custo subiu 6% na tabela 2026.', null, 'media', '{}');
+-- proposta de post para o Instagram (gera a imagem no backoffice); as fotos são inseridas mais abaixo
+insert into proposals (agent_key, kind, title, summary, priority, payload)
+select 'marketing', 'campaign.create', 'Post Instagram: AstroPro para turnos longos', 'Publicação de produto com a soca AstroPro.', 'media',
+  jsonb_build_object('channel', 'instagram', 'title', 'AstroPro no turno', 'content', jsonb_build_object(
+    'caption', E'12 horas de pé? A AstroPro aguenta contigo.\nPalmilha anatómica e sola antiderrapante.', 'hashtags', jsonb_build_array('enfermagem', 'socas', 'nursetok'),
+    'headline', 'Conforto do início ao fim do turno', 'subline', 'Socas AstroPro, antiderrapantes e laváveis', 'badge', 'NOVO',
+    'product_id', id, 'template', 'produto', 'format', 'quadrado', 'image_brief', 'Soca em fundo claro'))
+from products where handle = 'astropro-01';
 insert into reports (agent_key, title, body_md) values ('contabilista', 'Resumo do mês', E'## Resultado\n\nA loja está **positiva** este mês.\n\n- Vendas: 3 encomendas\n- Custos fixos cobertos');
 insert into expenses (category, description, amount_cents, recurrence, vendor) values
   ('plataforma', 'Alojamento e base de dados', 0, 'monthly', 'Supabase/Vercel'), ('dominio', 'Domínio inurse.pt', 1500, 'yearly', 'PTisp'),

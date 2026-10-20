@@ -30,4 +30,5 @@ fresh; run "avaliações e emails" -f reviews_test.sql
 fresh; run "página inicial, conversas e manutenção" -f campaigns_test.sql
 fresh; run "encomendas novas e pontos CTT" -f pickup_test.sql
 fresh; run "biblioteca de multimédia" -f media_test.sql
+fresh; run "redes sociais" -f social_test.sql
 exit $fail

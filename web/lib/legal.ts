@@ -47,3 +47,12 @@ export function applyLegal(html: string, l: Legal): string {
     .replace(/918 889 008/g, map.telefone);
   return out;
 }
+
+// perfis nas redes sociais (backoffice → Equipa IA → Redes sociais)
+export type Social = { instagram?: string; facebook?: string; tiktok?: string; pinterest?: string; youtube?: string };
+export async function getSocial(): Promise<Social> {
+  const { data } = await supabase.from("settings").select("value").eq("key", "public.social").maybeSingle();
+  const v = (data?.value ?? {}) as Social, out: Social = {};
+  for (const k of ["instagram", "facebook", "tiktok", "pinterest", "youtube"] as const) if (/^https:\/\//.test(String(v[k] ?? ""))) out[k] = v[k];
+  return out;
+}

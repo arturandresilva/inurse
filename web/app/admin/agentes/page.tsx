@@ -5,12 +5,14 @@ import { callFunction, rpc, run, sb, type Row } from "@/lib/admin/sb";
 import { ago, dateTime, euro, euroN } from "@/lib/admin/format";
 import { md } from "@/lib/admin/markdown";
 import { Alert, Badge, Card, Empty, Field, Loaded, Modal, PageHead, Tabs, useAction, useLoad } from "@/components/admin/ui";
+import SocialPost from "@/components/admin/SocialPost";
 
 const KIND: Record<string, string> = {
   "promotion.create": "Promoção", "product.content": "Textos de produto", "product.prices": "Preços", "product.featured": "Destaques",
   "pricing_rule.upsert": "Regra de margem", "campaign.create": "Campanha", "page.upsert": "Página", insight: "Análise",
 };
-const CHANNEL: Record<string, string> = { email: "Email/newsletter", instagram: "Instagram", facebook: "Facebook", google_ads: "Google Ads", blog: "Blog", sms: "SMS" };
+const CHANNEL: Record<string, string> = { email: "Email/newsletter", instagram: "Instagram", facebook: "Facebook", tiktok: "TikTok", pinterest: "Pinterest", google_ads: "Google Ads", blog: "Blog", sms: "SMS" };
+const SOCIAL = ["instagram", "facebook", "tiktok", "pinterest"];
 const DOW = ["domingo", "segunda", "terça", "quarta", "quinta", "sexta", "sábado"];
 
 function cronText(c: string) {
@@ -31,14 +33,16 @@ async function load() {
     run(c.from("agents").select("*").order("position")),
     run(c.from("reports").select("*").order("created_at", { ascending: false }).limit(20)),
     run(c.from("agent_runs").select("id,agent_key,trigger,status,summary,cost_usd,error,started_at").gte("started_at", monthStart).order("started_at", { ascending: false })),
-    run(c.from("products").select("id,title,handle").limit(3000)),
+    run(c.from("products").select("id,title,handle,product_images(url,position)").limit(3000)),
     run<Row | null>(c.from("settings").select("value").eq("key", "agents").maybeSingle()),
   ]);
   const campaigns = await run(c.from("campaigns").select("*").order("created_at", { ascending: false }).limit(30));
+  const social = await callFunction<Row>("redes", { mode: "status" }).catch(() => null);
+  for (const p of products) p.image = [...(p.product_images ?? [])].sort((a: Row, b: Row) => a.position - b.position)[0]?.url ?? null;
   // ofertas da concorrência (com os links) das propostas de preço por decidir
   const runIds = [...new Set(pending.filter((p) => p.agent_key === "concorrencia" && p.run_id).map((p) => p.run_id))];
   const offers = runIds.length ? await run(c.from("competitor_prices").select("run_id,label,shop,url,price_cents,shipping_cents,in_stock").in("run_id", runIds).order("price_cents")) : [];
-  return { pending, decided, agents, reports, runs, products, campaigns, offers, policy: (policy?.value ?? {}) as Row };
+  return { pending, decided, agents, reports, runs, products, campaigns, offers, social, policy: (policy?.value ?? {}) as Row };
 }
 
 export default function Agents() {
@@ -89,7 +93,21 @@ export default function Agents() {
                   {p.rationale && <p className="a-small"><strong>Porquê:</strong> {p.rationale}</p>}
                   {p.expected_impact && <p className="a-small"><strong>Impacto esperado:</strong> {p.expected_impact}</p>}
                   <Offers p={p} all={d.offers} />
-                  <PayloadView p={p} products={d.products} />
+                  {p.kind === "campaign.create" && SOCIAL.includes(p.payload?.channel) ? (
+                    <SocialPost channel={p.payload.channel} content={p.payload.content ?? {}} products={d.products} handle={d.social?.instagram?.username}
+                      actions={({ saveImage, busy: b2, setBusy }) => (
+                        <button className="a-btn sm primary" type="button" disabled={busy || b2} onClick={() => act(async () => {
+                          setBusy(true);
+                          try {
+                            const content = await saveImage();
+                            await run(sb().from("proposals").update({ payload: { ...p.payload, content } }).eq("id", p.id));
+                            const r = await rpc<Row>("decide_proposal", { p_id: p.id, p_approve: true, p_note: null });
+                            await s.reload();
+                            if (r.status === "failed") throw new Error(`Não foi possível aplicar: ${r.erro}`);
+                          } finally { setBusy(false); }
+                        }, "Post aprovado. Está no separador Campanhas, pronto a publicar.")}>Aprovar post</button>
+                      )} />
+                  ) : <PayloadView p={p} products={d.products} />}
                 </article>
               )))}
 
@@ -99,9 +117,32 @@ export default function Agents() {
                   {c.status === "draft" && <button className="a-btn sm" disabled={busy} onClick={() => act(async () => { await run(sb().from("campaigns").update({ status: "sent", sent_at: new Date().toISOString() }).eq("id", c.id)); await s.reload(); }, "Marcada como publicada.")}>Marcar como publicada</button>}
                   {c.status === "draft" && <button className="a-btn sm ghost" disabled={busy} onClick={() => act(async () => { await run(sb().from("campaigns").update({ status: "cancelled" }).eq("id", c.id)); await s.reload(); })}>Cancelar</button>}
                 </>}>
-                  <PayloadView p={{ kind: "campaign.create", payload: { channel: c.channel, content: c.content, segment: c.segment } }} products={d.products} />
+                  {SOCIAL.includes(c.channel) ? (
+                    <>
+                      <SocialPost key={c.id + String(c.content?.image_url ?? "")} channel={c.channel} content={c.content ?? {}} products={d.products} handle={d.social?.instagram?.username}
+                        actions={({ saveImage, busy: b2, setBusy }) => {
+                          const save = async () => { const content = await saveImage(); await run(sb().from("campaigns").update({ content }).eq("id", c.id)); return content; };
+                          const publish = (net: string) => act(async () => {
+                            setBusy(true);
+                            try {
+                              await save();
+                              const r = await callFunction<Row>("redes", { mode: "publish", campaign_id: c.id, networks: [net] });
+                              await s.reload();
+                              if (r.errors?.[net]) throw new Error(`${CHANNEL[net]}: ${r.errors[net]}`);
+                            } finally { setBusy(false); }
+                          }, `Publicado no ${CHANNEL[net]}.`);
+                          const meta = d.social?.meta ?? {};
+                          return <>
+                            {c.status !== "cancelled" && <button className="a-btn sm" type="button" disabled={busy || b2} onClick={() => act(async () => { setBusy(true); try { await save(); await s.reload(); } finally { setBusy(false); } }, "Post guardado.")}>Guardar alterações</button>}
+                            {c.status !== "cancelled" && meta.instagram && <button className="a-btn sm primary" type="button" disabled={busy || b2 || !!c.published?.instagram} onClick={() => publish("instagram")}>Publicar no Instagram</button>}
+                            {c.status !== "cancelled" && meta.pagina && <button className="a-btn sm primary" type="button" disabled={busy || b2 || !!c.published?.facebook} onClick={() => publish("facebook")}>Publicar no Facebook</button>}
+                          </>;
+                        }} />
+                      {Object.keys(c.published ?? {}).length > 0 && <p className="a-small" style={{ marginTop: 8 }}>Publicado: {Object.entries(c.published as Row).map(([k, v]) => <span key={k}>{v?.url ? <a href={v.url} target="_blank" rel="noopener noreferrer">{CHANNEL[k] ?? k} ↗</a> : CHANNEL[k] ?? k}{" "}</span>)}</p>}
+                    </>
+                  ) : <PayloadView p={{ kind: "campaign.create", payload: { channel: c.channel, content: c.content, segment: c.segment } }} products={d.products} />}
                   {c.content?.body_html && <details style={{ marginTop: 8 }}><summary>HTML do email (copiar)</summary><pre className="a-pre">{c.content.body_html}</pre></details>}
-                  <p className="a-hint" style={{ marginTop: 8 }}>{c.channel === "email" ? "O envio automático da newsletter fica disponível quando ligarmos um serviço de email; por agora copia o texto para o teu programa de email." : "Copia o texto e publica na rede social; depois marca como publicada."}</p>
+                  <p className="a-hint" style={{ marginTop: 8 }}>{c.channel === "email" ? "O envio automático da newsletter fica disponível quando ligarmos um serviço de email; por agora copia o texto para o teu programa de email." : d.social?.meta?.chave && ["instagram", "facebook"].includes(c.channel) ? "Publica direto daqui, ou descarrega a imagem e copia o texto." : <>Descarrega a imagem, copia o texto e publica na app; depois marca como publicada. {["instagram", "facebook"].includes(c.channel) && <Link href="/admin/redes">Ligar Instagram e Facebook para publicar daqui</Link>}</>}</p>
                 </Card>
               )))}
 

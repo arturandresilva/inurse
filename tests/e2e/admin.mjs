@@ -62,7 +62,7 @@ await shot(page, '01-painel');
 // ---------- todas as páginas ----------
 const ROUTES = (process.env.ROUTES || [
   'encomendas', 'encomendas/1001', 'encomendas/1002', 'devolucoes', 'clientes', 'promocoes', 'produtos', 'importar', 'precos', 'fornecedores',
-  'envios', 'agentes', 'contas', 'pagina-inicial', 'multimedia', 'paginas', 'configuracoes', 'configuracoes?tab=faturacao',
+  'envios', 'agentes', 'redes', 'contas', 'pagina-inicial', 'multimedia', 'paginas', 'configuracoes', 'configuracoes?tab=faturacao',
 ].join(',')).split(',');
 for (const [i, r] of ROUTES.entries()) {
   const resp = await page.goto(`${BASE}/admin/${r}`);
@@ -75,6 +75,26 @@ for (const [i, r] of ROUTES.entries()) {
 }
 
 // ---------- ações ----------
+// post para o Instagram: imagem gerada, pré-visualização e aprovação
+{
+  await page.goto(`${BASE}/admin/agentes`); await settle(page);
+  const post = page.locator('.a-post').first();
+  await post.waitFor({ timeout: 15000 });
+  await page.waitForFunction(() => { const c = document.querySelector('.a-post canvas'); return c && c.width === 1080; }, null, { timeout: 15000 });
+  await post.scrollIntoViewIfNeeded(); await shot(page, '19c-post-instagram');
+  await post.locator('button:has-text("Pré-visualizar")').click();
+  await page.locator('.a-phone.ig .ig-img').waitFor({ timeout: 10000 });
+  await shot(page, '19d-post-previsualizar');
+  await page.locator('.a-tabs-mini button:has-text("TikTok")').click(); await shot(page, '19e-post-tiktok');
+  await page.keyboard.press('Escape');
+  await post.locator('button:has-text("Aprovar post")').click();
+  await page.waitForFunction(() => !document.querySelector('.a-post button') || document.body.innerText.includes('Post aprovado'), null, { timeout: 15000 }).catch(() => problems.push('aprovar post não terminou'));
+  await page.locator('.a-tabs button:has-text("Campanhas")').click(); await settle(page);
+  if (!(await page.locator('.a-post').count())) problems.push('post aprovado não aparece nas campanhas');
+  await shot(page, '19f-post-campanha');
+  ok('post redes sociais');
+}
+
 const step = async (name, fn) => {
   try { await fn(); ok(name); } catch (e) { problems.push(`ação "${name}" falhou: ${e.message.split('\n')[0]}`); await shot(page, `falha-${name.replace(/\W+/g, '-')}`, false); }
 };
