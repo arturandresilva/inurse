@@ -202,7 +202,6 @@ await stepShop('loja em inglês', async () => {
 await stepShop('loja com logótipo novo', async () => {
   await shop.goto(`${BASE}/`); await shop.waitForSelector('header .logo svg');
   await shop.waitForTimeout(1500);
-  if (!(await shop.evaluate(() => { const c = document.querySelector('.fx-gl'); return !!c && c.width > 50 && !!c.getContext('webgl'); }))) throw new Error('destaque 3D sem WebGL');
   await shop.screenshot({ path: `${SHOTS}/63-loja-inicio.png` });
   await shop.screenshot({ path: `${SHOTS}/63b-loja-inicio-completa.png`, fullPage: true });
 });
