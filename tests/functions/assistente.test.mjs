@@ -13,6 +13,7 @@ globalThis.fetch = async (url, init = {}) => {
   if (p === '/rest/v1/settings') return res([{ value: { 'public.chat': { whatsapp: '351900000000' }, agents: { monthly_budget_usd: 15 }, 'public.store': { return_days: 15 } }[q('key')] ?? {} }]);
   if (p === '/rest/v1/products') return res([{ handle: 'clog-01-azul', title: 'CLOG 01 - AZUL', brand: 'Wock', model: 'CLOG', color: 'Azul', status: 'active', variants: [{ option_value: '38', price_cents: 5990, active: true }] }]);
   if (p === '/rest/v1/agent_runs') return res([]);
+  if (p === '/rest/v1/pages') return res([{ body_html: '<table><tr><td>cB – tornozelo</td><td>19–21</td></tr></table>' }]);
   if (p === '/rest/v1/orders') return res([{ id: 'o', number: 1001, email: 'ana@x.pt', status: 'shipped', created_at: '2026-10-19', total_cents: 6440, shipments: [{ carrier: 'CTT', tracking_code: 'EA1PT' }] }]);
   if (p === '/rest/v1/chat_conversations') {
     if (m === 'POST') { const c = { id: '11111111-1111-1111-1111-111111111111', token: '22222222-2222-2222-2222-222222222222', status: 'open', messages: 0, cost_usd: 0 }; db.convs.push(c); return res([c]); }
@@ -34,6 +35,7 @@ test('primeira mensagem cria conversa e responde', async () => {
   const j = await (await call({ message: 'Que socas recomendam?', locale: 'pt', page: '/' })).json();
   assert.equal(j.conversation_id, db.convs[0].id); assert.match(j.reply, /CLOG/);
   assert.match(sent[0].system, /"modelo":"CLOG"/);
+  assert.match(sent[0].system, /cB – tornozelo \| 19–21/);   // o guia de tamanhos vai no contexto
   assert.deepEqual(db.msgs.map((x) => x.role), ['user', 'assistant']);
   assert.ok(db.convs[0].cost_usd > 0);
 });

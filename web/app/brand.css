@@ -222,3 +222,11 @@ h3 { font-size: 1rem; }
 
 /* menu Loja: fecha depois de escolher uma opção (ver MobileNavCloser) */
 html.mega-off .mega { opacity: 0 !important; visibility: hidden !important; pointer-events: none; }
+
+/* tabelas nas páginas (ex.: guia de tamanhos) */
+.prose table { width: 100%; border-collapse: collapse; margin: 8px 0 22px; font-size: .9rem; display: block; overflow-x: auto; }
+.prose th, .prose td { padding: 8px 10px; border-bottom: 1px solid var(--line); text-align: center; white-space: nowrap; }
+.prose th { background: var(--navy); color: #fff; font-weight: 600; }
+.prose td:first-child, .prose th:first-child { text-align: left; }
+.prose tbody tr:nth-child(odd) td { background: #E3F4F1; }
+.prose img { border-radius: 14px; }

@@ -36,11 +36,16 @@ const THANKS: Record<string, string> = {
   fr: "Merci ! Nous avons bien reçu votre message et vous répondrons à {e} au plus vite.",
 };
 
+// texto simples de uma página (o guia de tamanhos), com as tabelas linha a linha
+const htmlText = (h: string) => h.replace(/<\/(td|th)>/g, " | ").replace(/<\/(tr|p|li|h2|h3|table)>/g, "\n").replace(/<br\s*\/?>/g, "\n")
+  .replace(/<[^>]+>/g, "").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/[ \t]+/g, " ").replace(/\n\s*\n+/g, "\n").trim().slice(0, 6000);
+
 async function storeContext() {
-  const [products, ship, store, pay] = await Promise.all([
+  const [products, ship, store, pay, guide] = await Promise.all([
     rest("products?status=in.(active,out_of_stock)&select=handle,title,brand,model,color,status,excerpt,vat_rate,variants(option_value,price_cents,active)&limit=2000"),
     one("settings?key=eq.public.shipping&select=value"), one("settings?key=eq.public.store&select=value"),
     one("settings?key=eq.public.payments&select=value"),
+    one("pages?slug=eq.guia-de-tamanhos&published=eq.true&select=body_html"),
   ]);
   const groups = new Map<string, Row>();
   for (const p of (products ?? []) as Row[]) {
@@ -66,6 +71,7 @@ async function storeContext() {
       pagamentos: ["mbway", "multibanco", "transfer"].filter((k) => pv[k]).map((k) => ({ mbway: "MB WAY", multibanco: "Multibanco", transfer: "transferência bancária" }[k])).join(", "),
       contactos: `${st.email ?? "info@inurse.pt"} · ${st.phone ?? ""}`, guia_tamanhos: "/p/guia-de-tamanhos",
     },
+    guia: htmlText(guide?.body_html ?? ""),
   };
 }
 
@@ -119,6 +125,9 @@ Para o estado de uma encomenda usa ver_encomenda (precisa do número e do email 
 Se o cliente pedir para falar com uma pessoa, tiver uma reclamação, um problema que não consegues resolver ou uma pergunta a que não sabes responder com certeza, não adivinhes: diz que vamos responder por email o quanto antes, pede o email (e o nome, se quiser) e usa pedir_pessoa com o email em "contacto". Não há atendimento por WhatsApp nem por telefone no chat.
 Não dês aconselhamento médico: para dúvidas clínicas sobre compressão, recomenda falar com o médico ou farmacêutico.
 O cliente está na página: ${page || "/"}.
+Para ajudar a escolher o tamanho usa o guia de tamanhos abaixo: pede as medidas que faltam (nas meias, primeiro o tornozelo e a barriga da perna, em cm), indica o tamanho e o link /p/guia-de-tamanhos.
+Guia de tamanhos da loja:
+${ctx.guia}
 Informação da loja (JSON): ${JSON.stringify(ctx.loja)}
 Catálogo (JSON): ${JSON.stringify(ctx.catalogo)}`;
   let tin = 0, tout = 0, text = "";
