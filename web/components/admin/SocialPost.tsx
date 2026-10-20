@@ -179,7 +179,7 @@ export default function SocialPost({ channel, content, products, handle = "inurs
           )}
           {preview === "story" && (
             <div className="a-phone story">
-              {dataUrl && <img src={dataUrl} alt="" />}
+              {dataUrl && <img src={dataUrl} alt="" style={{ objectFit: c.format === "story" ? "cover" : "contain" }} />}
               <div className="st-bar"><i /></div>
               <div className="st-head"><img src="/marca/inurse-icone.svg" alt="" /><b>{handle}</b><span>agora</span></div>
               <div className="st-foot"><span>Enviar mensagem</span><Ico d="M12 21s-7-4.6-9.3-9A5.3 5.3 0 0 1 12 6a5.3 5.3 0 0 1 9.3 6c-2.3 4.4-9.3 9-9.3 9z" /></div>
@@ -187,7 +187,7 @@ export default function SocialPost({ channel, content, products, handle = "inurs
           )}
           {preview === "tiktok" && (
             <div className="a-phone tiktok">
-              {dataUrl && <img src={dataUrl} alt="" />}
+              {dataUrl && <img src={dataUrl} alt="" style={{ objectFit: c.format === "story" ? "cover" : "contain" }} />}
               <div className="tt-side">{["M12 21s-7-4.6-9.3-9A5.3 5.3 0 0 1 12 6a5.3 5.3 0 0 1 9.3 6c-2.3 4.4-9.3 9-9.3 9z", "M21 12a8.5 8.5 0 0 1-12.6 7.4L3 21l1.6-5.2A8.5 8.5 0 1 1 21 12z", "M6 3h12v18l-6-4-6 4z", "M14 4l7 8-7 8v-5c-6 0-9 2-11 5 1-6 4-10 11-11z"].map((d, i) => <Ico key={i} d={d} />)}</div>
               <div className="tt-cap"><b>@{handle.replace(/^@/, "")}</b><p><Caption text={caption} max={90} /> <span className="tags">{tags.slice(0, 4).join(" ")}</span></p></div>
             </div>
