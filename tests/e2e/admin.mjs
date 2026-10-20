@@ -14,7 +14,7 @@ const problems = [];
 const ok = (...a) => { console.log('✔', ...a); fs.appendFileSync(`${SHOTS}/passos.log`, `✔ ${a.join(' ')}\n`); };
 const browser = await chromium.launch();
 
-async function newPage(viewport, { cookies = true } = {}) {
+async function newPage(viewport, { cookies = true, images = false } = {}) {
   const ctx = await browser.newContext({ viewport, locale: 'pt-PT', timezoneId: 'Europe/Lisbon' });
   // o aviso de cookies já respondido, para não tapar botões nos outros testes
   if (cookies) await ctx.addInitScript(() => { try { localStorage.setItem('inurse.cookies', JSON.stringify({ v: 1, stats: false, marketing: false, at: '2026-01-01' })); } catch {} });
@@ -28,7 +28,7 @@ async function newPage(viewport, { cookies = true } = {}) {
   page.on('response', (r) => { if (r.status() >= 400) fs.appendFileSync(`${SHOTS}/rede.log`, `${r.status()} ${r.request().method()} ${r.url()}\n`); });
   page.on('requestfailed', (r) => fs.appendFileSync(`${SHOTS}/rede.log`, `FALHOU ${r.request ? '' : ''}${r.method()} ${r.url()} ${r.failure()?.errorText}\n`));
   // imagens externas (CDN antigo) não interessam ao teste
-  await page.route(/lojasonlinectt|supabase\.co\/storage/, (r) => r.fulfill({ status: 404, body: '' }));
+  await page.route(images ? /lojasonlinectt/ : /lojasonlinectt|supabase\.co\/storage/, (r) => r.fulfill({ status: 404, body: '' }));
   return page;
 }
 
@@ -135,7 +135,7 @@ if (process.env.EXTRA_STEPS) {
 }
 
 // ---------- área de cliente (loja) ----------
-const shop = await newPage({ width: 1280, height: 860 });
+const shop = await newPage({ width: 1280, height: 860 }, { images: true });
 const stepShop = async (name, fn) => { try { await fn(); ok(name); } catch (e) { problems.push(`ação "${name}" falhou: ${e.message.split('\n')[0]}`); await shop.screenshot({ path: `${SHOTS}/falha-loja-${name.replace(/\W+/g, '-')}.png`, fullPage: true }); } };
 await stepShop('cliente cria conta e vê a sua encomenda', async () => {
   await shop.goto(`${BASE}/conta`);
@@ -193,16 +193,18 @@ await stepShop('formulário de livre resolução', async () => {
 });
 await stepShop('loja em inglês', async () => {
   await shop.goto(`${BASE}/?lang=en`); await shop.waitForSelector('html[lang="en"]');
-  await shop.waitForSelector('text=Footwear and socks for healthcare professionals');
+  await shop.waitForSelector('text=Comfort for long shifts.');
   await shop.screenshot({ path: `${SHOTS}/69-loja-ingles.png` });
   await shop.goto(`${BASE}/?lang=pt`); await shop.waitForSelector('html[lang="pt-PT"]');
 });
 await stepShop('loja com logótipo novo', async () => {
   await shop.goto(`${BASE}/`); await shop.waitForSelector('header .logo svg');
+  await shop.waitForTimeout(1500);
   await shop.screenshot({ path: `${SHOTS}/63-loja-inicio.png` });
+  await shop.screenshot({ path: `${SHOTS}/63b-loja-inicio-completa.png`, fullPage: true });
 });
 // ---------- loja no telemóvel: fotografias de cada página para rever o aspeto ----------
-const phone = await newPage({ width: 390, height: 844 });
+const phone = await newPage({ width: 390, height: 844 }, { images: true });
 for (const [name, url, wait] of [['inicio', '/', 'header'], ['loja', '/loja', '.prod'], ['categoria', '/c/calcado/socas', 'header'], ['produto', null, '.buybox, .colors, h1'],
   ['carrinho', '/carrinho', 'header'], ['checkout', '/checkout', 'header'], ['pagina', '/p/envios', 'h1'], ['livre-resolucao', '/livre-resolucao', 'h1'], ['conta', '/conta', 'header']]) {
   await stepShop(`telemóvel: ${name}`, async () => {

@@ -49,3 +49,27 @@ insert into home_campaigns (id, name, placement, status) values ('00000000-0000-
 insert into home_slides (campaign_id, position, media_url, title, body, cta_label, cta_url) values
   ('00000000-0000-0000-0000-00000000ca01', 0, '/marca/png/inurse-partilha-1200x630.png', 'Campanha de outono', 'Socas com 10% de desconto até domingo.', 'Ver socas', '/loja'),
   ('00000000-0000-0000-0000-00000000ca01', 1, '/marca/png/inurse-partilha-1200x630.png', 'Segundo diapositivo', null, null, null);
+
+-- fotografias reais (do armazenamento da loja) para as capturas da loja parecerem a loja verdadeira
+insert into product_images (product_id, url, position)
+select p.id, v.url, 0 from (values
+  ('astropro-01', 'https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/4c68a84-141830-astropro-01_2.jpg'),
+  ('astropro-02', 'https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/d9e1163-135439-astropro-02_2.jpg'),
+  ('astropro-03', 'https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/aff7d00-143340-astropro-03_2.jpg'),
+  ('astropro-05', 'https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/b2caee8-143705-astropro-05_2.jpg'),
+  ('collant-medicinal-140-den-18-21-mmhg', 'https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/f15ca52-084235-mn34-800x800.jpg'),
+  ('collant-medicinal-140-den-18-21-mmhg-2', 'https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/cbda6b0-110656-mn24-800x800.jpg'),
+  ('collant-terapeutica-class-ii-340-den-23-32-mmhg', 'https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/40a9f3f-090557-mn43-800x800.jpg'),
+  ('easylite-black', 'https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/dfc690f-134103-easylite-black_2.jpg'),
+  ('easylite-fuchsia', 'https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/a21c1b8-135121-easylite-pink_2.jpg'),
+  ('easylite-green', 'https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/cf9a18f-131448-easylite-green_2.jpg'),
+  ('easylite-lightblue', 'https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/b0c8c32-134350-easylite-light-blue_2.jpg'),
+  ('easylite-navyblue', 'https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/423c9ea-134700-easylite-navy_2.jpg'),
+  ('easylite-white', 'https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/1db18c6-135311-easylite-white_2.jpg'),
+  ('meias-medicinais-140-den-18-21-mmhg', 'https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/e6b753e-093541-mn33-800x800.jpg'),
+  ('meias-medicinais-140-den-18-21-mmhg-2', 'https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/d533eb1-090203-mn23-800x800.jpg'),
+  ('meias-medicinais-140-den-18-21-mmhg-3', 'https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/fa145ec-083423-mn31-800x800.jpg'),
+  ('meias-medicinais-140-den-18-21-mmhg-4', 'https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/77704b4-143601-mn21-800x800.jpg'),
+  ('meias-medicinais-140-den-18-21-mmhg-sem-biqueira', 'https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/78592e9-105314-mn42-800x800-2.jpg'),
+  ('meias-medicinais-de-descanso-140-den-18-21-mmhg-algodao', 'https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/5660dfb-131528-mn22-500x500.jpg'),
+  ('meias-para-pe-diabetico-e-artritico', 'https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/5078ded-090944-mn51-800x800-2.jpg')) v(handle, url) join products p on p.handle = v.handle;

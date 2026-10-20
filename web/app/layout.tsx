@@ -5,6 +5,7 @@ import { HTML_LANG } from "@/lib/i18n";
 import { I18nProvider } from "@/lib/i18n/client";
 import { getLocale, getT } from "@/lib/i18n/server";
 import "./globals.css";
+import "./brand.css";
 
 // Inter: letra simples e muito legível, para títulos e texto
 const inter = Inter({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"], variable: "--font-text", display: "swap" });
