@@ -59,3 +59,9 @@ test('chave errada não lê a conversa', async () => {
   const j = await (await call({ mode: 'poll', conversation_id: db.convs[0].id, token: '33333333-3333-3333-3333-333333333333' })).json();
   assert.deepEqual(j.messages, []);
 });
+
+test('resposta cortada pelo limite fica até à última frase completa', async () => {
+  script = [{ stop_reason: 'max_tokens', content: [{ type: 'text', text: 'O tornozelo aponta para o tamanho II. As outras medidas apontam para o III. Prefiro que uma pessoa da loja conf' }], usage: { input_tokens: 10, output_tokens: 10 } }];
+  const j = await (await call({ message: 'tamanho?', conversation_id: db.convs[0].id, token: db.convs[0].token, locale: 'pt' })).json();
+  assert.equal(j.reply, 'O tornozelo aponta para o tamanho II. As outras medidas apontam para o III.');
+});

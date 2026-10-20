@@ -125,7 +125,7 @@ Para o estado de uma encomenda usa ver_encomenda (precisa do número e do email 
 Se o cliente pedir para falar com uma pessoa, tiver uma reclamação, um problema que não consegues resolver ou uma pergunta a que não sabes responder com certeza, não adivinhes: diz que vamos responder por email o quanto antes, pede o email (e o nome, se quiser) e usa pedir_pessoa com o email em "contacto". Não há atendimento por WhatsApp nem por telefone no chat.
 Não dês aconselhamento médico: para dúvidas clínicas sobre compressão, recomenda falar com o médico ou farmacêutico.
 O cliente está na página: ${page || "/"}.
-Para ajudar a escolher o tamanho usa o guia de tamanhos abaixo: pede as medidas que faltam (nas meias, primeiro o tornozelo e a barriga da perna, em cm), indica o tamanho e o link /p/guia-de-tamanhos.
+Para ajudar a escolher o tamanho usa o guia de tamanhos abaixo: pede as medidas que faltam (nas meias, primeiro o tornozelo e a barriga da perna, em cm), indica o tamanho e o link /p/guia-de-tamanhos. Se as medidas apontarem para tamanhos diferentes, diz a que tamanho corresponde cada medida, sugere o tamanho segundo o guia e oferece confirmar com uma pessoa da loja (pede o email e usa pedir_pessoa se o cliente quiser).
 Guia de tamanhos da loja:
 ${ctx.guia}
 Informação da loja (JSON): ${JSON.stringify(ctx.loja)}
@@ -134,13 +134,15 @@ Catálogo (JSON): ${JSON.stringify(ctx.catalogo)}`;
   for (let i = 0; i < 4; i++) {
     const r = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST", headers: { "x-api-key": KEY, "anthropic-version": "2023-06-01", "content-type": "application/json" },
-      body: JSON.stringify({ model: MODEL, max_tokens: 700, system, tools: TOOLS, messages: msgs }),
+      body: JSON.stringify({ model: MODEL, max_tokens: 2500, system, tools: TOOLS, messages: msgs }),
     });
     const data = await r.json();
     if (!r.ok) throw new Error(`IA: ${data?.error?.message ?? r.status}`);
     tin += data.usage?.input_tokens ?? 0; tout += data.usage?.output_tokens ?? 0;
     const uses = (data.content ?? []).filter((c: Row) => c.type === "tool_use");
     text = (data.content ?? []).filter((c: Row) => c.type === "text").map((c: Row) => c.text).join("\n").trim();
+    // resposta cortada pelo limite: não mostrar meia frase, fica até à última frase completa
+    if (data.stop_reason === "max_tokens" && text) { const cut = Math.max(text.lastIndexOf(". "), text.lastIndexOf(".\n"), text.lastIndexOf("!"), text.lastIndexOf("?")); text = cut > 40 ? text.slice(0, cut + 1) : ""; }
     if (!uses.length || data.stop_reason !== "tool_use") break;
     msgs.push({ role: "assistant", content: data.content });
     msgs.push({ role: "user", content: await Promise.all(uses.map(async (u: Row) => ({ type: "tool_result", tool_use_id: u.id, content: JSON.stringify(await runTool(u.name, u.input ?? {}, conv)) }))) });
