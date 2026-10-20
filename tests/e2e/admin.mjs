@@ -230,8 +230,8 @@ await stepShop('computador: menu Loja fecha ao escolher', async () => {
   await shop.hover('.mega-trigger'); await shop.waitForTimeout(400);
   await shop.locator('.mega a[href^="/c/"]').first().click(); await shop.waitForURL(/\/c\//);
   await shop.waitForTimeout(400);
-  const vis = await shop.evaluate(() => getComputedStyle(document.querySelector('.mega')).visibility);
-  if (vis !== 'hidden') throw new Error('o menu Loja continua aberto depois de escolher um modelo');
+  const vis = await shop.evaluate(() => { const m = document.querySelector('.mega'); const c = getComputedStyle(m); return { v: c.visibility, html: document.documentElement.className, wrapHover: document.querySelector('.mega-wrap').matches(':hover'), focus: document.activeElement?.tagName + '.' + document.activeElement?.className }; });
+  if (vis.v !== 'hidden') throw new Error('o menu Loja continua aberto depois de escolher: ' + JSON.stringify(vis));
   await shop.screenshot({ path: `${SHOTS}/64-menu-loja-fechado.png` });
 });
 await stepShop('modo de manutenção', async () => {
