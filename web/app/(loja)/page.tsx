@@ -37,9 +37,8 @@ export default async function Home() {
     .map((c) => { const ps = inCat(c.path); const img = home.settings.tiles[c.id] || (ps.find((p) => image(p)) ? image(ps.find((p) => image(p))!) : null);
       return { c, img, n: groupByModel(ps).length, name: cname(loc(c, locale, "name")) }; })
     .filter((x) => x.n > 0).slice(0, 4);
-  // fotos para o holograma do destaque: as escolhidas no backoffice, ou uma soca e uma meia à venda (evita brancas, que se confundem com o fundo)
-  const firstImg = (path: string) => { const ps = inCat(path).filter((p) => image(p)); const p = ps.find((x) => !/white|branc/i.test(x.title)) ?? ps[0]; return p ? image(p) ?? undefined : undefined; };
-  const holo = { soca: home.settings.hero_images[0] || firstImg("CALÇADO>SOCAS"), meia: home.settings.hero_images[1] || firstImg("MEIAS") };
+  // fotos do holograma do destaque: as escolhidas no backoffice ou as de referência (recortadas, em /holo)
+  const holo = { soca: home.settings.hero_images[0] || "/holo/soca.png", meia: home.settings.hero_images[1] || "/holo/meia.png" };
   const profs = cats.filter((c) => c.path.startsWith("CALÇADO>COMPRAR POR PROFISSÃO>"));
   const quotes = store.list.filter((r) => r.body).slice(0, 3);
 

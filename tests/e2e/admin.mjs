@@ -208,7 +208,7 @@ await stepShop('loja com logótipo novo', async () => {
   await shop.screenshot({ path: `${SHOTS}/63-loja-inicio.png` });
   await shop.locator('.h4-stage').screenshot({ path: `${SHOTS}/63e-holo-logo.png` });
   await shop.waitForTimeout(5500); await shop.locator('.h4-stage').screenshot({ path: `${SHOTS}/63c-destaque-soca.png` });
-  await shop.waitForTimeout(5600); await shop.locator('.h4-stage').screenshot({ path: `${SHOTS}/63d-destaque-meia.png` });
+  await shop.waitForTimeout(6400); await shop.locator('.h4-stage').screenshot({ path: `${SHOTS}/63d-destaque-meia.png` });
   await shop.waitForTimeout(1200); await shop.locator('.h4-stage').screenshot({ path: `${SHOTS}/63f-holo-meia2.png` });
   await shop.screenshot({ path: `${SHOTS}/63b-loja-inicio-completa.png`, fullPage: true });
 });
