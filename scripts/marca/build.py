@@ -44,10 +44,9 @@ def logo_svg(**k): return f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{VB
 
 # símbolo: só o i com o coração, centrado num quadrado 100×100
 def symbol_inner(i=MINT, h=CORAL, scale=1.0):
-    x0, y0, x1, y1 = IX - HS/2, TOP + 1 - HS*0.5, IX + HS/2 + 1, BOT + SW/2
-    s = 62 / (y1 - y0) * scale; tx = 50 - (IX + 1) * s; ty = 50 - (y0 + y1) / 2 * s
-    return (f'<g transform="translate({tx:.2f},{ty:.2f}) scale({s:.3f})"><path d="{I_D}" stroke="{i}" stroke-width="{SW*1.15}" stroke-linecap="round" fill="none"/>'
-            f'<path d="{heart_d(IX + 1, TOP + 1, HS*1.05)}" fill="{h}"/></g>')
+    # ícone: coração grande em cima e a haste do i por baixo (desenho próprio para tamanhos pequenos)
+    g = f'<path d="{heart_d(50, 37, 62)}" fill="{h}"/><path d="M50,74 V87" stroke="{i}" stroke-width="13" stroke-linecap="round" fill="none"/>'
+    return g if scale == 1.0 else f'<g transform="translate(50,50) scale({scale}) translate(-50,-50)">{g}</g>'
 def tile(bg, i=MINT, h=CORAL, rx=22, stroke=None, scale=1.0):
     r = f'<rect x="1" y="1" width="98" height="98" rx="{rx}" fill="{bg}"' + (f' stroke="{stroke}" stroke-width="2"' if stroke else "") + "/>"
     return f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="iNurse">{r}{symbol_inner(i, h, scale)}</svg>'
@@ -57,10 +56,10 @@ FILES = {
     "inurse-logo-fundo-escuro.svg": logo_svg(ink=WH),
     "inurse-logo-azul-tinta.svg": logo_svg(ink=INK, i=INK, h=INK),
     "inurse-logo-branco.svg": logo_svg(ink=WH, i=WH, h=WH),
-    "inurse-icone.svg": tile(INK),
-    "inurse-icone-claro.svg": tile(WH, stroke="#E3EAF0"),
-    "inurse-icone-menta.svg": tile(MINT, i=WH),
-    "inurse-favicon.svg": tile(INK, rx=20, scale=1.25),
+    "inurse-icone.svg": tile(INK, scale=0.86),
+    "inurse-icone-claro.svg": tile(WH, stroke="#E3EAF0", scale=0.86),
+    "inurse-icone-menta.svg": tile(MINT, i=WH, scale=0.86),
+    "inurse-favicon.svg": tile(INK, rx=20, scale=1.08),
     "inurse-simbolo.svg": f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="iNurse">{symbol_inner()}</svg>',
 }
 for n, s in FILES.items(): (OUT / n).write_text(s)
@@ -100,7 +99,7 @@ SHARE = lambda: page_html(f'''<div style="width:1200px;height:630px;background:r
 <img src="{uri(FILES["inurse-logo.svg"])}" style="width:600px">
 <div style="font:600 44px Inter;color:{INK};letter-spacing:-.01em">Calçado e meias para profissionais de saúde</div>
 <div style="font:500 28px Inter;color:#2A8378">Envio CTT para todo o país · trocas em 15 dias</div></div>''', 1200, 630)
-AVATAR = lambda: page_html(f'<div style="width:1080px;height:1080px;background:{INK};display:flex;align-items:center;justify-content:center"><img src="{uri(symbol_svg_nobg())}" style="width:900px"></div>', 1080, 1080)
+AVATAR = lambda: page_html(f'<div style="width:1080px;height:1080px;background:{INK};display:flex;align-items:center;justify-content:center"><img src="{uri(symbol_svg_nobg())}" style="width:640px"></div>', 1080, 1080)
 def symbol_svg_nobg(): return f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">{symbol_inner()}</svg>'
 
 jobs = []
@@ -112,7 +111,7 @@ for n in (16, 32, 48, 64, 180, 192, 512, 1024): jobs.append((f"inurse-icone-{n}.
 for n in (512, 1024): jobs.append((f"inurse-icone-claro-{n}.png", *sq_png(FILES["inurse-icone-claro.svg"], n)))
 jobs.append(("inurse-icone-menta-1024.png", *sq_png(FILES["inurse-icone-menta.svg"], 1024)))
 for n in (16, 32, 48, 64): jobs.append((f"inurse-favicon-{n}.png", *sq_png(FILES["inurse-favicon.svg"], n)))
-jobs.append(("inurse-apple-touch-180.png", *sq_png(tile(INK, rx=0, scale=1.1), 180)))
+jobs.append(("inurse-apple-touch-180.png", *sq_png(tile(INK, rx=0, scale=0.86), 180)))
 jobs.append(("inurse-avatar-redes-1080.png", AVATAR(), 1080, 1080))
 jobs.append(("inurse-partilha-1200x630.png", SHARE(), 1200, 630))
 with sync_playwright() as p:
