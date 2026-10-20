@@ -3,7 +3,6 @@ import ProductCard from "@/components/ProductCard";
 import Stars from "@/components/Stars";
 import Finder from "@/components/Finder";
 import HeroSlider from "@/components/HeroSlider";
-import HeroParticles from "@/components/HeroParticles";
 import { getCategories, getProducts, groupByModel, image, type Product } from "@/lib/catalog";
 import { categoryHref, SIZES } from "@/lib/format";
 import { loc } from "@/lib/i18n";
@@ -31,6 +30,7 @@ export default async function Home() {
   const active = products.filter((p) => p.status === "active");
   const groups = groupByModel([...active.filter((p) => p.featured), ...active.filter((p) => !p.featured)]);
   const featured = groups.slice(0, 8);
+  const heroImgs = (home.settings.hero_images.length ? home.settings.hero_images : groups.map((g) => image(g.lead)).filter(Boolean)).slice(0, 3) as string[];
   const inCat = (path: string) => { const ids = new Set(cats.filter((c) => c.path === path || c.path.startsWith(path + ">")).map((c) => c.id)); return active.filter((p: Product) => p.product_categories.some((pc) => ids.has(pc.category_id))); };
   const cname = (n: string) => n.charAt(0) + n.slice(1).toLowerCase();
   const tiles = [...cats.filter((c) => c.path.startsWith("CALÇADO>") && c.path.split(">").length === 2 && !c.path.includes("COMPRAR POR")), ...cats.filter((c) => !c.parent_id && c.path !== "CALÇADO")]
@@ -60,7 +60,11 @@ export default async function Home() {
               </nav>
             </div>
             <div className="h4-art" aria-hidden="true">
-              <HeroParticles labels={{ logo: "iNurse", soca: t("Socas"), meia: t("Meias de compressão") }} />
+              <div className="h4-stage">
+                {heroImgs[0] && <img className="h4-main" src={heroImgs[0]} alt="" />}
+                {heroImgs[1] && <div className="h4-mini m1"><img src={heroImgs[1]} alt="" /></div>}
+                {heroImgs[2] && <div className="h4-mini m2"><img src={heroImgs[2]} alt="" /></div>}
+              </div>
               <div className="h4-chip c1"><Icon k="grip" s={18} /> {t("Sola antiderrapante")}</div>
               <div className="h4-chip c2">{store.count > 0 ? <><Stars value={store.avg} /> <b>{store.avg.toFixed(1).replace(".", ",")}</b></> : <><Icon k="swap" s={18} /> {t("Troca de tamanho fácil")}</>}</div>
             </div>

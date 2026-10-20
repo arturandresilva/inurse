@@ -67,32 +67,16 @@ h3 { font-size: 1rem; }
 .h4-mini img { width: 84%; height: 84%; object-fit: contain; mix-blend-mode: multiply; }
 .h4-mini.m1 { right: 22px; bottom: 26px; transform: rotate(4deg); }
 .h4-mini.m2 { right: 152px; bottom: 6px; width: 92px; height: 92px; border-radius: 22px; transform: rotate(-5deg); }
-.h4-art .h4-chip.c1 { display: none; }
 .h4-chip { position: absolute; display: inline-flex; align-items: center; gap: 7px; padding: 9px 14px; border-radius: 999px; background: #fff; box-shadow: var(--sh-2); font-size: .8rem; font-weight: 650; color: var(--navy); }
 .h4-chip svg { color: var(--mint-d); }
-.h4-chip.c1 { left: 0; bottom: 64px; animation: floaty 6s ease-in-out infinite; }
-.h4-chip.c2 { right: 0; top: 44px; animation: floaty 7s ease-in-out -2s infinite; }
+.h4-chip.c1 { left: 0; top: 46px; animation: floaty 6s ease-in-out infinite; }
+.h4-chip.c2 { right: 0; top: 20px; animation: floaty 7s ease-in-out -2s infinite; }
 @keyframes floaty { 50% { transform: translateY(-6px); } }
-/* destaque: digitalização 3D (inspiração médica) */
-.h4-stage.fx { background: radial-gradient(360px 260px at 50% 42%, rgba(72, 187, 174, .16), transparent 70%), radial-gradient(380px 260px at 12% 100%, rgba(242, 124, 121, .1), transparent 70%), linear-gradient(160deg, #0B2238, #071A2C 55%, #04111E); box-shadow: 0 30px 60px -20px rgba(15, 47, 74, .5), inset 0 0 0 1px rgba(255, 255, 255, .06); }
-.h4-stage.fx::before { width: auto; height: auto; inset: 0; border-radius: 0; right: auto; top: auto; background-image: linear-gradient(rgba(127, 227, 214, .06) 1px, transparent 1px), linear-gradient(90deg, rgba(127, 227, 214, .06) 1px, transparent 1px); background-size: 24px 24px; -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 25%, transparent 78%); mask-image: radial-gradient(circle at 50% 50%, #000 25%, transparent 78%); }
-.fx-gl { position: absolute; inset: 0; width: 100%; height: 100%; display: block; filter: drop-shadow(0 0 5px rgba(72, 187, 174, .55)); }
-.fx-hud { position: absolute; inset: 14px; pointer-events: none; font: 600 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .18em; color: rgba(166, 245, 234, .75); }
-.fx-c { position: absolute; width: 16px; height: 16px; border: 1.5px solid rgba(127, 227, 214, .55); }
-.fx-c.tl { left: 0; top: 0; border-right: 0; border-bottom: 0; } .fx-c.tr { right: 0; top: 0; border-left: 0; border-bottom: 0; }
-.fx-c.bl { left: 0; bottom: 0; border-right: 0; border-top: 0; } .fx-c.br { right: 0; bottom: 0; border-left: 0; border-top: 0; }
-.fx-top { position: absolute; left: 24px; top: 4px; display: flex; align-items: center; gap: 8px; } .fx-top b { color: #fff; font-weight: 700; }
-.fx-rec { width: 6px; height: 6px; border-radius: 50%; background: var(--red); box-shadow: 0 0 8px var(--red); animation: fxblink 1.6s steps(2) infinite; }
-@keyframes fxblink { 50% { opacity: .2; } }
-.fx-rot { position: absolute; right: 24px; bottom: 4px; }
-.fx-label { position: absolute; left: 38px; bottom: 26px; color: #fff; font-size: .74rem; font-weight: 650; letter-spacing: .16em; text-transform: uppercase; animation: fxin .6s ease both; }
-.fx-label::before { content: ""; display: inline-block; width: 18px; height: 2px; background: var(--blue); vertical-align: middle; margin-right: 10px; border-radius: 2px; box-shadow: 0 0 8px var(--blue); }
-@keyframes fxin { from { opacity: 0; transform: translateY(6px); } }
 @media (prefers-reduced-motion: reduce) { .h4-chip { animation: none !important; } }
 @media (max-width: 900px) { .h4-grid { grid-template-columns: 1fr; } .h4-art { height: 300px; } }
 @media (max-width: 640px) {
   .h4 { padding: 22px 0 18px; } .h4 h1 { font-size: 1.8rem; } .h4-sub { font-size: .95rem; }
-  .h4-art { height: 300px; margin-top: 6px; } .h4-art .h4-chip { display: none; } .h4-stage.fx { inset: 0; border-radius: 26px; }
+  .h4-art { display: none; }
   .quick { flex-wrap: nowrap; overflow-x: auto; margin: 12px -16px 0; padding: 0 16px 4px; scrollbar-width: none; }
   .quick a { white-space: nowrap; flex: none; }
 }

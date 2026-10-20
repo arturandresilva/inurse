@@ -22,5 +22,5 @@ export async function getHome(locale: Locale): Promise<{ campaigns: Campaign[]; 
     })) as Slide[],
   })).filter((r) => r.slides.length) as Campaign[];
   const v = (s.data?.value ?? {}) as Partial<HomeSettings>;
-  return { campaigns, settings: { hero_images: (v.hero_images ?? []).map((x: unknown) => (typeof x === "string" ? x : "")), tiles: v.tiles ?? {} } };
+  return { campaigns, settings: { hero_images: (v.hero_images ?? []).filter(Boolean), tiles: v.tiles ?? {} } };
 }

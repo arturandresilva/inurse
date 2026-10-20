@@ -238,13 +238,29 @@ function Images() {
 
   return (
     <Loaded s={s}>
-      {({ value, cats }) => {
-                const tiles: Record<string, string> = value.tiles ?? {};
+      {({ value, cats, auto }) => {
+        const hero: string[] = value.hero_images ?? [];
+        const tiles: Record<string, string> = value.tiles ?? {};
         const tileCats = [...cats.filter((c) => c.path.startsWith("CALÇADO>") && c.path.split(">").length === 2 && !c.path.includes("COMPRAR POR")), ...cats.filter((c) => !c.parent_id && c.path !== "CALÇADO")].slice(0, 4);
         return (
           <>
             <Card title="Destaque normal (quando não há campanha no topo)">
-              <p className="a-hint">À direita do título aparecem modelos 3D feitos de partículas de luz — o coração do símbolo iNurse, uma soca e um collant — que rodam e se transformam uns nos outros. Para mostrar fotos ou vídeo no topo, cria uma campanha em “Topo da página”.</p>
+              <p className="a-hint">Até 3 imagens nos círculos à direita do título. Sem imagens escolhidas, a loja usa as fotos dos modelos em destaque. Usa fotos de produto com fundo branco ou transparente (PNG/WebP), quadradas, ~800 × 800 px.</p>
+              <div className="a-img-slots">
+                {[0, 1, 2].map((k) => {
+                  const url = hero[k];
+                  return (
+                    <div key={k} className="a-img-slot round">
+                      {url ? <img src={url} alt="" /> : auto[k] ? <img src={auto[k]} alt="" className="auto" /> : <span>Vazio</span>}
+                      <small>{url ? `Imagem ${k + 1}` : "Automática"}</small>
+                      <div>
+                        <button className="a-btn sm" disabled={busy} onClick={() => pickFile((u) => { const n = [...hero]; n[k] = u; return store({ ...value, hero_images: n.filter(Boolean) }); })}>{url ? "Trocar" : "Escolher"}</button>
+                        {url && <button className="a-btn sm" disabled={busy} onClick={() => store({ ...value, hero_images: hero.filter((_, i) => i !== k) })}>Remover</button>}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </Card>
             <Card title="Imagens das categorias (“Compra por categoria”)">
               <p className="a-hint">Sem imagem escolhida, a loja usa a foto de um produto dessa categoria. Formato ao alto ou quadrado, ~800 × 1000 px.</p>
