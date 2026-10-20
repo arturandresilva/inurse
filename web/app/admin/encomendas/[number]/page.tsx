@@ -10,6 +10,8 @@ async function load(number: number) {
   const c = sb();
   const o = await run<Row | null>(c.from("orders").select("*, order_items(*), shipments(*), payments(*), invoices(*), returns(id,number,status,reason,created_at)").eq("number", number).maybeSingle());
   if (!o) throw new Error(`A encomenda #${number} não existe.`);
+  // aberta no backoffice: deixa de contar como "nova"
+  if (!o.admin_seen_at) c.from("orders").update({ admin_seen_at: new Date().toISOString() }).eq("id", o.id).then(() => window.dispatchEvent(new Event("inurse-orders-seen")));
   const [events, pickups, suppliers, ctt, invoicing] = await Promise.all([
     run(c.from("order_events").select("*").eq("order_id", o.id).order("created_at", { ascending: false })),
     run(c.from("pickup_addresses").select("id,label,supplier_id,is_default_pickup").eq("active", true).order("label")),
@@ -166,6 +168,10 @@ export default function OrderPage() {
                   {o.customer_id && <p style={{ marginTop: 10 }}><Link className="a-btn sm" href={`/admin/clientes/${o.customer_id}`}>Ficha do cliente</Link></p>}
                 </Card>
                 <Card title="Entrega">
+                  {o.shipping_method?.delivery === "ponto" && (
+                    <div className="a-alert info" style={{ marginBottom: 12, display: "block" }}><strong>Levantamento num ponto CTT</strong><br />
+                      {o.shipping_method.point ? <>{o.shipping_method.point.name}{o.shipping_method.point.code ? ` (código ${o.shipping_method.point.code})` : ""}<br />{[o.shipping_method.point.address, `${o.shipping_method.point.zip ?? ""} ${o.shipping_method.point.city ?? ""}`].filter((x: string) => x && x.trim()).join(", ")}</> : "O cliente não indicou o ponto: contacta-o."}</div>
+                  )}
                   <p>{addr.name}<br />{addr.line1}{addr.line2 ? <><br />{addr.line2}</> : null}<br />{addr.zip} {addr.city}<br />{addr.region}</p>
                   {o.billing_address && <><h3 style={{ marginTop: 14 }}>Faturação</h3><p>{o.billing_address.name}<br />{o.billing_address.line1}<br />{o.billing_address.zip} {o.billing_address.city}</p></>}
                 </Card>

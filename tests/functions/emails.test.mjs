@@ -95,3 +95,15 @@ test('conversas do site: resposta ao cliente por email e aviso à loja', async (
   await call({ mode: 'due' }, { 'x-cron-secret': 'S' });
   assert.equal(sent.length, 0); assert.equal(db.outbox.find((e) => e.id === 'm3').status, 'skipped');
 });
+
+test('aviso à loja de encomenda nova (com ponto CTT)', async () => {
+  sent.length = 0; resendFail = false;
+  db.order.shipping_method = { label: 'Ponto CTT', delivery: 'ponto', point: { code: 'P1', name: 'Loja CTT Paços', zip: '4590-509', city: 'Paços' } };
+  db.outbox.length = 0;
+  db.outbox.push({ id: 'n1', kind: 'loja_nova_encomenda', order_id: 'o1', to_email: 'info@inurse.pt', created_at: new Date().toISOString(), attempts: 0 });
+  await call({ mode: 'due' }, { 'x-cron-secret': 'S' });
+  assert.equal(sent.length, 1);
+  assert.match(sent[0].subject, /^Nova encomenda #1001 · /);
+  assert.match(sent[0].html, /Loja CTT Paços \(P1\)/);
+  assert.match(sent[0].html, /\/admin\/encomendas\/1001/);
+});

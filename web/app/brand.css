@@ -210,3 +210,12 @@ h3 { font-size: 1rem; }
 @media (max-width: 640px) {
   .buy .btn.block { position: sticky; bottom: 10px; z-index: 5; box-shadow: 0 10px 24px rgba(15, 47, 74, .18); }
 }
+/* checkout: escolha do ponto CTT */
+.pickup { margin-top: 14px; padding: 16px; border-radius: var(--r-md); background: var(--tint-mint); display: grid; gap: 12px; }
+.pickup .field { margin: 0; }
+.pickup-list { display: grid; gap: 8px; max-height: 320px; overflow-y: auto; }
+.pickup-list label { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: start; background: #fff; border: 1.5px solid var(--line); border-radius: 12px; padding: 10px 12px; cursor: pointer; }
+.pickup-list label.on { border-color: var(--mint-d); box-shadow: 0 0 0 1px var(--mint-d); }
+.pickup-list strong { display: block; font-size: .9rem; }
+.pickup-list small { color: var(--ink-soft); font-size: .8rem; }
+.pickup .link { background: none; border: 0; padding: 0; color: var(--mint-d); font: inherit; font-size: .85rem; text-decoration: underline; cursor: pointer; justify-self: start; }

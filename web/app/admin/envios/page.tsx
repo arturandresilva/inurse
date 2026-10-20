@@ -31,9 +31,9 @@ function Shipping() {
   return (
     <>
       <PageHead title="Portes e recolhas" sub="O que o cliente paga de portes (por peso e zona), quanto te custa a CTT, e de onde a CTT recolhe as encomendas." />
-      <Tabs tabs={[["portes", "Tabela de portes"], ["moradas", "Moradas de recolha e devolução"], ["envios", "Envios recentes"]]} value={tab} onChange={setTab} />
+      <Tabs tabs={[["portes", "Tabela de portes"], ["pontos", "Pontos CTT"], ["moradas", "Moradas de recolha e devolução"], ["envios", "Envios recentes"]]} value={tab} onChange={setTab} />
       <Loaded s={s}>
-        {(d) => tab === "portes" ? <Rates d={d} reload={s.reload} /> : tab === "moradas" ? <Pickups d={d} reload={s.reload} /> : <Shipments d={d} />}
+        {(d) => tab === "portes" ? <Rates d={d} reload={s.reload} /> : tab === "pontos" ? <Points /> : tab === "moradas" ? <Pickups d={d} reload={s.reload} /> : <Shipments d={d} />}
       </Loaded>
     </>
   );
@@ -128,6 +128,17 @@ function Rates({ d, reload }: { d: D; reload: () => Promise<void> }) {
           <Field label="Volume de um artigo sem medidas (litros)" hint="Ex.: caixa de socas ≈ 6 L. O volume do produto = comprimento × largura × altura (cm) ÷ 1000. 0 = ignorar o volume nesses artigos.">
             <input inputMode="decimal" defaultValue={simple.default_item_volume_l ?? ""} onBlur={(e) => setSimple({ default_item_volume_l: Number(e.target.value.replace(",", ".")) || 0 })} />
           </Field>
+        </div>
+        <div className="a-subcard">
+          <label className="a-check"><input type="checkbox" checked={!!simple.pickup?.enabled} onChange={(e) => setSimple({ pickup: { ...(simple.pickup ?? {}), enabled: e.target.checked } })} /> <strong>Oferecer levantamento num ponto CTT</strong></label>
+          <p className="a-hint">No checkout aparecem duas opções: entrega na morada e levantamento num ponto CTT (loja, agente ou cacifo). O cliente escolhe o ponto pelo código postal (lista em “Pontos CTT”) ou escreve o que prefere.</p>
+          {simple.pickup?.enabled && (
+            <div className="a-grid-2" style={{ marginTop: 10 }}>
+              <Field label="Nome da opção"><input defaultValue={simple.pickup?.label ?? "Ponto CTT"} onBlur={(e) => setSimple({ pickup: { ...simple.pickup, label: e.target.value } })} /></Field>
+              <Field label="Desconto face à entrega na morada (€)" hint="0 = mesmo preço."><input inputMode="decimal" defaultValue={fromCents(simple.pickup?.discount_cents ?? 0)} onBlur={(e) => setSimple({ pickup: { ...simple.pickup, discount_cents: toCents(e.target.value) ?? 0 } })} /></Field>
+              <Field label="Prazo (opcional)" hint="Vazio = o mesmo da entrega na morada."><input defaultValue={simple.pickup?.eta ?? ""} placeholder="2 dias úteis" onBlur={(e) => setSimple({ pickup: { ...simple.pickup, eta: e.target.value } })} /></Field>
+            </div>
+          )}
         </div>
       </Card>
       <details style={{ marginBottom: 18 }} open={!simple.enabled}>
@@ -310,5 +321,63 @@ function Shipments({ d }: { d: D }) {
         </div>
       )}
     </Card>
+  );
+}
+
+// Pontos CTT para levantamento: lista importada de um ficheiro (CSV/Excel guardado como CSV) com os pontos que queres oferecer
+function Points() {
+  const s = useLoad(async () => {
+    const c = sb();
+    const [n, rows] = await Promise.all([
+      c.from("pickup_points").select("code", { count: "exact", head: true }),
+      run(c.from("pickup_points").select("*").order("zip").limit(200)),
+    ]);
+    return { total: n.count ?? 0, rows: rows as Row[] };
+  });
+  const { busy, act } = useAction();
+  const [q, setQ] = useState("");
+  const importFile = (file: File | undefined) => act(async () => {
+    if (!file) return;
+    const text = await file.text();
+    const lines = text.split(/\r?\n/).filter((l) => l.trim());
+    const sep = (lines[0].match(/;/g)?.length ?? 0) >= (lines[0].match(/,/g)?.length ?? 0) ? ";" : ",";
+    const head = lines[0].toLowerCase().split(sep).map((h) => h.trim().replace(/^"|"$/g, ""));
+    const col = (names: string[]) => head.findIndex((h) => names.some((n) => h.includes(n)));
+    const ic = col(["codigo", "código", "code", "id"]), iname = col(["nome", "name", "designa"]), ik = col(["tipo", "kind", "type"]),
+      ia = col(["morada", "address", "rua"]), iz = col(["postal", "zip", "cp"]), icity = col(["localidade", "cidade", "city"]),
+      ilat = col(["lat"]), ilng = col(["lng", "lon"]);
+    if (iname < 0 || iz < 0) throw new Error("O ficheiro tem de ter pelo menos as colunas “nome” e “código postal”.");
+    const kindOf = (v: string) => (/cacifo|locker/i.test(v) ? "cacifo" : /loja|estação|estacao/i.test(v) ? "loja" : "ponto");
+    const rows = lines.slice(1).map((l) => l.split(sep).map((x) => x.trim().replace(/^"|"$/g, ""))).filter((r) => r[iname] && r[iz]).map((r, i) => ({
+      code: (ic >= 0 && r[ic]) || `${r[iz]}-${i}`, name: r[iname], kind: ik >= 0 ? kindOf(r[ik]) : kindOf(r[iname]),
+      address: ia >= 0 ? r[ia] : null, zip: r[iz], city: icity >= 0 ? r[icity] : null,
+      lat: ilat >= 0 ? Number(r[ilat].replace(",", ".")) || null : null, lng: ilng >= 0 ? Number(r[ilng].replace(",", ".")) || null : null,
+      active: true, updated_at: new Date().toISOString(),
+    }));
+    for (let i = 0; i < rows.length; i += 500) await run(sb().from("pickup_points").upsert(rows.slice(i, i + 500), { onConflict: "code" }));
+    await s.reload();
+    return rows.length;
+  }, "Pontos importados.");
+  return (
+    <Loaded s={s}>
+      {(d) => (
+        <Card title={`Pontos CTT (${d.total})`} actions={<label className="a-btn sm primary" style={{ cursor: "pointer" }}>{busy ? "A importar…" : "Importar ficheiro CSV"}<input type="file" accept=".csv,text/csv" hidden onChange={(e) => { importFile(e.target.files?.[0]); e.target.value = ""; }} /></label>}>
+          <Alert tone="info">Sem lista, o cliente escreve o ponto que prefere no checkout. Com lista, escolhe a partir do código postal. Importa um CSV com as colunas <code>código; nome; tipo; morada; código postal; localidade</code> (a primeira linha com os nomes das colunas). Quando ativares a API dos CTT (CTT_USER_ID e CTT_AUTH_ID), a lista oficial pode passar a vir de lá.</Alert>
+          {d.total > 0 && (
+            <>
+              <input placeholder="Filtrar por nome, código postal ou localidade" value={q} onChange={(e) => setQ(e.target.value)} style={{ margin: "10px 0", maxWidth: 360 }} />
+              <div className="a-table-wrap"><table className="a-table">
+                <thead><tr><th>Código</th><th>Nome</th><th>Tipo</th><th>Morada</th><th>Código postal</th><th>Ativo</th></tr></thead>
+                <tbody>{d.rows.filter((r) => !q || `${r.name} ${r.zip} ${r.city}`.toLowerCase().includes(q.toLowerCase())).slice(0, 100).map((r) => (
+                  <tr key={r.code}><td><code>{r.code}</code></td><td>{r.name}</td><td>{r.kind}</td><td className="a-small">{r.address}</td><td>{r.zip} {r.city}</td>
+                    <td><input type="checkbox" checked={r.active} disabled={busy} onChange={(e) => act(async () => { await run(sb().from("pickup_points").update({ active: e.target.checked }).eq("code", r.code)); await s.reload(); })} /></td></tr>
+                ))}</tbody>
+              </table></div>
+              {d.total > 200 && <p className="a-hint">A mostrar os primeiros 200 de {d.total}.</p>}
+            </>
+          )}
+        </Card>
+      )}
+    </Loaded>
   );
 }

@@ -95,6 +95,11 @@ await step('nota interna', async () => {
   await page.fill('input[aria-label="Nota interna"]', 'Teste automático');
   await page.click('button:has-text("Guardar nota")'); await page.waitForSelector('.a-timeline >> text=Teste automático');
 });
+await step('encomenda nova aparece em Por tratar', async () => {
+  await page.goto(`${BASE}/admin/encomendas`); await settle(page);
+  await page.waitForSelector('.a-table .a-badge:has-text("Nova")', { timeout: 10000 });
+  await shot(page, '02b-encomendas-novas', false);
+});
 await step('editar campanha da página inicial', async () => {
   await page.goto(`${BASE}/admin/pagina-inicial`); await settle(page);
   await page.click('tr:has-text("Campanha de teste") button:has-text("Editar")');

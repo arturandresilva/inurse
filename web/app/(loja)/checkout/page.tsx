@@ -8,6 +8,7 @@ import { supabase } from "@/lib/supabase";
 import { account } from "@/lib/account";
 import { useQuote } from "@/lib/useQuote";
 import { useLocale, useT } from "@/lib/i18n/client";
+import PickupPicker, { type Point } from "@/components/PickupPicker";
 
 const PAY_LABEL: Record<string, string> = { mbway: "MB WAY", multibanco: "Multibanco (referência)", transfer: "Transferência bancária" };
 
@@ -20,6 +21,7 @@ export default function CheckoutPage() {
   const [f, setF] = useState({ email: "", name: "", phone: "", nif: "", line1: "", line2: "", zip: "", city: "", region: "Continente",
     payment: "", promo: "", notes: "", terms: false, newsletter: false, ship: "" });
   const [promoApplied, setPromoApplied] = useState("");
+  const [point, setPoint] = useState<Point | null>(null);
   const [error, setError] = useState("");
   const [sending, setSending] = useState(false);
   const { quote, loading } = useQuote(lines, f.region, promoApplied, f.ship);
@@ -52,6 +54,8 @@ export default function CheckoutPage() {
     e.preventDefault();
     setError("");
     if (!f.terms) { setError(t("Para continuar, aceita os termos e condições.")); return; }
+    const pickup = quote?.shipping_options?.find((o) => o.key === quote?.shipping_option)?.delivery === "ponto";
+    if (pickup && !point?.name) { setError(t("Escolhe o ponto CTT onde queres levantar a encomenda.")); return; }
     setSending(true);
     const { data, error: err } = await supabase.rpc("place_order_l", { p: {
       locale,
@@ -59,6 +63,7 @@ export default function CheckoutPage() {
       promo_code: promoApplied || null, notes: f.notes || null, cart_token: cartToken(), shipping_option: quote?.shipping_option ?? null,
       shipping_address: { name: f.name, phone: f.phone, line1: f.line1, line2: f.line2, zip: f.zip.trim(), city: f.city, region: f.region },
       items: lines.map((l) => ({ variant_id: l.variant_id, qty: l.qty })),
+      pickup_point: quote?.shipping_options?.find((o) => o.key === quote?.shipping_option)?.delivery === "ponto" ? point : null,
     } });
     setSending(false);
     if (err) { const m = err.message.replace(/^.*?: /, "").replace(/^não foi possível concluir: /, ""); setError(t("Não foi possível concluir:") + " " + t(m)); return; }
@@ -108,6 +113,9 @@ export default function CheckoutPage() {
                   </label>
                 ))}
               </div>
+              {quote!.shipping_options!.find((o) => o.key === quote!.shipping_option)?.delivery === "ponto" && (
+                <PickupPicker zip={f.zip} value={point} onChange={setPoint} />
+              )}
             </fieldset>
           )}
           <fieldset>

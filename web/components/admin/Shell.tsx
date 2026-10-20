@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { MaintenanceBar } from "./Maintenance";
+import { toast } from "./ui";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { Session } from "@supabase/supabase-js";
@@ -70,15 +71,33 @@ export default function Shell({ children }: { children: React.ReactNode }) {
     if (!admin) return;
     let alive = true;
     const load = () => Promise.all([
-      count("orders", (q) => q.in("status", ["paid", "processing"])),
+      count("orders", (q) => q.or("status.in.(paid,processing),and(admin_seen_at.is.null,status.neq.cancelled)")),
       count("proposals", (q) => q.eq("status", "pending")),
       count("returns", (q) => q.in("status", ["requested", "approved", "label_sent", "in_transit", "received"])),
       count("reviews", (q) => q.eq("status", "pending")),
       count("chat_conversations", (q) => q.eq("status", "needs_human")),
     ]).then(([orders, proposals, returns, reviews, chats]) => alive && setBadges({ orders, proposals, returns, reviews, chats })).catch(() => {});
-    load();
-    const t = setInterval(load, 60_000);
-    return () => { alive = false; clearInterval(t); };
+    // encomendas novas: aviso no ecrã (e notificação do browser, se autorizada) quando entra uma
+    const checkNew = async () => {
+      const { data } = await sb().from("orders").select("number,total_cents,shipping_address").is("admin_seen_at", null).neq("status", "cancelled").order("created_at", { ascending: false }).limit(20);
+      const nums = (data ?? []).map((o) => o.number as number);
+      const known: number[] = JSON.parse(sessionStorage.getItem("inurse.admin.orders") ?? "null") ?? nums;
+      const fresh = (data ?? []).filter((o) => !known.includes(o.number));
+      sessionStorage.setItem("inurse.admin.orders", JSON.stringify(nums));
+      document.title = nums.length ? `(${nums.length}) Backoffice iNurse` : "Backoffice iNurse";
+      for (const o of fresh) {
+        const msg = `Nova encomenda #${o.number} · ${(o.total_cents / 100).toFixed(2).replace(".", ",")} € · ${o.shipping_address?.name ?? ""}`;
+        toast(msg);
+        try { if ("Notification" in window && Notification.permission === "granted") new Notification("iNurse: nova encomenda", { body: msg, icon: "/marca/png/inurse-icone-192.png" }); } catch { /* sem notificações */ }
+      }
+    };
+    const tick = () => { load(); checkNew().catch(() => {}); };
+    tick();
+    const t = setInterval(tick, 30_000);
+    const onSeen = () => tick();
+    window.addEventListener("inurse-orders-seen", onSeen);
+    try { if ("Notification" in window && Notification.permission === "default") Notification.requestPermission().catch(() => {}); } catch { /* sem notificações */ }
+    return () => { alive = false; clearInterval(t); window.removeEventListener("inurse-orders-seen", onSeen); };
   }, [admin, path]);
 
   useEffect(() => { setMenu(false); }, [path]);

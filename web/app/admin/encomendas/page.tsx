@@ -20,10 +20,10 @@ export default function Orders() {
 
   const s = useLoad(async () => {
     let query = sb().from("orders")
-      .select("id,number,email,status,payment_method,total_cents,created_at,shipping_address,nif", { count: "exact" })
+      .select("id,number,email,status,payment_method,total_cents,created_at,shipping_address,nif,admin_seen_at", { count: "exact" })
       .order("created_at", { ascending: tab === "todo" })
       .range(page * SIZE, page * SIZE + SIZE - 1);
-    if (tab === "todo") query = query.in("status", ["paid", "processing"]);
+    if (tab === "todo") query = query.or("status.in.(paid,processing),and(admin_seen_at.is.null,status.neq.cancelled)");
     else if (tab === "shipped") query = query.in("status", ["shipped", "delivered"]);
     else if (tab === "closed") query = query.in("status", ["cancelled", "refunded"]);
     else if (tab !== "all") query = query.eq("status", tab);
@@ -39,14 +39,14 @@ export default function Orders() {
 
   return (
     <>
-      <PageHead title="Encomendas" sub="As encomendas pagas ficam em “Por tratar” até registares o envio." />
+      <PageHead title="Encomendas" sub="As encomendas novas (ainda não abertas) e as pagas ficam em “Por tratar” até registares o envio." />
       <Tabs tabs={TABS} value={tab} onChange={(v) => { setTab(v); setPage(0); }} />
       <div className="a-toolbar">
         <input type="search" placeholder="Nº, email ou NIF" value={q} onChange={(e) => { setQ(e.target.value); setPage(0); }} aria-label="Pesquisar encomendas" />
       </div>
       <Card className="flush">
         {s.error ? <ErrorBox error={s.error} retry={s.reload} /> : !s.data ? <Loading /> : s.data.rows.length === 0 ? (
-          <Empty title={tab === "todo" ? "Nada por tratar" : "Sem encomendas"}>{tab === "todo" ? "Quando entrar uma encomenda paga, aparece aqui." : "Experimenta outro filtro."}</Empty>
+          <Empty title={tab === "todo" ? "Nada por tratar" : "Sem encomendas"}>{tab === "todo" ? "Quando entrar uma encomenda, aparece aqui." : "Experimenta outro filtro."}</Empty>
         ) : (
           <>
             <div className="a-table-wrap">
@@ -55,7 +55,7 @@ export default function Orders() {
                 <tbody>
                   {s.data.rows.map((o) => (
                     <tr key={o.id} className="click" onClick={() => router.push(`/admin/encomendas/${o.number}`)}>
-                      <td><Link href={`/admin/encomendas/${o.number}`} onClick={(e) => e.stopPropagation()}>#{o.number}</Link></td>
+                      <td><Link href={`/admin/encomendas/${o.number}`} onClick={(e) => e.stopPropagation()}>#{o.number}</Link>{!o.admin_seen_at && <> <Badge tone="warn">Nova</Badge></>}</td>
                       <td className="nowrap a-muted">{dateTime(o.created_at)}</td>
                       <td>{o.shipping_address?.name ?? "—"}<div className="a-small a-muted">{o.email}</div></td>
                       <td><Badge tone={ORDER_TONE[o.status]}>{ORDER_STATUS[o.status]}</Badge></td>

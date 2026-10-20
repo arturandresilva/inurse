@@ -132,7 +132,27 @@ const tx = (k: string, v: Record<string, string | number> = {}) =>
   Object.entries(v).reduce((s, [a, b]) => s.split(`{${a}}`).join(String(b)), TX[LANG][k] ?? TX.pt[k] ?? k);
 const money = (c: number) => (c / 100).toLocaleString({ pt: "pt-PT", en: "en-GB", es: "es-ES", fr: "fr-FR" }[LANG], { style: "currency", currency: "EUR" });
 
+// aviso à loja: entrou uma encomenda nova
+async function renderStore(o: Row, cfg: Row): Promise<{ subject: string; html: string }> {
+  LANG = "pt";
+  const site = String(cfg.site_url || "https://www.inurse.pt").replace(/\/$/, "");
+  const items = ((await rest(`order_items?order_id=eq.${o.id}&select=title,option_value,quantity,unit_price_cents&order=title`)) ?? []) as Row[];
+  const a = o.shipping_address ?? {}; const m = o.shipping_method ?? {};
+  const pay: Record<string, string> = { mbway: "MB WAY", multibanco: "Multibanco", transfer: "Transferência bancária" };
+  const pt = m.point ? `<br><strong>Levantar no ponto CTT:</strong> ${esc(m.point.name)}${m.point.code ? ` (${esc(m.point.code)})` : ""}${m.point.zip ? `, ${esc(m.point.zip)} ${esc(m.point.city ?? "")}` : ""}` : "";
+  const rows = items.map((i) => `<tr><td style="padding:6px 0;border-bottom:1px solid #e3e9ee">${i.quantity} × ${esc(i.title)} <span style="color:#5b6780">(${esc(i.option_value)})</span></td><td align="right" style="padding:6px 0;border-bottom:1px solid #e3e9ee">${money(i.unit_price_cents * i.quantity)}</td></tr>`).join("");
+  return { subject: `Nova encomenda #${o.number} · ${money(o.total_cents)} · ${a.name ?? o.email}`, html: layout(`Nova encomenda #${o.number}`, `
+    <p style="margin:0 0 12px"><strong>Entrou uma encomenda nova na loja.</strong></p>
+    <p>${esc(a.name ?? "")} · ${esc(o.email)}${a.phone ? ` · ${esc(a.phone)}` : ""}<br>${esc(a.line1 ?? "")} ${esc(a.line2 ?? "")}, ${esc(a.zip ?? "")} ${esc(a.city ?? "")} (${esc(a.region ?? "")})
+      <br><strong>Envio:</strong> ${esc(m.label ?? "—")}${pt}<br><strong>Pagamento:</strong> ${esc(pay[o.payment_method] ?? o.payment_method ?? "—")}</p>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:12px 0">${rows}</table>
+    <p style="text-align:right"><strong>Total: ${money(o.total_cents)}</strong> (portes ${money(o.shipping_cents ?? 0)})</p>
+    ${o.notes ? `<p><strong>Notas do cliente:</strong> ${esc(o.notes)}</p>` : ""}
+    ${button(`${site}/admin/encomendas/${o.number}`, "Abrir no backoffice")}`, site) };
+}
+
 async function render(kind: string, o: Row, cfg: Row): Promise<{ subject: string; html: string }> {
+  if (kind === "loja_nova_encomenda") return renderStore(o, cfg);
   LANG = (["pt", "en", "es", "fr"].includes(o.locale) ? o.locale : "pt") as Lang;
   const site = String(cfg.site_url || "https://www.inurse.pt").replace(/\/$/, "");
   const q = LANG === "pt" ? "" : `&lang=${LANG}`;
@@ -248,7 +268,7 @@ async function due(cfg: Row) {
       const m = await render(e.kind, o, cfg);
       await send(e.to_email, m.subject, m.html, cfg);
       await patch({ status: "sent", sent_at: new Date().toISOString(), attempts: (e.attempts ?? 0) + 1, error: null });
-      await rest("order_events", { method: "POST", body: JSON.stringify({ order_id: o.id, kind: "nota", message: `Email enviado ao cliente: ${m.subject}` }) }).catch(() => null);
+      if (e.kind !== "loja_nova_encomenda") await rest("order_events", { method: "POST", body: JSON.stringify({ order_id: o.id, kind: "nota", message: `Email enviado ao cliente: ${m.subject}` }) }).catch(() => null);
       out.push({ id: e.id, sent: true });
     } catch (err) {
       const attempts = (e.attempts ?? 0) + 1;

@@ -284,3 +284,4 @@
 .a-funnel li i { display: block; height: 100%; background: #0f6e63; border-radius: 6px; }
 .a-funnel strong { text-align: right; } .a-funnel small { color: var(--a-soft); text-align: right; }
 @media (max-width: 600px) { .a-funnel li { grid-template-columns: 1fr 50px 46px; } .a-funnel li div { display: none; } }
+.a-subcard { margin-top: 16px; padding: 14px 16px; border: 1px solid var(--a-line); border-radius: 12px; background: #f8fafc; }
