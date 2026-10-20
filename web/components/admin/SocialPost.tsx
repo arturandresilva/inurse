@@ -13,7 +13,13 @@ const SIZES = { quadrado: [1080, 1080], retrato: [1080, 1350], story: [1080, 192
 const C = { ink: "#0F2F4A", mint: "#48BBAE", mintD: "#2A8378", coral: "#F27C79", sky: "#D7EAF7", soft: "#5B6B7F", tint: "#E3F4F1" };
 
 const tagsOf = (h: PostContent["hashtags"]) => (Array.isArray(h) ? h : String(h ?? "").split(/[\s,]+/)).map((t) => t.trim()).filter(Boolean).map((t) => (t.startsWith("#") ? t : `#${t}`));
-const load = (src: string) => new Promise<HTMLImageElement | null>((res) => { if (!src) return res(null); const i = new Image(); if (/^https?:/.test(src) && !src.startsWith(location.origin)) i.crossOrigin = "anonymous"; i.onload = () => res(i); i.onerror = () => res(null); i.src = src; });
+const loadOne = (src: string, cors: boolean) => new Promise<HTMLImageElement | null>((res) => { const i = new Image(); if (cors) i.crossOrigin = "anonymous"; i.onload = () => res(i); i.onerror = () => res(null); i.src = src; });
+// fotos de outro domínio passam pelo otimizador de imagens do site (mesma origem), para o canvas poder ser exportado
+const load = async (src: string) => {
+  if (!src) return null;
+  if (!/^https?:/.test(src) || src.startsWith(location.origin)) return loadOne(src, false);
+  return (await loadOne(`/_next/image?url=${encodeURIComponent(src)}&w=1080&q=90`, false)) ?? loadOne(src, true);
+};
 
 function wrap(g: CanvasRenderingContext2D, text: string, maxW: number) {
   const words = text.split(/\s+/).filter(Boolean), lines: string[] = []; let line = "";

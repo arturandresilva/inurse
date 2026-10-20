@@ -86,7 +86,7 @@ export default function Agents() {
                     </div>
                     <div className="a-actions">
                       <button className="a-btn sm" disabled={busy} onClick={() => setDecide({ p, approve: false })}>Rejeitar</button>
-                      <button className="a-btn sm primary" disabled={busy} onClick={() => setDecide({ p, approve: true })}>{p.kind === "insight" ? "Marcar como lida" : "Aprovar e aplicar"}</button>
+                      {!(p.kind === "campaign.create" && SOCIAL.includes(p.payload?.channel)) && <button className="a-btn sm primary" disabled={busy} onClick={() => setDecide({ p, approve: true })}>{p.kind === "insight" ? "Marcar como lida" : "Aprovar e aplicar"}</button>}
                     </div>
                   </header>
                   <p>{p.summary}</p>
