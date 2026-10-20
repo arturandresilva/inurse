@@ -28,6 +28,8 @@ const esc = (s: unknown) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&
 const first = (n: unknown) => String(n ?? "").trim().split(/\s+/)[0] ?? "";
 
 // ---------- modelo base ----------
+// logótipo em imagem (o desenho não é uma fonte); o texto alternativo aparece se o email bloquear imagens
+const LOGO = "https://inurse-loja.vercel.app/marca/png/inurse-logo-600.png";
 let LEGAL: Row = {};
 const phone = (p: unknown) => String(p ?? "").replace(/\D/g, "").replace(/^(\d{3})(\d{3})(\d{3})$/, "$1 $2 $3");
 function layout(title: string, inner: string, site: string) {
@@ -36,7 +38,7 @@ function layout(title: string, inner: string, site: string) {
 <body style="margin:0;background:#F1F6F9;font-family:Arial,Helvetica,sans-serif;color:#0F2F4A">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F1F6F9;padding:24px 12px"><tr><td align="center">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border-radius:16px;overflow:hidden">
-<tr><td style="padding:22px 28px;border-bottom:1px solid #e3e9ee"><a href="${site}" style="text-decoration:none;font:700 28px Arial,Helvetica,sans-serif;color:#0F2F4A"><span style="color:#F27C79;font-size:16px;vertical-align:top">&#10084;</span><span style="color:#48BBAE">i</span>nurse</a></td></tr>
+<tr><td style="padding:22px 28px;border-bottom:1px solid #e3e9ee"><a href="${site}" style="text-decoration:none;font:700 24px Arial,Helvetica,sans-serif;color:#0F2F4A;letter-spacing:1px"><img src="${LOGO}" width="150" height="37" alt="iNURSE" style="display:block;border:0;width:150px;height:auto"></a></td></tr>
 <tr><td style="padding:28px;font-size:15px;line-height:1.55">${inner}</td></tr>
 <tr><td style="padding:18px 28px;background:#0F2F4A;color:#cfd8e3;font-size:12px;line-height:1.5">
 iNurse · ${tx("foot")} · <a href="mailto:${esc(L.email)}" style="color:#fff">${esc(L.email)}</a> · ${esc(phone(L.phone))}<br>
