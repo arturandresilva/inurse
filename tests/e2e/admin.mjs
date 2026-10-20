@@ -70,6 +70,8 @@ for (const [i, r] of ROUTES.entries()) {
   await settle(page);
   await shot(page, `${String(i + 2).padStart(2, '0')}-${r.replace(/[\/?=]/g, '_')}`);
   ok('página', r);
+  // encomendas ainda não abertas aparecem com o selo "Nova" (antes de abrir os detalhes)
+  if (r === 'encomendas' && !(await page.locator('.a-table .a-badge:has-text("Nova")').count())) problems.push('encomendas novas sem o selo "Nova"');
 }
 
 // ---------- ações ----------
@@ -94,11 +96,6 @@ await step('registar envio da 1001', async () => {
 await step('nota interna', async () => {
   await page.fill('input[aria-label="Nota interna"]', 'Teste automático');
   await page.click('button:has-text("Guardar nota")'); await page.waitForSelector('.a-timeline >> text=Teste automático');
-});
-await step('encomenda nova aparece em Por tratar', async () => {
-  await page.goto(`${BASE}/admin/encomendas`); await settle(page);
-  await page.waitForSelector('.a-table .a-badge:has-text("Nova")', { timeout: 10000 });
-  await shot(page, '02b-encomendas-novas', false);
 });
 await step('editar campanha da página inicial', async () => {
   await page.goto(`${BASE}/admin/pagina-inicial`); await settle(page);
