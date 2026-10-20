@@ -453,4 +453,5 @@ export const FR: Record<string, string> = {
   "Podes ver os pontos CTT perto de ti em": "Vous trouverez les points CTT près de chez vous sur",
   "Escolhe o ponto CTT onde queres levantar a encomenda.": "Choisissez le point CTT où retirer votre commande.",
   "escolhe o ponto CTT onde queres levantar a encomenda": "choisissez le point CTT où retirer votre commande",
+  "Meias de descanso": "Chaussettes de repos",
 };
