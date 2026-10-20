@@ -26,7 +26,10 @@ function cutout(src: CanvasImageSource, sw: number, sh: number, max = 900): HTML
       if (x > 0) st.push(i - 1); if (x < W - 1) st.push(i + 1); if (i >= W) st.push(i - W); if (i < N - W) st.push(i + W); }
     // suavizar a borda (1 px) e apagar o fundo
     for (let i = 0; i < N; i++) if (bg[i]) d[i * 4 + 3] = 0;
-    for (let i = W; i < N - W; i++) if (!bg[i] && (bg[i - 1] || bg[i + 1] || bg[i - W] || bg[i + W])) d[i * 4 + 3] = 150;
+    // tirar a orla clara (2 px) que fica do fundo
+    for (let pass = 0; pass < 2; pass++) { const edge: number[] = [];
+      for (let i = W; i < N - W; i++) if (!bg[i] && (bg[i - 1] || bg[i + 1] || bg[i - W] || bg[i + W])) edge.push(i);
+      for (const i of edge) { bg[i] = 1; d[i * 4 + 3] = 0; } }
     g.putImageData(img, 0, 0);
   }
   // cortar à volta do produto
@@ -144,8 +147,8 @@ export function startHeroScan(stage: HTMLElement, images: { soca?: string; meia?
     const t = reduce ? ASM + REV + 1 : Math.max(0, (now - t0 - paused) / 1000);
     const total = items.length, k = Math.floor(t / STEP), lt = t - k * STEP;
     const cur = items[k % total], prev = items[(k + total - 1) % total];
-    const scale = Math.min((W * 0.72) / BOX, (H * 0.7) / BOX);       // px por unidade
-    const ox = W / 2, oy = H * 0.46;
+    const scale = Math.min((W * 0.6) / BOX, (H * 0.64) / BOX);       // px por unidade
+    const ox = W / 2, oy = H * 0.47;
     // fases
     const m = lt < ASM ? ease(lt / ASM) : 1;                            // pontos: do produto anterior para este
     const rev = lt < ASM ? 0 : lt < ASM + REV ? (lt - ASM) / REV : 1;  // varrimento a revelar a foto
