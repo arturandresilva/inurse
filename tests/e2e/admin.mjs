@@ -228,7 +228,7 @@ await stepShop('telemóvel: menu aberto e fecha ao escolher', async () => {
 await stepShop('computador: menu Loja fecha ao escolher', async () => {
   await shop.goto(`${BASE}/loja`); await shop.waitForSelector('.prod');
   await shop.hover('.mega-trigger'); await shop.waitForTimeout(400);
-  await shop.locator('.mega-models a').first().click(); await shop.waitForURL(/\/produto\//);
+  await shop.locator('.mega a[href^="/c/"]').first().click(); await shop.waitForURL(/\/c\//);
   await shop.waitForTimeout(400);
   const vis = await shop.evaluate(() => getComputedStyle(document.querySelector('.mega')).visibility);
   if (vis !== 'hidden') throw new Error('o menu Loja continua aberto depois de escolher um modelo');
