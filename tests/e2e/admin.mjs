@@ -62,7 +62,7 @@ await shot(page, '01-painel');
 // ---------- todas as páginas ----------
 const ROUTES = (process.env.ROUTES || [
   'encomendas', 'encomendas/1001', 'encomendas/1002', 'devolucoes', 'clientes', 'promocoes', 'produtos', 'importar', 'precos', 'fornecedores',
-  'envios', 'agentes', 'contas', 'pagina-inicial', 'paginas', 'configuracoes', 'configuracoes?tab=faturacao',
+  'envios', 'agentes', 'contas', 'pagina-inicial', 'multimedia', 'paginas', 'configuracoes', 'configuracoes?tab=faturacao',
 ].join(',')).split(',');
 for (const [i, r] of ROUTES.entries()) {
   const resp = await page.goto(`${BASE}/admin/${r}`);
@@ -206,8 +206,10 @@ await stepShop('loja com logótipo novo', async () => {
   const lit = await shop.evaluate(() => { const c = document.querySelector('.fx-canvas'); if (!c) return -1; const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data; let n = 0; for (let i = 3; i < d.length; i += 64) if (d[i] > 40) n++; return n; });
   if (lit < 200) throw new Error(`animação do destaque vazia (${lit})`);
   await shop.screenshot({ path: `${SHOTS}/63-loja-inicio.png` });
-  await shop.waitForTimeout(3500); await shop.screenshot({ path: `${SHOTS}/63c-destaque-soca.png` });
-  await shop.waitForTimeout(5200); await shop.screenshot({ path: `${SHOTS}/63d-destaque-meia.png` });
+  await shop.locator('.h4-stage').screenshot({ path: `${SHOTS}/63e-holo-logo.png` });
+  await shop.waitForTimeout(5500); await shop.locator('.h4-stage').screenshot({ path: `${SHOTS}/63c-destaque-soca.png` });
+  await shop.waitForTimeout(5600); await shop.locator('.h4-stage').screenshot({ path: `${SHOTS}/63d-destaque-meia.png` });
+  await shop.waitForTimeout(1200); await shop.locator('.h4-stage').screenshot({ path: `${SHOTS}/63f-holo-meia2.png` });
   await shop.screenshot({ path: `${SHOTS}/63b-loja-inicio-completa.png`, fullPage: true });
 });
 // ---------- loja no telemóvel: fotografias de cada página para rever o aspeto ----------

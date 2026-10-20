@@ -285,3 +285,16 @@
 .a-funnel strong { text-align: right; } .a-funnel small { color: var(--a-soft); text-align: right; }
 @media (max-width: 600px) { .a-funnel li { grid-template-columns: 1fr 50px 46px; } .a-funnel li div { display: none; } }
 .a-subcard { margin-top: 16px; padding: 14px 16px; border: 1px solid var(--a-line); border-radius: 12px; background: #f8fafc; }
+
+/* Multimédia */
+.a-media { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 14px; }
+.a-media-item { margin: 0; background: #fff; border: 1px solid var(--a-line); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
+.a-media-thumb { position: relative; display: block; aspect-ratio: 1; background: #f3f5f8; }
+.a-media-thumb img, .a-media-thumb video { width: 100%; height: 100%; object-fit: contain; display: block; }
+.a-media-kind { position: absolute; left: 8px; top: 8px; background: rgba(15, 47, 74, .85); color: #fff; font-size: .7rem; font-weight: 700; padding: 3px 8px; border-radius: 999px; }
+.a-media-item figcaption { padding: 10px 12px 12px; display: grid; gap: 6px; font-size: .82rem; }
+.a-media-item figcaption b { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600; }
+.a-media-item figcaption small { color: var(--a-soft); }
+.a-media-used { display: flex; flex-wrap: wrap; gap: 4px; }
+.a-media-used .a-badge { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.a-media-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }

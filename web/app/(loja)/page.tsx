@@ -37,6 +37,9 @@ export default async function Home() {
     .map((c) => { const ps = inCat(c.path); const img = home.settings.tiles[c.id] || (ps.find((p) => image(p)) ? image(ps.find((p) => image(p))!) : null);
       return { c, img, n: groupByModel(ps).length, name: cname(loc(c, locale, "name")) }; })
     .filter((x) => x.n > 0).slice(0, 4);
+  // fotos para o holograma do destaque: as escolhidas no backoffice, ou uma soca e uma meia à venda (evita brancas, que se confundem com o fundo)
+  const firstImg = (path: string) => { const ps = inCat(path).filter((p) => image(p)); const p = ps.find((x) => !/white|branc/i.test(x.title)) ?? ps[0]; return p ? image(p) ?? undefined : undefined; };
+  const holo = { soca: home.settings.hero_images[0] || firstImg("CALÇADO>SOCAS"), meia: home.settings.hero_images[1] || firstImg("MEIAS") };
   const profs = cats.filter((c) => c.path.startsWith("CALÇADO>COMPRAR POR PROFISSÃO>"));
   const quotes = store.list.filter((r) => r.body).slice(0, 3);
 
@@ -60,7 +63,7 @@ export default async function Home() {
               </nav>
             </div>
             <div className="h4-art" aria-hidden="true">
-              <HeroParticles labels={{ logo: "iNurse", soca: t("Socas"), meia: t("Meias de descanso") }} />
+              <HeroParticles labels={{ logo: "iNurse", soca: t("Socas"), meia: t("Meias de descanso") }} images={holo} />
               <div className="h4-chip c1"><Icon k="grip" s={18} /> {t("Sola antiderrapante")}</div>
               <div className="h4-chip c2">{store.count > 0 ? <><Stars value={store.avg} /> <b>{store.avg.toFixed(1).replace(".", ",")}</b></> : <><Icon k="swap" s={18} /> {t("Troca de tamanho fácil")}</>}</div>
             </div>
