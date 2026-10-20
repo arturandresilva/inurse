@@ -1,0 +1,1004 @@
+400 POST http://127.0.0.1:3002/auth/v1/token?grant_type=password
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/pricing_rules?select=*&active=eq.true net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&status=eq.pending_payment net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/pickup_addresses?select=*&active=eq.true net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/products?select=*&supplier_id=not.is.null net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/shipping_rates?select=*&active=eq.true net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/pages?select=* net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&or=%28status.in.%28paid%2Cprocessing%29%2Cand%28admin_seen_at.is.null%2Cstatus.neq.cancelled%29%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/proposals?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/returns?select=*&status=in.%28requested%2Capproved%2Clabel_sent%2Cin_transit%2Creceived%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/chat_conversations?select=*&status=eq.needs_human net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/reviews?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/estatisticas?_rsc=f6buO9EWxguZ60wc net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/encomendas?_rsc=f6buO9EWxguZ60wc net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/devolucoes?_rsc=f6buO9EWxguZ60wc net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/conversas?_rsc=f6buO9EWxguZ60wc net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/avaliacoes?_rsc=f6buO9EWxguZ60wc net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos?_rsc=f6buO9EWxguZ60wc net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/precos?_rsc=f6buO9EWxguZ60wc net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/importar?_rsc=f6buO9EWxguZ60wc net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/concorrencia?_rsc=f6buO9EWxguZ60wc net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/fornecedores?_rsc=f6buO9EWxguZ60wc net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/envios?_rsc=f6buO9EWxguZ60wc net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/agentes?_rsc=f6buO9EWxguZ60wc net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/contas?_rsc=f6buO9EWxguZ60wc net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/pagina-inicial?_rsc=f6buO9EWxguZ60wc net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/configuracoes?_rsc=f6buO9EWxguZ60wc net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/paginas?_rsc=f6buO9EWxguZ60wc net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/encomendas/1001?_rsc=f6buO9EWxguZ60wc net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/reviews?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/returns?select=*&status=in.%28requested%2Capproved%2Clabel_sent%2Cin_transit%2Creceived%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/proposals?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&or=%28status.in.%28paid%2Cprocessing%29%2Cand%28admin_seen_at.is.null%2Cstatus.neq.cancelled%29%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/chat_conversations?select=*&status=eq.needs_human net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin?_rsc=t6uJ6ZuDYYu4MiC_ net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/estatisticas?_rsc=t6uJ6ZuDYYu4MiC_ net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/devolucoes?_rsc=t6uJ6ZuDYYu4MiC_ net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/clientes?_rsc=t6uJ6ZuDYYu4MiC_ net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/promocoes?_rsc=t6uJ6ZuDYYu4MiC_ net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/concorrencia?_rsc=t6uJ6ZuDYYu4MiC_ net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/fornecedores?_rsc=t6uJ6ZuDYYu4MiC_ net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/envios?_rsc=t6uJ6ZuDYYu4MiC_ net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/agentes?_rsc=t6uJ6ZuDYYu4MiC_ net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/redes?_rsc=t6uJ6ZuDYYu4MiC_ net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/contas?_rsc=t6uJ6ZuDYYu4MiC_ net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/pagina-inicial?_rsc=t6uJ6ZuDYYu4MiC_ net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/encomendas/1001?_rsc=t6uJ6ZuDYYu4MiC_ net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/encomendas/1002?_rsc=t6uJ6ZuDYYu4MiC_ net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/returns?select=*&status=in.%28requested%2Capproved%2Clabel_sent%2Cin_transit%2Creceived%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/proposals?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/reviews?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&or=%28status.in.%28paid%2Cprocessing%29%2Cand%28admin_seen_at.is.null%2Cstatus.neq.cancelled%29%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/chat_conversations?select=*&status=eq.needs_human net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin?_rsc=uLFYNe9Ye41MgRNq net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/estatisticas?_rsc=uLFYNe9Ye41MgRNq net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/encomendas?_rsc=uLFYNe9Ye41MgRNq net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/devolucoes?_rsc=uLFYNe9Ye41MgRNq net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/returns?select=*&status=in.%28requested%2Capproved%2Clabel_sent%2Cin_transit%2Creceived%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/proposals?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/reviews?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/chat_conversations?select=*&status=eq.needs_human net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&or=%28status.in.%28paid%2Cprocessing%29%2Cand%28admin_seen_at.is.null%2Cstatus.neq.cancelled%29%29 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/promocoes?_rsc=uLFYNe9Ye41MgRNq net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/conversas?_rsc=uLFYNe9Ye41MgRNq net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/avaliacoes?_rsc=uLFYNe9Ye41MgRNq net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/precos?_rsc=uLFYNe9Ye41MgRNq net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/concorrencia?_rsc=uLFYNe9Ye41MgRNq net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/fornecedores?_rsc=uLFYNe9Ye41MgRNq net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/envios?_rsc=uLFYNe9Ye41MgRNq net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/agentes?_rsc=uLFYNe9Ye41MgRNq net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/redes?_rsc=uLFYNe9Ye41MgRNq net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/contas?_rsc=uLFYNe9Ye41MgRNq net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/pagina-inicial?_rsc=uLFYNe9Ye41MgRNq net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&or=%28status.in.%28paid%2Cprocessing%29%2Cand%28admin_seen_at.is.null%2Cstatus.neq.cancelled%29%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/returns?select=*&status=in.%28requested%2Capproved%2Clabel_sent%2Cin_transit%2Creceived%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/proposals?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/reviews?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/chat_conversations?select=*&status=eq.needs_human net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/encomendas?_rsc=-Kiec3AMEEIPHa-6 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/devolucoes?_rsc=-Kiec3AMEEIPHa-6 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/clientes?_rsc=-Kiec3AMEEIPHa-6 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin?_rsc=-Kiec3AMEEIPHa-6 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/estatisticas?_rsc=-Kiec3AMEEIPHa-6 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/promocoes?_rsc=-Kiec3AMEEIPHa-6 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/importar?_rsc=-Kiec3AMEEIPHa-6 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/avaliacoes?_rsc=-Kiec3AMEEIPHa-6 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/conversas?_rsc=-Kiec3AMEEIPHa-6 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos?_rsc=-Kiec3AMEEIPHa-6 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&or=%28status.in.%28paid%2Cprocessing%29%2Cand%28admin_seen_at.is.null%2Cstatus.neq.cancelled%29%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/returns?select=*&status=in.%28requested%2Capproved%2Clabel_sent%2Cin_transit%2Creceived%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/proposals?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/chat_conversations?select=*&status=eq.needs_human net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/reviews?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/fornecedores?_rsc=-Kiec3AMEEIPHa-6 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/envios?_rsc=-Kiec3AMEEIPHa-6 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/agentes?_rsc=-Kiec3AMEEIPHa-6 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/redes?_rsc=-Kiec3AMEEIPHa-6 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/contas?_rsc=-Kiec3AMEEIPHa-6 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/pagina-inicial?_rsc=-Kiec3AMEEIPHa-6 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/clientes/14a66a65-443d-4f1f-bc18-617b0530408d?_rsc=-Kiec3AMEEIPHa-6 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/proposals?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/returns?select=*&status=in.%28requested%2Capproved%2Clabel_sent%2Cin_transit%2Creceived%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&or=%28status.in.%28paid%2Cprocessing%29%2Cand%28admin_seen_at.is.null%2Cstatus.neq.cancelled%29%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/reviews?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/chat_conversations?select=*&status=eq.needs_human net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/avaliacoes?_rsc=Xl9CP3C09PnkMnzI net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos?_rsc=Xl9CP3C09PnkMnzI net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/conversas?_rsc=Xl9CP3C09PnkMnzI net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/importar?_rsc=Xl9CP3C09PnkMnzI net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/precos?_rsc=Xl9CP3C09PnkMnzI net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/concorrencia?_rsc=Xl9CP3C09PnkMnzI net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/fornecedores?_rsc=Xl9CP3C09PnkMnzI net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/envios?_rsc=Xl9CP3C09PnkMnzI net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/agentes?_rsc=Xl9CP3C09PnkMnzI net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/redes?_rsc=Xl9CP3C09PnkMnzI net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/contas?_rsc=Xl9CP3C09PnkMnzI net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&or=%28status.in.%28paid%2Cprocessing%29%2Cand%28admin_seen_at.is.null%2Cstatus.neq.cancelled%29%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/proposals?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/returns?select=*&status=in.%28requested%2Capproved%2Clabel_sent%2Cin_transit%2Creceived%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/reviews?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/chat_conversations?select=*&status=eq.needs_human net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/encomendas?_rsc=rRQ4knpgR7Ja_kTP net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/devolucoes?_rsc=rRQ4knpgR7Ja_kTP net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/promocoes?_rsc=rRQ4knpgR7Ja_kTP net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin?_rsc=rRQ4knpgR7Ja_kTP net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/estatisticas?_rsc=rRQ4knpgR7Ja_kTP net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos?_rsc=rRQ4knpgR7Ja_kTP net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/importar?_rsc=rRQ4knpgR7Ja_kTP net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/precos?_rsc=rRQ4knpgR7Ja_kTP net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/concorrencia?_rsc=rRQ4knpgR7Ja_kTP net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/envios?_rsc=rRQ4knpgR7Ja_kTP net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/agentes?_rsc=rRQ4knpgR7Ja_kTP net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/redes?_rsc=rRQ4knpgR7Ja_kTP net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/contas?_rsc=rRQ4knpgR7Ja_kTP net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/clientes/70dc502c-349c-47ae-8f43-9759bf0a7140?_rsc=rRQ4knpgR7Ja_kTP net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/clientes/8a47710c-ced5-42f6-be50-0c88ba31473c?_rsc=rRQ4knpgR7Ja_kTP net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/clientes/7dd56cdc-be68-4091-a694-8898316639a0?_rsc=rRQ4knpgR7Ja_kTP net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/clientes/14a66a65-443d-4f1f-bc18-617b0530408d?_rsc=rRQ4knpgR7Ja_kTP net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&or=%28status.in.%28paid%2Cprocessing%29%2Cand%28admin_seen_at.is.null%2Cstatus.neq.cancelled%29%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/proposals?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/returns?select=*&status=in.%28requested%2Capproved%2Clabel_sent%2Cin_transit%2Creceived%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/reviews?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/chat_conversations?select=*&status=eq.needs_human net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin?_rsc=1fTqC6GZH1GTg5MG net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/encomendas?_rsc=1fTqC6GZH1GTg5MG net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/estatisticas?_rsc=1fTqC6GZH1GTg5MG net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/devolucoes?_rsc=1fTqC6GZH1GTg5MG net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/clientes?_rsc=1fTqC6GZH1GTg5MG net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/conversas?_rsc=1fTqC6GZH1GTg5MG net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/avaliacoes?_rsc=1fTqC6GZH1GTg5MG net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos?_rsc=1fTqC6GZH1GTg5MG net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/importar?_rsc=1fTqC6GZH1GTg5MG net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/precos?_rsc=1fTqC6GZH1GTg5MG net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/concorrencia?_rsc=1fTqC6GZH1GTg5MG net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/fornecedores?_rsc=1fTqC6GZH1GTg5MG net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/envios?_rsc=1fTqC6GZH1GTg5MG net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/agentes?_rsc=1fTqC6GZH1GTg5MG net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/redes?_rsc=1fTqC6GZH1GTg5MG net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/contas?_rsc=1fTqC6GZH1GTg5MG net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/proposals?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&or=%28status.in.%28paid%2Cprocessing%29%2Cand%28admin_seen_at.is.null%2Cstatus.neq.cancelled%29%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/returns?select=*&status=in.%28requested%2Capproved%2Clabel_sent%2Cin_transit%2Creceived%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/chat_conversations?select=*&status=eq.needs_human net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/reviews?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/estatisticas?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/4c68a84-141830-astropro-01_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/d9e1163-135439-astropro-02_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/aff7d00-143340-astropro-03_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/b2caee8-143705-astropro-05_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/dfc690f-134103-easylite-black_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/cbda6b0-110656-mn24-800x800.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/1db18c6-135311-easylite-white_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/fa145ec-083423-mn31-800x800.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/f15ca52-084235-mn34-800x800.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/40a9f3f-090557-mn43-800x800.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/a21c1b8-135121-easylite-pink_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/cf9a18f-131448-easylite-green_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/b0c8c32-134350-easylite-light-blue_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/423c9ea-134700-easylite-navy_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/77704b4-143601-mn21-800x800.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/e6b753e-093541-mn33-800x800.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/d533eb1-090203-mn23-800x800.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/78592e9-105314-mn42-800x800-2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/5660dfb-131528-mn22-500x500.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/5078ded-090944-mn51-800x800-2.jpg
+FALHOU GET http://127.0.0.1:3000/admin/promocoes?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/conversas?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/avaliacoes?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/importar?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/precos?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/fornecedores?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/envios?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/agentes?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/redes?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/contas?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/pagina-inicial?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos/novo?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos/dd92e41d-e189-4419-a23b-8e9987b8231d?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos/99f89481-c560-4419-8645-734692192f3d?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos/ebe5fc2e-9fda-4e8d-a603-652a4af0014b?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos/b3a0125b-7a47-485e-bfcd-de35a5573cb2?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos/71e50f3b-4223-4cc0-bb37-bf8ca889b942?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos/94e1587e-2392-4a27-bbbc-202e5b9e80e6?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos/3bbf7b4b-de76-4a0e-b98c-aaa7fdb4b17f?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos/36d6c0c9-6bf0-4020-a9c4-583f21d6576b?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos/a2601341-6ae6-4774-b07e-4dc7a0b008fd?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos/5d635305-173d-4452-97e5-f2153ff04d2e?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/proposals?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/reviews?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/returns?select=*&status=in.%28requested%2Capproved%2Clabel_sent%2Cin_transit%2Creceived%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&or=%28status.in.%28paid%2Cprocessing%29%2Cand%28admin_seen_at.is.null%2Cstatus.neq.cancelled%29%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/chat_conversations?select=*&status=eq.needs_human net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin?_rsc=yPfBU8zVK7dtQDAK net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/estatisticas?_rsc=yPfBU8zVK7dtQDAK net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/promocoes?_rsc=yPfBU8zVK7dtQDAK net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/conversas?_rsc=yPfBU8zVK7dtQDAK net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/avaliacoes?_rsc=yPfBU8zVK7dtQDAK net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos?_rsc=yPfBU8zVK7dtQDAK net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/fornecedores?_rsc=yPfBU8zVK7dtQDAK net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/envios?_rsc=yPfBU8zVK7dtQDAK net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/agentes?_rsc=yPfBU8zVK7dtQDAK net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/redes?_rsc=yPfBU8zVK7dtQDAK net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/contas?_rsc=yPfBU8zVK7dtQDAK net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/pagina-inicial?_rsc=yPfBU8zVK7dtQDAK net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/proposals?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&or=%28status.in.%28paid%2Cprocessing%29%2Cand%28admin_seen_at.is.null%2Cstatus.neq.cancelled%29%29 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin?_rsc=M3ccLw7DpgMafxt0 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/estatisticas?_rsc=M3ccLw7DpgMafxt0 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/returns?select=*&status=in.%28requested%2Capproved%2Clabel_sent%2Cin_transit%2Creceived%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/reviews?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/chat_conversations?select=*&status=eq.needs_human net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/concorrencia?_rsc=M3ccLw7DpgMafxt0 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/fornecedores?_rsc=M3ccLw7DpgMafxt0 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/envios?_rsc=M3ccLw7DpgMafxt0 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/agentes?_rsc=M3ccLw7DpgMafxt0 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/redes?_rsc=M3ccLw7DpgMafxt0 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/contas?_rsc=M3ccLw7DpgMafxt0 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&or=%28status.in.%28paid%2Cprocessing%29%2Cand%28admin_seen_at.is.null%2Cstatus.neq.cancelled%29%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/returns?select=*&status=in.%28requested%2Capproved%2Clabel_sent%2Cin_transit%2Creceived%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/proposals?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/reviews?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/chat_conversations?select=*&status=eq.needs_human net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin?_rsc=tnd8Vfv_dppmKxtG net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/estatisticas?_rsc=tnd8Vfv_dppmKxtG net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/encomendas?_rsc=tnd8Vfv_dppmKxtG net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/devolucoes?_rsc=tnd8Vfv_dppmKxtG net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/clientes?_rsc=tnd8Vfv_dppmKxtG net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/avaliacoes?_rsc=tnd8Vfv_dppmKxtG net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos?_rsc=tnd8Vfv_dppmKxtG net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/importar?_rsc=tnd8Vfv_dppmKxtG net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/precos?_rsc=tnd8Vfv_dppmKxtG net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/concorrencia?_rsc=tnd8Vfv_dppmKxtG net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/envios?_rsc=tnd8Vfv_dppmKxtG net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/agentes?_rsc=tnd8Vfv_dppmKxtG net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/redes?_rsc=tnd8Vfv_dppmKxtG net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/contas?_rsc=tnd8Vfv_dppmKxtG net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/proposals?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&or=%28status.in.%28paid%2Cprocessing%29%2Cand%28admin_seen_at.is.null%2Cstatus.neq.cancelled%29%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/returns?select=*&status=in.%28requested%2Capproved%2Clabel_sent%2Cin_transit%2Creceived%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/reviews?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin?_rsc=IA9EUqH_9eFnoIh9 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/estatisticas?_rsc=IA9EUqH_9eFnoIh9 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/encomendas?_rsc=IA9EUqH_9eFnoIh9 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/devolucoes?_rsc=IA9EUqH_9eFnoIh9 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/chat_conversations?select=*&status=eq.needs_human net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/importar?_rsc=IA9EUqH_9eFnoIh9 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/precos?_rsc=IA9EUqH_9eFnoIh9 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/concorrencia?_rsc=IA9EUqH_9eFnoIh9 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/agentes?_rsc=IA9EUqH_9eFnoIh9 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/fornecedores?_rsc=IA9EUqH_9eFnoIh9 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/redes?_rsc=IA9EUqH_9eFnoIh9 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/contas?_rsc=IA9EUqH_9eFnoIh9 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/pagina-inicial?_rsc=IA9EUqH_9eFnoIh9 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&or=%28status.in.%28paid%2Cprocessing%29%2Cand%28admin_seen_at.is.null%2Cstatus.neq.cancelled%29%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/returns?select=*&status=in.%28requested%2Capproved%2Clabel_sent%2Cin_transit%2Creceived%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/proposals?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/reviews?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/chat_conversations?select=*&status=eq.needs_human net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin?_rsc=s11GLc0c3sPMF5Zo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/estatisticas?_rsc=s11GLc0c3sPMF5Zo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/devolucoes?_rsc=s11GLc0c3sPMF5Zo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/clientes?_rsc=s11GLc0c3sPMF5Zo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/encomendas?_rsc=s11GLc0c3sPMF5Zo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/promocoes?_rsc=s11GLc0c3sPMF5Zo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/conversas?_rsc=s11GLc0c3sPMF5Zo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/avaliacoes?_rsc=s11GLc0c3sPMF5Zo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos?_rsc=s11GLc0c3sPMF5Zo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/importar?_rsc=s11GLc0c3sPMF5Zo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/contas?_rsc=s11GLc0c3sPMF5Zo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/pagina-inicial?_rsc=s11GLc0c3sPMF5Zo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/_next/image?url=https%3A%2F%2Fssmckeparvmrahsnoypt.supabase.co%2Fstorage%2Fv1%2Fobject%2Fpublic%2Fprodutos%2Fctt%2F4c68a84-141830-astropro-01_2.jpg&w=1080&q=90 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&or=%28status.in.%28paid%2Cprocessing%29%2Cand%28admin_seen_at.is.null%2Cstatus.neq.cancelled%29%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/proposals?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/returns?select=*&status=in.%28requested%2Capproved%2Clabel_sent%2Cin_transit%2Creceived%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/reviews?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/chat_conversations?select=*&status=eq.needs_human net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin?_rsc=L4R2Icay55qzIALl net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/importar?_rsc=L4R2Icay55qzIALl net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/precos?_rsc=L4R2Icay55qzIALl net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/avaliacoes?_rsc=L4R2Icay55qzIALl net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/conversas?_rsc=L4R2Icay55qzIALl net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos?_rsc=L4R2Icay55qzIALl net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/agentes?_rsc=L4R2Icay55qzIALl net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/contas?_rsc=L4R2Icay55qzIALl net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/pagina-inicial?_rsc=L4R2Icay55qzIALl net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/proposals?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&or=%28status.in.%28paid%2Cprocessing%29%2Cand%28admin_seen_at.is.null%2Cstatus.neq.cancelled%29%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/returns?select=*&status=in.%28requested%2Capproved%2Clabel_sent%2Cin_transit%2Creceived%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/reviews?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/chat_conversations?select=*&status=eq.needs_human net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin?_rsc=ogNY2wJMYWgx1Psx net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/estatisticas?_rsc=ogNY2wJMYWgx1Psx net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/encomendas?_rsc=ogNY2wJMYWgx1Psx net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/devolucoes?_rsc=ogNY2wJMYWgx1Psx net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos?_rsc=ogNY2wJMYWgx1Psx net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/importar?_rsc=ogNY2wJMYWgx1Psx net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/precos?_rsc=ogNY2wJMYWgx1Psx net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/concorrencia?_rsc=ogNY2wJMYWgx1Psx net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/fornecedores?_rsc=ogNY2wJMYWgx1Psx net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/envios?_rsc=ogNY2wJMYWgx1Psx net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/agentes?_rsc=ogNY2wJMYWgx1Psx net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/redes?_rsc=ogNY2wJMYWgx1Psx net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/reviews?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&or=%28status.in.%28paid%2Cprocessing%29%2Cand%28admin_seen_at.is.null%2Cstatus.neq.cancelled%29%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/returns?select=*&status=in.%28requested%2Capproved%2Clabel_sent%2Cin_transit%2Creceived%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/chat_conversations?select=*&status=eq.needs_human net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/proposals?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin?_rsc=EMb0dTo_NoMwd-F7 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/estatisticas?_rsc=EMb0dTo_NoMwd-F7 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/promocoes?_rsc=EMb0dTo_NoMwd-F7 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/conversas?_rsc=EMb0dTo_NoMwd-F7 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/avaliacoes?_rsc=EMb0dTo_NoMwd-F7 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos?_rsc=EMb0dTo_NoMwd-F7 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/concorrencia?_rsc=EMb0dTo_NoMwd-F7 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/precos?_rsc=EMb0dTo_NoMwd-F7 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/fornecedores?_rsc=EMb0dTo_NoMwd-F7 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/envios?_rsc=EMb0dTo_NoMwd-F7 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/redes?_rsc=EMb0dTo_NoMwd-F7 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/contas?_rsc=EMb0dTo_NoMwd-F7 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/agentes?_rsc=EMb0dTo_NoMwd-F7 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&or=%28status.in.%28paid%2Cprocessing%29%2Cand%28admin_seen_at.is.null%2Cstatus.neq.cancelled%29%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/returns?select=*&status=in.%28requested%2Capproved%2Clabel_sent%2Cin_transit%2Creceived%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/proposals?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/reviews?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/chat_conversations?select=*&status=eq.needs_human net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin?_rsc=STzOp-2URp0WcHZi net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/encomendas?_rsc=STzOp-2URp0WcHZi net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/devolucoes?_rsc=STzOp-2URp0WcHZi net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/estatisticas?_rsc=STzOp-2URp0WcHZi net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/promocoes?_rsc=STzOp-2URp0WcHZi net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/conversas?_rsc=STzOp-2URp0WcHZi net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/avaliacoes?_rsc=STzOp-2URp0WcHZi net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos?_rsc=STzOp-2URp0WcHZi net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/concorrencia?_rsc=STzOp-2URp0WcHZi net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/precos?_rsc=STzOp-2URp0WcHZi net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/fornecedores?_rsc=STzOp-2URp0WcHZi net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/envios?_rsc=STzOp-2URp0WcHZi net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/redes?_rsc=STzOp-2URp0WcHZi net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/contas?_rsc=STzOp-2URp0WcHZi net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/pagina-inicial?_rsc=STzOp-2URp0WcHZi net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&or=%28status.in.%28paid%2Cprocessing%29%2Cand%28admin_seen_at.is.null%2Cstatus.neq.cancelled%29%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/proposals?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/returns?select=*&status=in.%28requested%2Capproved%2Clabel_sent%2Cin_transit%2Creceived%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/chat_conversations?select=*&status=eq.needs_human net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/reviews?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin?_rsc=lhmJxeUSWDGiEmz2 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/estatisticas?_rsc=lhmJxeUSWDGiEmz2 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/conversas?_rsc=lhmJxeUSWDGiEmz2 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/avaliacoes?_rsc=lhmJxeUSWDGiEmz2 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos?_rsc=lhmJxeUSWDGiEmz2 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/importar?_rsc=lhmJxeUSWDGiEmz2 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/concorrencia?_rsc=lhmJxeUSWDGiEmz2 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/fornecedores?_rsc=lhmJxeUSWDGiEmz2 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/envios?_rsc=lhmJxeUSWDGiEmz2 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/agentes?_rsc=lhmJxeUSWDGiEmz2 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/contas?_rsc=lhmJxeUSWDGiEmz2 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&or=%28status.in.%28paid%2Cprocessing%29%2Cand%28admin_seen_at.is.null%2Cstatus.neq.cancelled%29%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/proposals?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin?_rsc=le2_I5SaZef4fmas net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/estatisticas?_rsc=le2_I5SaZef4fmas net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/chat_conversations?select=*&status=eq.needs_human net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/reviews?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/returns?select=*&status=in.%28requested%2Capproved%2Clabel_sent%2Cin_transit%2Creceived%29 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/avaliacoes?_rsc=le2_I5SaZef4fmas net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos?_rsc=le2_I5SaZef4fmas net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/importar?_rsc=le2_I5SaZef4fmas net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/precos?_rsc=le2_I5SaZef4fmas net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/concorrencia?_rsc=le2_I5SaZef4fmas net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/fornecedores?_rsc=le2_I5SaZef4fmas net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/envios?_rsc=le2_I5SaZef4fmas net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/agentes?_rsc=le2_I5SaZef4fmas net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/redes?_rsc=le2_I5SaZef4fmas net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/contas?_rsc=le2_I5SaZef4fmas net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&or=%28status.in.%28paid%2Cprocessing%29%2Cand%28admin_seen_at.is.null%2Cstatus.neq.cancelled%29%29 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin?_rsc=le2_I5SaZef4fmas net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/estatisticas?_rsc=le2_I5SaZef4fmas net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/encomendas?_rsc=le2_I5SaZef4fmas net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/proposals?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/chat_conversations?select=*&status=eq.needs_human net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/returns?select=*&status=in.%28requested%2Capproved%2Clabel_sent%2Cin_transit%2Creceived%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/reviews?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/precos?_rsc=le2_I5SaZef4fmas net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/concorrencia?_rsc=le2_I5SaZef4fmas net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/fornecedores?_rsc=le2_I5SaZef4fmas net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/envios?_rsc=le2_I5SaZef4fmas net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/agentes?_rsc=le2_I5SaZef4fmas net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/redes?_rsc=le2_I5SaZef4fmas net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/contas?_rsc=le2_I5SaZef4fmas net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&or=%28status.in.%28paid%2Cprocessing%29%2Cand%28admin_seen_at.is.null%2Cstatus.neq.cancelled%29%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/proposals?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/returns?select=*&status=in.%28requested%2Capproved%2Clabel_sent%2Cin_transit%2Creceived%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/reviews?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/chat_conversations?select=*&status=eq.needs_human net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin?_rsc=s11GLc0c3sPMF5Zo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/estatisticas?_rsc=s11GLc0c3sPMF5Zo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/encomendas?_rsc=s11GLc0c3sPMF5Zo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/devolucoes?_rsc=s11GLc0c3sPMF5Zo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/precos?_rsc=s11GLc0c3sPMF5Zo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/concorrencia?_rsc=s11GLc0c3sPMF5Zo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/contas?_rsc=s11GLc0c3sPMF5Zo net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/proposals?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&or=%28status.in.%28paid%2Cprocessing%29%2Cand%28admin_seen_at.is.null%2Cstatus.neq.cancelled%29%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/returns?select=*&status=in.%28requested%2Capproved%2Clabel_sent%2Cin_transit%2Creceived%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/reviews?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/chat_conversations?select=*&status=eq.needs_human net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/reviews?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/chat_conversations?select=*&status=eq.needs_human net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/proposals?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&or=%28status.in.%28paid%2Cprocessing%29%2Cand%28admin_seen_at.is.null%2Cstatus.neq.cancelled%29%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/returns?select=*&status=in.%28requested%2Capproved%2Clabel_sent%2Cin_transit%2Creceived%29 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/precos?_rsc=h4mkQWrF19u4p6_F net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/concorrencia?_rsc=h4mkQWrF19u4p6_F net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/fornecedores?_rsc=h4mkQWrF19u4p6_F net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/envios?_rsc=h4mkQWrF19u4p6_F net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/agentes?_rsc=h4mkQWrF19u4p6_F net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/redes?_rsc=h4mkQWrF19u4p6_F net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/contas?_rsc=h4mkQWrF19u4p6_F net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/pagina-inicial?_rsc=h4mkQWrF19u4p6_F net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/returns?select=*&status=in.%28requested%2Capproved%2Clabel_sent%2Cin_transit%2Creceived%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/proposals?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&or=%28status.in.%28paid%2Cprocessing%29%2Cand%28admin_seen_at.is.null%2Cstatus.neq.cancelled%29%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/reviews?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/chat_conversations?select=*&status=eq.needs_human net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/devolucoes?_rsc=uLFYNe9Ye41MgRNq net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin?_rsc=uLFYNe9Ye41MgRNq net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/estatisticas?_rsc=uLFYNe9Ye41MgRNq net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/clientes?_rsc=uLFYNe9Ye41MgRNq net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/encomendas?_rsc=uLFYNe9Ye41MgRNq net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos?_rsc=uLFYNe9Ye41MgRNq net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/promocoes?_rsc=uLFYNe9Ye41MgRNq net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/conversas?_rsc=uLFYNe9Ye41MgRNq net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/avaliacoes?_rsc=uLFYNe9Ye41MgRNq net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/agentes?_rsc=uLFYNe9Ye41MgRNq net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/pagina-inicial?_rsc=uLFYNe9Ye41MgRNq net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/clientes/8a47710c-ced5-42f6-be50-0c88ba31473c?_rsc=uLFYNe9Ye41MgRNq net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/redes?_rsc=uLFYNe9Ye41MgRNq net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/contas?_rsc=uLFYNe9Ye41MgRNq net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&or=%28status.in.%28paid%2Cprocessing%29%2Cand%28admin_seen_at.is.null%2Cstatus.neq.cancelled%29%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/reviews?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/returns?select=*&status=in.%28requested%2Capproved%2Clabel_sent%2Cin_transit%2Creceived%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/proposals?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/chat_conversations?select=*&status=eq.needs_human net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin?_rsc=EMb0dTo_NoMwd-F7 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/estatisticas?_rsc=EMb0dTo_NoMwd-F7 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/conversas?_rsc=EMb0dTo_NoMwd-F7 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/avaliacoes?_rsc=EMb0dTo_NoMwd-F7 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos?_rsc=EMb0dTo_NoMwd-F7 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/promocoes?_rsc=EMb0dTo_NoMwd-F7 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/precos?_rsc=EMb0dTo_NoMwd-F7 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/concorrencia?_rsc=EMb0dTo_NoMwd-F7 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/fornecedores?_rsc=EMb0dTo_NoMwd-F7 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/envios?_rsc=EMb0dTo_NoMwd-F7 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/redes?_rsc=EMb0dTo_NoMwd-F7 net::ERR_ABORTED
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/1db18c6-135311-easylite-white_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/a21c1b8-135121-easylite-pink_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/b2caee8-143705-astropro-05_2.jpg
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/returns?select=*&status=in.%28requested%2Capproved%2Clabel_sent%2Cin_transit%2Creceived%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/proposals?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&or=%28status.in.%28paid%2Cprocessing%29%2Cand%28admin_seen_at.is.null%2Cstatus.neq.cancelled%29%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/reviews?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/chat_conversations?select=*&status=eq.needs_human net::ERR_ABORTED
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/4c68a84-141830-astropro-01_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/d9e1163-135439-astropro-02_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/aff7d00-143340-astropro-03_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/b2caee8-143705-astropro-05_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/cbda6b0-110656-mn24-800x800.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/f15ca52-084235-mn34-800x800.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/40a9f3f-090557-mn43-800x800.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/dfc690f-134103-easylite-black_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/a21c1b8-135121-easylite-pink_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/cf9a18f-131448-easylite-green_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/b0c8c32-134350-easylite-light-blue_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/423c9ea-134700-easylite-navy_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/1db18c6-135311-easylite-white_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/e6b753e-093541-mn33-800x800.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/d533eb1-090203-mn23-800x800.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/78592e9-105314-mn42-800x800-2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/5660dfb-131528-mn22-500x500.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/fa145ec-083423-mn31-800x800.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/77704b4-143601-mn21-800x800.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/5078ded-090944-mn51-800x800-2.jpg
+FALHOU GET http://127.0.0.1:3000/admin/avaliacoes?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/importar?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/precos?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/concorrencia?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/fornecedores?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/envios?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/contas?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/pagina-inicial?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos/novo?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos/dd92e41d-e189-4419-a23b-8e9987b8231d?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos/99f89481-c560-4419-8645-734692192f3d?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos/ebe5fc2e-9fda-4e8d-a603-652a4af0014b?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos/454756d2-0c98-436f-92fc-aafe8a586fc9?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos/b801e0de-b3f8-41d8-b9be-5518f8c59482?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos/b3a0125b-7a47-485e-bfcd-de35a5573cb2?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos/71e50f3b-4223-4cc0-bb37-bf8ca889b942?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos/94e1587e-2392-4a27-bbbc-202e5b9e80e6?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos/3bbf7b4b-de76-4a0e-b98c-aaa7fdb4b17f?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos/a2601341-6ae6-4774-b07e-4dc7a0b008fd?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos/36d6c0c9-6bf0-4020-a9c4-583f21d6576b?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos/5d635305-173d-4452-97e5-f2153ff04d2e?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/reviews?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/proposals?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&or=%28status.in.%28paid%2Cprocessing%29%2Cand%28admin_seen_at.is.null%2Cstatus.neq.cancelled%29%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/returns?select=*&status=in.%28requested%2Capproved%2Clabel_sent%2Cin_transit%2Creceived%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/chat_conversations?select=*&status=eq.needs_human net::ERR_ABORTED
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/4c68a84-141830-astropro-01_2.jpg
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&or=%28status.in.%28paid%2Cprocessing%29%2Cand%28admin_seen_at.is.null%2Cstatus.neq.cancelled%29%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/reviews?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/proposals?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/returns?select=*&status=in.%28requested%2Capproved%2Clabel_sent%2Cin_transit%2Creceived%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/chat_conversations?select=*&status=eq.needs_human net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin?_rsc=yPfBU8zVK7dtQDAK net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/estatisticas?_rsc=yPfBU8zVK7dtQDAK net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/encomendas?_rsc=yPfBU8zVK7dtQDAK net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/concorrencia?_rsc=yPfBU8zVK7dtQDAK net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/fornecedores?_rsc=yPfBU8zVK7dtQDAK net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/envios?_rsc=yPfBU8zVK7dtQDAK net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos?_rsc=yPfBU8zVK7dtQDAK net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/precos?_rsc=yPfBU8zVK7dtQDAK net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/redes?_rsc=yPfBU8zVK7dtQDAK net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/agentes?_rsc=yPfBU8zVK7dtQDAK net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/contas?_rsc=yPfBU8zVK7dtQDAK net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/pagina-inicial?_rsc=yPfBU8zVK7dtQDAK net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&or=%28status.in.%28paid%2Cprocessing%29%2Cand%28admin_seen_at.is.null%2Cstatus.neq.cancelled%29%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/reviews?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/proposals?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/returns?select=*&status=in.%28requested%2Capproved%2Clabel_sent%2Cin_transit%2Creceived%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/chat_conversations?select=*&status=eq.needs_human net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/?_rsc=Or-hyltlwD4yW03A net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/loja?_rsc=Or-hyltlwD4yW03A net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/sapatilhas?_rsc=Or-hyltlwD4yW03A net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/socas?_rsc=Or-hyltlwD4yW03A net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/comprar-por-profissao/enfermagem?_rsc=Or-hyltlwD4yW03A net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/astropro-05?_rsc=Or-hyltlwD4yW03A net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/easylite-white?_rsc=Or-hyltlwD4yW03A net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/carrinho?_rsc=Or-hyltlwD4yW03A net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/envios?_rsc=Or-hyltlwD4yW03A net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/trocas-e-devolucoes?_rsc=Or-hyltlwD4yW03A net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/guia-de-tamanhos?_rsc=Or-hyltlwD4yW03A net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/contactos?_rsc=Or-hyltlwD4yW03A net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/termos-e-condicoes?_rsc=Or-hyltlwD4yW03A net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/privacidade?_rsc=Or-hyltlwD4yW03A net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/astropro-01?_rsc=Or-hyltlwD4yW03A net::ERR_ABORTED
+FALHOU GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/4c68a84-141830-astropro-01_2.jpg net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/sapatilhas?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/socas?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/meias?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/astropro-05?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/comprar-por-profissao/enfermagem?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/easylite-white?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/conta?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/carrinho?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/meias-para-pe-diabetico-e-artritico?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/collant-medicinal-140-den-18-21-mmhg?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/collant-medicinal-140-den-18-21-mmhg-2?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/easylite-white?_rsc=8enlUcTHAvzImqA4 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/easylite-fuchsia?_rsc=L8HJcCyaKCj-Loba net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/easylite-navyblue?_rsc=L8HJcCyaKCj-Loba net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/easylite-lightblue?_rsc=L8HJcCyaKCj-Loba net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/easylite-black?_rsc=L8HJcCyaKCj-Loba net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/easylite-green?_rsc=L8HJcCyaKCj-Loba net::ERR_ABORTED
+FALHOU GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/cf9a18f-131448-easylite-green_2.jpg net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/?_rsc=Or-hyltlwD4yW03A net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/loja?_rsc=Or-hyltlwD4yW03A net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/sapatilhas?_rsc=Or-hyltlwD4yW03A net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/socas?_rsc=Or-hyltlwD4yW03A net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/meias?_rsc=Or-hyltlwD4yW03A net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/comprar-por-profissao/enfermagem?_rsc=Or-hyltlwD4yW03A net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/astropro-05?_rsc=Or-hyltlwD4yW03A net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/trocas-e-devolucoes?_rsc=Or-hyltlwD4yW03A net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/easylite-white?_rsc=Or-hyltlwD4yW03A net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/carrinho?_rsc=Or-hyltlwD4yW03A net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/envios?_rsc=Or-hyltlwD4yW03A net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/guia-de-tamanhos?_rsc=Or-hyltlwD4yW03A net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/contactos?_rsc=Or-hyltlwD4yW03A net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/privacidade?_rsc=Or-hyltlwD4yW03A net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/socas?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/sapatilhas?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/meias?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/comprar-por-profissao/enfermagem?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/collant-terapeutica-class-ii-340-den-23-32-mmhg?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/collant-medicinal-140-den-18-21-mmhg?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/collant-medicinal-140-den-18-21-mmhg-2?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/astropro-03?_rsc=i7rwF03xRMwxfvtO net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/astropro-01?_rsc=i7rwF03xRMwxfvtO net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/astropro-02?_rsc=i7rwF03xRMwxfvtO net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/guia-de-tamanhos?_rsc=i7rwF03xRMwxfvtO net::ERR_ABORTED
+FALHOU GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/4c68a84-141830-astropro-01_2.jpg net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/comprar-por-profissao/enfermagem?_rsc=sMqu-SqGLezgN8Dd net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/astropro-05?_rsc=sMqu-SqGLezgN8Dd net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/conta?_rsc=sMqu-SqGLezgN8Dd net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/easylite-white?_rsc=sMqu-SqGLezgN8Dd net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/carrinho?_rsc=sMqu-SqGLezgN8Dd net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/envios?_rsc=sMqu-SqGLezgN8Dd net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/privacidade?_rsc=sMqu-SqGLezgN8Dd net::ERR_ABORTED
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/1db18c6-135311-easylite-white_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/b2caee8-143705-astropro-05_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/5078ded-090944-mn51-800x800-2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/a21c1b8-135121-easylite-pink_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/423c9ea-134700-easylite-navy_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/b0c8c32-134350-easylite-light-blue_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/dfc690f-134103-easylite-black_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/aff7d00-143340-astropro-03_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/4c68a84-141830-astropro-01_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/d9e1163-135439-astropro-02_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/40a9f3f-090557-mn43-800x800.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/f15ca52-084235-mn34-800x800.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/cbda6b0-110656-mn24-800x800.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/78592e9-105314-mn42-800x800-2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/e6b753e-093541-mn33-800x800.jpg
+FALHOU GET http://127.0.0.1:3000/conta?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/carrinho?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/sapatilhas?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/socas?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/loja?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/easylite-white?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/astropro-05?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/privacidade?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/1db18c6-135311-easylite-white_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/b2caee8-143705-astropro-05_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/5078ded-090944-mn51-800x800-2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/423c9ea-134700-easylite-navy_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/b0c8c32-134350-easylite-light-blue_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/dfc690f-134103-easylite-black_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/a21c1b8-135121-easylite-pink_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/aff7d00-143340-astropro-03_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/4c68a84-141830-astropro-01_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/d9e1163-135439-astropro-02_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/40a9f3f-090557-mn43-800x800.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/f15ca52-084235-mn34-800x800.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/cbda6b0-110656-mn24-800x800.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/78592e9-105314-mn42-800x800-2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/e6b753e-093541-mn33-800x800.jpg
+FALHOU GET http://127.0.0.1:3000/conta?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/carrinho?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/sapatilhas?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/socas?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/meias?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/loja?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/easylite-white?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/astropro-05?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/guia-de-tamanhos?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/envios?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/trocas-e-devolucoes?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/contactos?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/termos-e-condicoes?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/privacidade?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/livre-resolucao?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/meias?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/sapatilhas?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/socas?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/astropro-05?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/easylite-white?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/conta?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/carrinho?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/collant-terapeutica-class-ii-340-den-23-32-mmhg?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/collant-medicinal-140-den-18-21-mmhg?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/collant-medicinal-140-den-18-21-mmhg-2?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/easylite-white?_rsc=8enlUcTHAvzImqA4 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/easylite-fuchsia?_rsc=L8HJcCyaKCj-Loba net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/easylite-navyblue?_rsc=L8HJcCyaKCj-Loba net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/easylite-lightblue?_rsc=L8HJcCyaKCj-Loba net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/easylite-black?_rsc=L8HJcCyaKCj-Loba net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/easylite-green?_rsc=L8HJcCyaKCj-Loba net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/guia-de-tamanhos?_rsc=L8HJcCyaKCj-Loba net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/easylite-fuchsia?_rsc=fxpHIEAsx3u1PiV5 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/?_rsc=SrgUP47EZDtLTXJo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/loja?_rsc=SrgUP47EZDtLTXJo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/sapatilhas?_rsc=SrgUP47EZDtLTXJo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/socas?_rsc=SrgUP47EZDtLTXJo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/meias?_rsc=SrgUP47EZDtLTXJo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/astropro-05?_rsc=SrgUP47EZDtLTXJo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/easylite-white?_rsc=SrgUP47EZDtLTXJo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/conta?_rsc=SrgUP47EZDtLTXJo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/carrinho?_rsc=SrgUP47EZDtLTXJo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/comprar-por-profissao/enfermagem?_rsc=SrgUP47EZDtLTXJo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/trocas-e-devolucoes?_rsc=SrgUP47EZDtLTXJo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/loja?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/sapatilhas?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/socas?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/meias?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/astropro-05?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/easylite-white?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/conta?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/loja?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/socas?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/meias?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/sapatilhas?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/astropro-05?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/easylite-white?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/conta?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/carrinho?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/sapatilhas?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/socas?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/meias?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/comprar-por-profissao/enfermagem?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/loja?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/astropro-05?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/easylite-white?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/conta?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/carrinho?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/conta?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/carrinho?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/sapatilhas?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/socas?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/meias?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/loja?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/easylite-white?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/conta?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/carrinho?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/easylite-white?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/astropro-05?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/meias-para-pe-diabetico-e-artritico?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/collant-terapeutica-class-ii-340-den-23-32-mmhg?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/collant-medicinal-140-den-18-21-mmhg?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/collant-medicinal-140-den-18-21-mmhg-2?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/?_rsc=53Pra2R8SF84sdTA net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/sapatilhas?_rsc=53Pra2R8SF84sdTA net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/comprar-por-profissao/enfermagem?_rsc=53Pra2R8SF84sdTA net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/conta?_rsc=53Pra2R8SF84sdTA net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/carrinho?_rsc=53Pra2R8SF84sdTA net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/meias?_rsc=53Pra2R8SF84sdTA net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/loja?_rsc=53Pra2R8SF84sdTA net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/conta?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/carrinho?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/easylite-white?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/collant-medicinal-140-den-18-21-mmhg-2?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/meias-para-pe-diabetico-e-artritico?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/collant-terapeutica-class-ii-340-den-23-32-mmhg?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/collant-medicinal-140-den-18-21-mmhg?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/easylite-white?_rsc=8enlUcTHAvzImqA4 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/socas?_rsc=L8HJcCyaKCj-Loba net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/easylite-fuchsia?_rsc=L8HJcCyaKCj-Loba net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/easylite-navyblue?_rsc=L8HJcCyaKCj-Loba net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/easylite-lightblue?_rsc=L8HJcCyaKCj-Loba net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/?_rsc=7UmkG2y5QRUDqY6t net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/conta?_rsc=7UmkG2y5QRUDqY6t net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/socas?_rsc=7UmkG2y5QRUDqY6t net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/sapatilhas?_rsc=7UmkG2y5QRUDqY6t net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/loja?_rsc=7UmkG2y5QRUDqY6t net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/envios?_rsc=7UmkG2y5QRUDqY6t net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/trocas-e-devolucoes?_rsc=7UmkG2y5QRUDqY6t net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/guia-de-tamanhos?_rsc=7UmkG2y5QRUDqY6t net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/termos-e-condicoes?_rsc=7UmkG2y5QRUDqY6t net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/privacidade?_rsc=7UmkG2y5QRUDqY6t net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/?_rsc=sMqu-SqGLezgN8Dd net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/conta?_rsc=sMqu-SqGLezgN8Dd net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/carrinho?_rsc=sMqu-SqGLezgN8Dd net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/loja?_rsc=sMqu-SqGLezgN8Dd net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/sapatilhas?_rsc=sMqu-SqGLezgN8Dd net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/meias?_rsc=sMqu-SqGLezgN8Dd net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/envios?_rsc=sMqu-SqGLezgN8Dd net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/trocas-e-devolucoes?_rsc=sMqu-SqGLezgN8Dd net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/contactos?_rsc=sMqu-SqGLezgN8Dd net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/termos-e-condicoes?_rsc=sMqu-SqGLezgN8Dd net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/privacidade?_rsc=sMqu-SqGLezgN8Dd net::ERR_ABORTED
+404 GET http://127.0.0.1:3000/p/envios
+FALHOU GET http://127.0.0.1:3000/?_rsc=DE8jMmJSCz_I7lHN net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/conta?_rsc=DE8jMmJSCz_I7lHN net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/carrinho?_rsc=DE8jMmJSCz_I7lHN net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/loja?_rsc=DE8jMmJSCz_I7lHN net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/socas?_rsc=DE8jMmJSCz_I7lHN net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/sapatilhas?_rsc=DE8jMmJSCz_I7lHN net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/meias?_rsc=DE8jMmJSCz_I7lHN net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/trocas-e-devolucoes?_rsc=DE8jMmJSCz_I7lHN net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/guia-de-tamanhos?_rsc=DE8jMmJSCz_I7lHN net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/termos-e-condicoes?_rsc=DE8jMmJSCz_I7lHN net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/privacidade?_rsc=DE8jMmJSCz_I7lHN net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/?_rsc=SrgUP47EZDtLTXJo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/conta?_rsc=SrgUP47EZDtLTXJo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/?_rsc=Or-hyltlwD4yW03A net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/carrinho?_rsc=Or-hyltlwD4yW03A net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/envios?_rsc=Or-hyltlwD4yW03A net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/trocas-e-devolucoes?_rsc=Or-hyltlwD4yW03A net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/guia-de-tamanhos?_rsc=Or-hyltlwD4yW03A net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/contactos?_rsc=Or-hyltlwD4yW03A net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/loja?_rsc=Or-hyltlwD4yW03A net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/termos-e-condicoes?_rsc=Or-hyltlwD4yW03A net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/privacidade?_rsc=Or-hyltlwD4yW03A net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/conta?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/sapatilhas?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/socas?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/meias?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/carrinho?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/easylite-white?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/sapatilhas?_rsc=5GwMuLTG4x2kPyqU net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/sapatilhas?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/socas?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/meias?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/comprar-por-profissao/enfermagem?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/collant-terapeutica-class-ii-340-den-23-32-mmhg?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/collant-medicinal-140-den-18-21-mmhg?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/collant-medicinal-140-den-18-21-mmhg-2?_rsc=qexPiURIupUg2Ubu net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/sapatilhas?_rsc=5GwMuLTG4x2kPyqU net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/envios?_rsc=zNAT1S1ZoeRW7QVl net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/trocas-e-devolucoes?_rsc=zNAT1S1ZoeRW7QVl net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/guia-de-tamanhos?_rsc=zNAT1S1ZoeRW7QVl net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/contactos?_rsc=zNAT1S1ZoeRW7QVl net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/termos-e-condicoes?_rsc=zNAT1S1ZoeRW7QVl net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/p/privacidade?_rsc=zNAT1S1ZoeRW7QVl net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/livre-resolucao?_rsc=zNAT1S1ZoeRW7QVl net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&or=%28status.in.%28paid%2Cprocessing%29%2Cand%28admin_seen_at.is.null%2Cstatus.neq.cancelled%29%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/proposals?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/chat_conversations?select=*&status=eq.needs_human net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/reviews?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/returns?select=*&status=in.%28requested%2Capproved%2Clabel_sent%2Cin_transit%2Creceived%29 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin?_rsc=le2_I5SaZef4fmas net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/encomendas?_rsc=le2_I5SaZef4fmas net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/estatisticas?_rsc=le2_I5SaZef4fmas net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/devolucoes?_rsc=le2_I5SaZef4fmas net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/clientes?_rsc=le2_I5SaZef4fmas net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/promocoes?_rsc=le2_I5SaZef4fmas net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/fornecedores?_rsc=le2_I5SaZef4fmas net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/envios?_rsc=le2_I5SaZef4fmas net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/agentes?_rsc=le2_I5SaZef4fmas net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/?_rsc=SrgUP47EZDtLTXJo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/conta?_rsc=SrgUP47EZDtLTXJo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/conta?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/carrinho?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/sapatilhas?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/socas?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/loja?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/easylite-white?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/1db18c6-135311-easylite-white_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/b2caee8-143705-astropro-05_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/5078ded-090944-mn51-800x800-2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/a21c1b8-135121-easylite-pink_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/423c9ea-134700-easylite-navy_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/b0c8c32-134350-easylite-light-blue_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/4c68a84-141830-astropro-01_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/d9e1163-135439-astropro-02_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/40a9f3f-090557-mn43-800x800.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/f15ca52-084235-mn34-800x800.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/cbda6b0-110656-mn24-800x800.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/78592e9-105314-mn42-800x800-2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/e6b753e-093541-mn33-800x800.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/dfc690f-134103-easylite-black_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/aff7d00-143340-astropro-03_2.jpg
+FALHOU GET http://127.0.0.1:3000/loja?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/sapatilhas?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/socas?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/meias?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/comprar-por-profissao/enfermagem?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/astropro-05?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/easylite-white?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/conta?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/carrinho?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/sapatilhas?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/loja?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/calcado/socas?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/c/meias?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/astropro-05?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/easylite-white?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/conta?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/carrinho?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/meias-para-pe-diabetico-e-artritico?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/collant-terapeutica-class-ii-340-den-23-32-mmhg?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/produto/collant-medicinal-140-den-18-21-mmhg?_rsc=I0GlcYfuVONOK3sj net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&status=eq.pending_payment net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/pickup_addresses?select=*&active=eq.true net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/pricing_rules?select=*&active=eq.true net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/pages?select=* net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/proposals?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/shipping_rates?select=*&active=eq.true net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&or=%28status.in.%28paid%2Cprocessing%29%2Cand%28admin_seen_at.is.null%2Cstatus.neq.cancelled%29%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/products?select=*&supplier_id=not.is.null net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/returns?select=*&status=in.%28requested%2Capproved%2Clabel_sent%2Cin_transit%2Creceived%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/reviews?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/chat_conversations?select=*&status=eq.needs_human net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/conversas?_rsc=f6buO9EWxguZ60wc net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/avaliacoes?_rsc=f6buO9EWxguZ60wc net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos?_rsc=f6buO9EWxguZ60wc net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/importar?_rsc=f6buO9EWxguZ60wc net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/precos?_rsc=f6buO9EWxguZ60wc net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/redes?_rsc=f6buO9EWxguZ60wc net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/envios?_rsc=f6buO9EWxguZ60wc net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/fornecedores?_rsc=f6buO9EWxguZ60wc net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/agentes?_rsc=f6buO9EWxguZ60wc net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/concorrencia?_rsc=f6buO9EWxguZ60wc net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&status=eq.pending_payment net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/pricing_rules?select=*&active=eq.true net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/pages?select=* net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/pickup_addresses?select=*&active=eq.true net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/estatisticas?_rsc=f6buO9EWxguZ60wc net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/encomendas?_rsc=f6buO9EWxguZ60wc net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/shipping_rates?select=*&active=eq.true net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/products?select=*&supplier_id=not.is.null net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/devolucoes?_rsc=f6buO9EWxguZ60wc net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&or=%28status.in.%28paid%2Cprocessing%29%2Cand%28admin_seen_at.is.null%2Cstatus.neq.cancelled%29%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/proposals?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/returns?select=*&status=in.%28requested%2Capproved%2Clabel_sent%2Cin_transit%2Creceived%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/reviews?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/chat_conversations?select=*&status=eq.needs_human net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/concorrencia?_rsc=f6buO9EWxguZ60wc net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/fornecedores?_rsc=f6buO9EWxguZ60wc net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/envios?_rsc=f6buO9EWxguZ60wc net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/agentes?_rsc=f6buO9EWxguZ60wc net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/redes?_rsc=f6buO9EWxguZ60wc net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/contas?_rsc=f6buO9EWxguZ60wc net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/configuracoes?_rsc=f6buO9EWxguZ60wc net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&or=%28status.in.%28paid%2Cprocessing%29%2Cand%28admin_seen_at.is.null%2Cstatus.neq.cancelled%29%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/returns?select=*&status=in.%28requested%2Capproved%2Clabel_sent%2Cin_transit%2Creceived%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/proposals?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/reviews?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/chat_conversations?select=*&status=eq.needs_human net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin?_rsc=-Kiec3AMEEIPHa-6 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/estatisticas?_rsc=-Kiec3AMEEIPHa-6 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/encomendas?_rsc=-Kiec3AMEEIPHa-6 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/devolucoes?_rsc=-Kiec3AMEEIPHa-6 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/promocoes?_rsc=-Kiec3AMEEIPHa-6 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/conversas?_rsc=-Kiec3AMEEIPHa-6 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/avaliacoes?_rsc=-Kiec3AMEEIPHa-6 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/envios?_rsc=-Kiec3AMEEIPHa-6 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/agentes?_rsc=-Kiec3AMEEIPHa-6 net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/redes?_rsc=-Kiec3AMEEIPHa-6 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/returns?select=*&status=in.%28requested%2Capproved%2Clabel_sent%2Cin_transit%2Creceived%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/proposals?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&or=%28status.in.%28paid%2Cprocessing%29%2Cand%28admin_seen_at.is.null%2Cstatus.neq.cancelled%29%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/reviews?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/estatisticas?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/chat_conversations?select=*&status=eq.needs_human net::ERR_ABORTED
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/4c68a84-141830-astropro-01_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/d9e1163-135439-astropro-02_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/aff7d00-143340-astropro-03_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/b2caee8-143705-astropro-05_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/f15ca52-084235-mn34-800x800.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/cbda6b0-110656-mn24-800x800.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/40a9f3f-090557-mn43-800x800.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/dfc690f-134103-easylite-black_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/a21c1b8-135121-easylite-pink_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/cf9a18f-131448-easylite-green_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/b0c8c32-134350-easylite-light-blue_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/423c9ea-134700-easylite-navy_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/1db18c6-135311-easylite-white_2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/fa145ec-083423-mn31-800x800.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/e6b753e-093541-mn33-800x800.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/d533eb1-090203-mn23-800x800.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/77704b4-143601-mn21-800x800.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/78592e9-105314-mn42-800x800-2.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/5660dfb-131528-mn22-500x500.jpg
+404 GET https://ssmckeparvmrahsnoypt.supabase.co/storage/v1/object/public/produtos/ctt/5078ded-090944-mn51-800x800-2.jpg
+FALHOU GET http://127.0.0.1:3000/admin/importar?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/precos?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/promocoes?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/conversas?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/avaliacoes?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/concorrencia?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/fornecedores?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/envios?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/agentes?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/redes?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos/99f89481-c560-4419-8645-734692192f3d?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos/ebe5fc2e-9fda-4e8d-a603-652a4af0014b?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/contas?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos/novo?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos/dd92e41d-e189-4419-a23b-8e9987b8231d?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos/b801e0de-b3f8-41d8-b9be-5518f8c59482?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos/95f17450-1073-42fe-a168-d5db351f5501?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos/454756d2-0c98-436f-92fc-aafe8a586fc9?_rsc=WgOzhKciXOdOD6WX net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/returns?select=*&status=in.%28requested%2Capproved%2Clabel_sent%2Cin_transit%2Creceived%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/orders?select=*&or=%28status.in.%28paid%2Cprocessing%29%2Cand%28admin_seen_at.is.null%2Cstatus.neq.cancelled%29%29 net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/proposals?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/reviews?select=*&status=eq.pending net::ERR_ABORTED
+FALHOU HEAD http://127.0.0.1:3002/rest/v1/chat_conversations?select=*&status=eq.needs_human net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin?_rsc=s11GLc0c3sPMF5Zo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/estatisticas?_rsc=s11GLc0c3sPMF5Zo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/encomendas?_rsc=s11GLc0c3sPMF5Zo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/devolucoes?_rsc=s11GLc0c3sPMF5Zo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/promocoes?_rsc=s11GLc0c3sPMF5Zo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/conversas?_rsc=s11GLc0c3sPMF5Zo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/avaliacoes?_rsc=s11GLc0c3sPMF5Zo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/produtos?_rsc=s11GLc0c3sPMF5Zo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/redes?_rsc=s11GLc0c3sPMF5Zo net::ERR_ABORTED
+FALHOU GET http://127.0.0.1:3000/admin/contas?_rsc=s11GLc0c3sPMF5Zo net::ERR_ABORTED

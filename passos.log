@@ -1,0 +1,52 @@
+✔ palavra-passe errada recusada: Email ou palavra-passe errados.
+✔ entrou no painel
+✔ página encomendas
+✔ página encomendas/1001
+✔ página encomendas/1002
+✔ página devolucoes
+✔ página clientes
+✔ página promocoes
+✔ página produtos
+✔ página importar
+✔ página precos
+✔ página fornecedores
+✔ página envios
+✔ página agentes
+✔ página redes
+✔ página contas
+✔ página pagina-inicial
+✔ página multimedia
+✔ página paginas
+✔ página configuracoes
+✔ página configuracoes?tab=faturacao
+✔ post redes sociais
+✔ marcar encomenda 1003 como paga
+✔ registar envio da 1001
+✔ nota interna
+✔ editar campanha da página inicial
+✔ editar preço de um produto
+✔ importar folha CSV e aplicar
+✔ cliente cria conta e vê a sua encomenda
+✔ cliente guarda favorito e morada
+✔ checkout preenchido com os dados da conta
+✔ aviso de cookies aparece na primeira visita e some ao escolher
+✔ loja agrupada por modelos com escolha da cor
+✔ formulário de livre resolução
+✔ loja em inglês
+✔ loja com logótipo novo
+✔ telemóvel: inicio
+✔ telemóvel: loja
+✔ telemóvel: categoria
+✔ telemóvel: produto
+✔ telemóvel: carrinho
+✔ telemóvel: checkout
+✔ telemóvel: pagina
+✔ telemóvel: livre-resolucao
+✔ telemóvel: conta
+✔ telemóvel: menu aberto e fecha ao escolher
+✔ computador: menu Loja fecha ao escolher
+✔ modo de manutenção
+✔ balão de ajuda aparece e fecha
+✔ campanha na página inicial (slider)
+✔ telemóvel
+✔ conta sem permissões vê "Sem acesso"
