@@ -201,3 +201,12 @@ h3 { font-size: 1rem; }
   .prod h3 { font-size: .88rem; }
 }
 .h4-main { transform: none; }
+/* página de produto */
+.gallery .main { background: linear-gradient(160deg, #F6FAFC, #EAF3F7); border-radius: var(--r-lg); }
+.gallery .thumbs button, .gallery .thumbs img { border-radius: 12px; }
+.pdp .brand { font-size: .74rem; letter-spacing: .14em; text-transform: uppercase; color: var(--mint-d); font-weight: 700; }
+.size-choice .opts button { border-radius: 12px; font-size: .9rem; }
+.promise li::before { background: var(--tint-mint) !important; }
+@media (max-width: 640px) {
+  .buy .btn.block { position: sticky; bottom: 10px; z-index: 5; box-shadow: 0 10px 24px rgba(15, 47, 74, .18); }
+}
