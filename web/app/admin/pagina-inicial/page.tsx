@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import { run, sb, uploadPublic, type Row } from "@/lib/admin/sb";
 import { dateTime } from "@/lib/admin/format";
 import { Alert, Badge, Card, Confirm, Empty, Field, Loaded, PageHead, Tabs, useAction, useLoad } from "@/components/admin/ui";
+import { useMediaPicker } from "@/components/admin/MediaPicker";
 
 // Página inicial: campanhas (sliders de imagens/vídeos com datas) e imagens do destaque normal e das categorias
 const PLACE: Record<string, string> = { topo: "Destaque do topo", faixa: "Faixa a meio da página" };
@@ -115,6 +116,16 @@ function Editor({ c, onChange, onDeleted }: { c: Row; onChange: () => void; onDe
     await slidesL.reload(); onChange();
   }, "Adicionado. Escreve os textos e o botão em cada diapositivo (opcional).");
 
+  const picker = useMediaPicker((f) => upload(f, c.id));
+  const addFromGallery = async () => {
+    const p = await picker.pick({ video: true, title: "Adicionar diapositivo" });
+    if (!p) return;
+    await act(async () => {
+      await run(sb().from("home_slides").insert({ campaign_id: c.id, media_url: p.url, kind: p.kind, position: (slidesL.data ?? []).length }));
+      await slidesL.reload(); onChange();
+    }, "Adicionado. Escreve os textos e o botão no diapositivo (opcional).");
+  };
+
   const move = (list: Row[], k: number, d: number) => act(async () => {
     const n = [...list]; const [x] = n.splice(k, 1); n.splice(k + d, 0, x);
     for (const [i, sl] of n.entries()) await run(sb().from("home_slides").update({ position: i }).eq("id", sl.id));
@@ -143,7 +154,11 @@ function Editor({ c, onChange, onDeleted }: { c: Row; onChange: () => void; onDe
       <h3 className="a-h3" style={{ marginTop: 24 }}>Diapositivos</h3>
       <p className="a-hint">Imagens: {c.placement === "topo" ? "1920 × 800 px" : "1600 × 500 px"} (JPG/WebP, até ~500 KB). Telemóvel (opcional): 900 × 1200 px. Vídeos: MP4 1080p, sem som, 5–15 s, idealmente até 10 MB. A loja escurece ou clareia a imagem atrás do texto para se ler bem.</p>
       <input ref={file} type="file" hidden multiple accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm" onChange={(e) => { addSlides(e.target.files); e.target.value = ""; }} />
-      <button className="a-btn" disabled={busy} onClick={() => file.current?.click()} style={{ margin: "8px 0 14px" }}>{busy ? "A enviar…" : "Adicionar imagens ou vídeos"}</button>
+      {picker.node}
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", margin: "8px 0 14px" }}>
+        <button className="a-btn" disabled={busy} onClick={addFromGallery}>Escolher da galeria</button>
+        <button className="a-btn" disabled={busy} onClick={() => file.current?.click()}>{busy ? "A enviar…" : "Enviar do computador"}</button>
+      </div>
       <Loaded s={slidesL}>
         {(list) => !list.length ? <Empty title="Sem diapositivos">Adiciona uma ou mais imagens ou vídeos.</Empty> : (
           <div className="a-slides">
@@ -159,14 +174,13 @@ function SlideEditor({ sl, folder, first, last, onMove, onChange }: { sl: Row; f
   const [v, setV] = useState<Row>(sl);
   const [dirty, setDirty] = useState(false);
   const { busy, act } = useAction();
-  const media = useRef<HTMLInputElement>(null), mobile = useRef<HTMLInputElement>(null), poster = useRef<HTMLInputElement>(null);
   const set = (k: string, x: unknown) => { setV((o) => ({ ...o, [k]: x })); setDirty(true); };
-  const pick = (k: "media_url" | "mobile_url" | "poster_url") => async (files: FileList | null) => {
-    const f = files?.[0]; if (!f) return;
+  const picker = useMediaPicker((f) => upload(f, folder));
+  const choose = (k: "media_url" | "mobile_url" | "poster_url") => async () => {
+    const p = await picker.pick({ video: k === "media_url", title: k === "media_url" ? "Imagem ou vídeo do diapositivo" : k === "mobile_url" ? "Imagem para telemóvel" : "Capa do vídeo" });
+    if (!p) return;
     await act(async () => {
-      if (k !== "media_url" && isVideo(f)) throw new Error("Aqui só imagens.");
-      const url = await upload(f, folder);
-      const patch: Row = { [k]: url }; if (k === "media_url") patch.kind = isVideo(f) ? "video" : "image";
+      const patch: Row = { [k]: p.url }; if (k === "media_url") patch.kind = p.kind;
       await run(sb().from("home_slides").update(patch).eq("id", sl.id)); setV((o) => ({ ...o, ...patch })); onChange();
     }, "Ficheiro trocado.");
   };
@@ -198,15 +212,13 @@ function SlideEditor({ sl, folder, first, last, onMove, onChange }: { sl: Row; f
             <select value={v.align} onChange={(e) => set("align", e.target.value)}><option value="left">Esquerda</option><option value="center">Centro</option><option value="right">Direita</option></select>
           </Field>
         </div>
-        <input ref={media} type="file" hidden accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm" onChange={(e) => { pick("media_url")(e.target.files); e.target.value = ""; }} />
-        <input ref={mobile} type="file" hidden accept="image/jpeg,image/png,image/webp" onChange={(e) => { pick("mobile_url")(e.target.files); e.target.value = ""; }} />
-        <input ref={poster} type="file" hidden accept="image/jpeg,image/png,image/webp" onChange={(e) => { pick("poster_url")(e.target.files); e.target.value = ""; }} />
+        {picker.node}
         <div className="a-slide-actions">
           <button className="a-btn primary sm" disabled={busy || !dirty} onClick={save}>Guardar textos</button>
-          <button className="a-btn sm" disabled={busy} onClick={() => media.current?.click()}>Trocar imagem/vídeo</button>
-          {v.kind === "image" && <button className="a-btn sm" disabled={busy} onClick={() => mobile.current?.click()}>{v.mobile_url ? "Trocar imagem de telemóvel" : "Imagem para telemóvel"}</button>}
+          <button className="a-btn sm" disabled={busy} onClick={choose("media_url")}>Trocar imagem/vídeo</button>
+          {v.kind === "image" && <button className="a-btn sm" disabled={busy} onClick={choose("mobile_url")}>{v.mobile_url ? "Trocar imagem de telemóvel" : "Imagem para telemóvel"}</button>}
           {v.kind === "image" && v.mobile_url && <button className="a-btn sm" disabled={busy} onClick={() => act(async () => { await run(sb().from("home_slides").update({ mobile_url: null }).eq("id", sl.id)); setV((o) => ({ ...o, mobile_url: null })); })}>Sem imagem de telemóvel</button>}
-          {v.kind === "video" && <button className="a-btn sm" disabled={busy} onClick={() => poster.current?.click()}>{v.poster_url ? "Trocar capa do vídeo" : "Capa do vídeo"}</button>}
+          {v.kind === "video" && <button className="a-btn sm" disabled={busy} onClick={choose("poster_url")}>{v.poster_url ? "Trocar capa do vídeo" : "Capa do vídeo"}</button>}
           <button className="a-btn sm" disabled={busy || first} onClick={() => onMove(-1)} aria-label="Subir">↑</button>
           <button className="a-btn sm" disabled={busy || last} onClick={() => onMove(1)} aria-label="Descer">↓</button>
           <Confirm className="a-btn sm danger" text="Remover este diapositivo?" onYes={() => act(async () => { await run(sb().from("home_slides").delete().eq("id", sl.id)); onChange(); }, "Diapositivo removido.")}>Remover</Confirm>
@@ -230,13 +242,12 @@ function Images() {
   const store = (value: Row) => act(async () => {
     await run(sb().from("settings").update({ value, updated_at: new Date().toISOString() }).eq("key", "public.home")); await s.reload();
   }, "Guardado. Já aparece na loja.");
-  const pickFile = (cb: (url: string) => void) => {
-    const i = document.createElement("input"); i.type = "file"; i.accept = "image/jpeg,image/png,image/webp";
-    i.onchange = () => { const f = i.files?.[0]; if (f) act(async () => cb(await upload(f, "inicio"))); };
-    i.click();
-  };
+  const picker = useMediaPicker((f) => upload(f, "inicio"));
+  const pickFile = async (cb: (url: string) => void) => { const p = await picker.pick(); if (p) cb(p.url); };
 
   return (
+    <>
+    {picker.node}
     <Loaded s={s}>
       {({ value, cats, auto }) => {
         const hero: string[] = value.hero_images ?? [];
@@ -283,5 +294,6 @@ function Images() {
         );
       }}
     </Loaded>
+    </>
   );
 }

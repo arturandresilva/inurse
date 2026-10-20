@@ -106,6 +106,11 @@ await step('editar campanha da página inicial', async () => {
   await shot(page, '18-pagina-inicial-campanha');
   await page.click('button[role=tab]:has-text("Imagens da página inicial")'); await settle(page);
   await shot(page, '19-pagina-inicial-imagens');
+  // escolher imagem da galeria do site
+  await page.locator('.a-img-slot button:has-text("Escolher"), .a-img-slot button:has-text("Trocar")').first().click();
+  await page.waitForSelector('dialog[open] .a-picker-head');
+  await shot(page, '19b-galeria');
+  await page.click('dialog[open] .a-x');
 });
 await step('editar preço de um produto', async () => {
   await page.goto(`${BASE}/admin/produtos`); await settle(page);

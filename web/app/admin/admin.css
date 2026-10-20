@@ -298,3 +298,12 @@
 .a-media-used { display: flex; flex-wrap: wrap; gap: 4px; }
 .a-media-used .a-badge { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .a-media-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
+
+/* Escolher da galeria */
+.a-picker-head .a-toolbar { margin-top: 10px; }
+.a-picker { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; max-height: 60vh; overflow: auto; padding: 2px; }
+.a-picker-item { display: grid; gap: 4px; padding: 6px; border: 1px solid var(--a-line); border-radius: 10px; background: #fff; cursor: pointer; text-align: left; font: inherit; }
+.a-picker-item:hover, .a-picker-item:focus-visible { border-color: var(--a-accent, #2A8378); box-shadow: 0 0 0 2px rgba(42, 131, 120, .2); }
+.a-picker-item img, .a-picker-item video { width: 100%; aspect-ratio: 1; object-fit: contain; background: #f3f5f8; border-radius: 6px; display: block; }
+.a-picker-item span { font-size: .75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.a-picker-item small { font-size: .68rem; color: var(--a-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
