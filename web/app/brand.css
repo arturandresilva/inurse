@@ -219,3 +219,6 @@ h3 { font-size: 1rem; }
 .pickup-list strong { display: block; font-size: .9rem; }
 .pickup-list small { color: var(--ink-soft); font-size: .8rem; }
 .pickup .link { background: none; border: 0; padding: 0; color: var(--mint-d); font: inherit; font-size: .85rem; text-decoration: underline; cursor: pointer; justify-self: start; }
+
+/* menu Loja: fecha depois de escolher uma opção (ver MobileNavCloser) */
+.mega-wrap.mega-off .mega { opacity: 0 !important; visibility: hidden !important; pointer-events: none; }

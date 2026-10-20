@@ -225,6 +225,15 @@ await stepShop('telemóvel: menu aberto e fecha ao escolher', async () => {
   await phone.locator('.mnav-panel a').first().click();
   await phone.waitForFunction(() => !document.querySelector('details.mnav[open]'), null, { timeout: 5000 });
 });
+await stepShop('computador: menu Loja fecha ao escolher', async () => {
+  await shop.goto(`${BASE}/loja`); await shop.waitForSelector('.prod');
+  await shop.hover('.mega-trigger'); await shop.waitForTimeout(400);
+  await shop.locator('.mega-models a').first().click(); await shop.waitForURL(/\/produto\//);
+  await shop.waitForTimeout(400);
+  const vis = await shop.evaluate(() => getComputedStyle(document.querySelector('.mega')).visibility);
+  if (vis !== 'hidden') throw new Error('o menu Loja continua aberto depois de escolher um modelo');
+  await shop.screenshot({ path: `${SHOTS}/64-menu-loja-fechado.png` });
+});
 await stepShop('modo de manutenção', async () => {
   await page.goto(`${BASE}/admin/configuracoes`); await settle(page);
   await page.click('button:has-text("Pôr a loja em manutenção")'); await toastOk();
