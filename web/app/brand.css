@@ -196,3 +196,9 @@ h3 { font-size: 1rem; }
 .foot h2 { font-size: .8rem; text-transform: uppercase; letter-spacing: .12em; color: #8FE0D3; }
 .foot .logo, .foot svg[aria-label="iNurse"] { height: 36px; width: auto; }
 .pay-badges b { font-size: .7rem; }
+@media (max-width: 640px) {
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 12px; }
+  .prod h3 { font-size: .88rem; }
+  .finder-wrap { margin: 0 -4px; }
+}
+.h4-main { transform: none; }
