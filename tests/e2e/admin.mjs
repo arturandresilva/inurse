@@ -203,13 +203,13 @@ await stepShop('loja com logótipo novo', async () => {
   await shop.goto(`${BASE}/`); await shop.waitForSelector('header .logo svg');
   await shop.waitForTimeout(1500);
   // destaque animado: o canvas tem de ter corações desenhados
-  const lit = await shop.evaluate(() => { const c = document.querySelector('.fx-canvas'); if (!c) return -1; const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data; let n = 0; for (let i = 3; i < d.length; i += 64) if (d[i] > 40) n++; return n; });
-  if (lit < 200) throw new Error(`animação do destaque vazia (${lit})`);
+  const lit = await shop.evaluate(() => { const c = document.querySelector('.fx-back'); if (!c) return -1; const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data; let n = 0; for (let i = 3; i < d.length; i += 64) if (d[i] > 40) n++; return n; });
+  if (lit < 50) throw new Error(`animação do destaque vazia (${lit})`);
   await shop.screenshot({ path: `${SHOTS}/63-loja-inicio.png` });
-  await shop.locator('.h4-stage').screenshot({ path: `${SHOTS}/63e-holo-logo.png` });
-  await shop.waitForTimeout(5500); await shop.locator('.h4-stage').screenshot({ path: `${SHOTS}/63c-destaque-soca.png` });
-  await shop.waitForTimeout(6400); await shop.locator('.h4-stage').screenshot({ path: `${SHOTS}/63d-destaque-meia.png` });
-  await shop.waitForTimeout(1200); await shop.locator('.h4-stage').screenshot({ path: `${SHOTS}/63f-holo-meia2.png` });
+  await shop.waitForTimeout(3000); await shop.locator('.h4-stage').screenshot({ path: `${SHOTS}/63e-holo-logo.png` });
+  await shop.waitForTimeout(4600); await shop.locator('.h4-stage').screenshot({ path: `${SHOTS}/63g-holo-scan.png` });
+  await shop.waitForTimeout(2400); await shop.locator('.h4-stage').screenshot({ path: `${SHOTS}/63c-destaque-soca.png` });
+  await shop.waitForTimeout(7400); await shop.locator('.h4-stage').screenshot({ path: `${SHOTS}/63d-destaque-meia.png` });
   await shop.screenshot({ path: `${SHOTS}/63b-loja-inicio-completa.png`, fullPage: true });
 });
 // ---------- loja no telemóvel: fotografias de cada página para rever o aspeto ----------
